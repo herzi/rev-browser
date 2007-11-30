@@ -23,6 +23,20 @@
 
 #include <glib.h>
 
+#define _XOPEN_SOURCE
+#include <time.h>
+
+static void
+print_revs (gchar* key,
+	    gpointer values,
+	    gpointer unused /* max_values */)
+{
+	// FIXME: provide proper ascii art bars: #+-
+	g_print ("%s: %d\n",
+		 key,
+		 GPOINTER_TO_SIZE (values));
+}
+
 int
 main (int   argc,
       char**argv)
@@ -33,7 +47,7 @@ main (int   argc,
 	gchar **lines  = NULL;
 	gchar **iter;
 
-	g_spawn_command_line_sync ("git-rev-list --all --pretty=format:%at", &out, NULL, &status, &error);
+	g_spawn_command_line_sync ("git-rev-list --all --pretty=format:%ai", &out, NULL, &status, &error);
 
 	if (error) {
 		g_warning ("Error executing 'git-rev-list': %s",
@@ -49,15 +63,22 @@ main (int   argc,
 		return 2;
 	}
 
+	GHashTable* revs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 	lines = g_strsplit (out, "\n", -1);
+	g_free (out);
 	for (iter = lines; iter && *iter; iter++) {
 		if (G_LIKELY (**iter)) {
 			if (!g_str_has_prefix (*iter, "commit ")) {
-				g_print ("git-rev-list: %s\n", *iter);
+				gchar** words = g_strsplit (*iter, " ", 2);
+				gsize count = GPOINTER_TO_SIZE (g_hash_table_lookup (revs, words[0]));
+				count++;
+				g_hash_table_insert (revs, g_strdup (words[0]), GSIZE_TO_POINTER (count));
+				g_strfreev (words);
 			}
 		}
 	}
-	g_free (out);
+	g_strfreev (lines);
+	g_hash_table_foreach (revs, (GHFunc)print_revs, NULL);
 
 	return 0;
 }
