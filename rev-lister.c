@@ -27,6 +27,36 @@ int
 main (int   argc,
       char**argv)
 {
+	GError* error  = NULL;
+	gchar * out    = NULL;
+	gint    status = 0;
+	gchar **lines  = NULL;
+	gchar **iter;
+
+	g_spawn_command_line_sync ("git-rev-list --all", &out, NULL, &status, &error);
+
+	if (error) {
+		g_warning ("Error executing 'git-rev-list': %s",
+			   error->message);
+		g_error_free (error);
+		g_free (out);
+		return 1;
+	};
+
+	if (status != 0) {
+		g_warning ("git-rev-list didn't return 0");
+		g_free (out);
+		return 2;
+	}
+
+	lines = g_strsplit (out, "\n", -1);
+	for (iter = lines; iter && *iter; iter++) {
+		if (G_LIKELY (**iter)) {
+			g_print ("git-rev-list: %s\n", *iter);
+		}
+	}
+	g_free (out);
+
 	return 0;
 }
 
