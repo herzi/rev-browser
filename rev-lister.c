@@ -33,7 +33,7 @@ main (int   argc,
 	gchar **lines  = NULL;
 	gchar **iter;
 
-	g_spawn_command_line_sync ("git-rev-list --all", &out, NULL, &status, &error);
+	g_spawn_command_line_sync ("git-rev-list --all --pretty=format:%at", &out, NULL, &status, &error);
 
 	if (error) {
 		g_warning ("Error executing 'git-rev-list': %s",
@@ -52,7 +52,9 @@ main (int   argc,
 	lines = g_strsplit (out, "\n", -1);
 	for (iter = lines; iter && *iter; iter++) {
 		if (G_LIKELY (**iter)) {
-			g_print ("git-rev-list: %s\n", *iter);
+			if (!g_str_has_prefix (*iter, "commit ")) {
+				g_print ("git-rev-list: %s\n", *iter);
+			}
 		}
 	}
 	g_free (out);
