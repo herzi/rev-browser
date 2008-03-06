@@ -77,13 +77,15 @@ display_expose_event (GtkWidget     * widget,
 			    widget->allocation.width - 2,
 			    widget->allocation.height - 2);
 
-	for (i = 1; i < G_N_ELEMENTS (years); i++) {
-		gdk_draw_line (widget->window,
-			       widget->style->black_gc,
-			       widget->allocation.x + i * 33,
-			       widget->allocation.y + 1,
-			       widget->allocation.x + i * 33,
-			       widget->allocation.y + 5);
+	for (i = 0; i < G_N_ELEMENTS (years); i++) {
+		if (G_LIKELY (i)) {
+			gdk_draw_line (widget->window,
+				       widget->style->black_gc,
+				       widget->allocation.x + i * 33,
+				       widget->allocation.y + 1,
+				       widget->allocation.x + i * 33,
+				       widget->allocation.y + 5);
+		}
 	}
 
 	return FALSE;
