@@ -50,6 +50,7 @@ main (int   argc,
 {
 	GtkWidget* window;
 	GtkWidget* hbox;
+	GtkWidget* vbox;
 
 	gtk_init (&argc, &argv);
 
@@ -67,6 +68,10 @@ main (int   argc,
 				     g_object_new (display_get_type (), NULL));
 	add_button (hbox,
 		    GTK_ARROW_RIGHT);
+
+	vbox = gtk_vbox_new (TRUE, 0);
+	gtk_container_add (GTK_CONTAINER (hbox),
+			   vbox);
 
 	gtk_widget_show_all (window);
 
