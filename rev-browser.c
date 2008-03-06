@@ -44,7 +44,9 @@ G_DEFINE_TYPE (Display, display, GTK_TYPE_WIDGET);
 
 static void
 display_init (Display* self)
-{}
+{
+	GTK_WIDGET_SET_FLAGS (self, GTK_NO_WINDOW);
+}
 
 static void
 display_class_init (DisplayClass* self_class)
