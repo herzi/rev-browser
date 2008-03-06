@@ -99,13 +99,6 @@ display_expose_event (GtkWidget     * widget,
 	pango_layout_set_width (layout, PANGO_SCALE * 33);
 
 	for (i = 0; i < G_N_ELEMENTS (years); i++) {
-		pango_layout_set_text (layout, years[i], -1);
-		gdk_draw_layout (widget->window,
-				 widget->style->black_gc,
-				 widget->allocation.x + i * 33 + 5,
-				 widget->allocation.y + 5,
-				 layout);
-
 		if (G_LIKELY (i)) {
 			gdk_draw_line (widget->window,
 				       widget->style->black_gc,
@@ -114,6 +107,13 @@ display_expose_event (GtkWidget     * widget,
 				       widget->allocation.x + i * 33,
 				       widget->allocation.y + 5);
 		}
+
+		pango_layout_set_text (layout, years[i], -1);
+		gdk_draw_layout (widget->window,
+				 widget->style->black_gc,
+				 widget->allocation.x + i * 33 + 5,
+				 widget->allocation.y + 5,
+				 layout);
 	}
 	g_object_unref (layout);
 
