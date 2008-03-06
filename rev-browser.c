@@ -23,23 +23,10 @@
 
 #include <gtk/gtk.h>
 
-int
-main (int   argc,
-      char**argv)
+static void
+add_button (GtkWidget* hbox)
 {
-	GtkWidget* window;
-	GtkWidget* hbox;
 	GtkWidget* button;
-
-	gtk_init (&argc, &argv);
-
-	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	g_signal_connect (window, "destroy",
-			  G_CALLBACK (gtk_main_quit), NULL);
-
-	hbox = gtk_hbox_new (FALSE, 0);
-	gtk_container_add (GTK_CONTAINER (window),
-			   hbox);
 
 	button = gtk_button_new ();
 	gtk_button_set_relief (GTK_BUTTON (button),
@@ -52,6 +39,26 @@ main (int   argc,
 			    FALSE,
 			    FALSE,
 			    0);
+}
+
+int
+main (int   argc,
+      char**argv)
+{
+	GtkWidget* window;
+	GtkWidget* hbox;
+
+	gtk_init (&argc, &argv);
+
+	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	g_signal_connect (window, "destroy",
+			  G_CALLBACK (gtk_main_quit), NULL);
+
+	hbox = gtk_hbox_new (FALSE, 0);
+	gtk_container_add (GTK_CONTAINER (window),
+			   hbox);
+
+	add_button (hbox);
 
 	gtk_widget_show_all (window);
 
