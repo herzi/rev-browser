@@ -82,29 +82,29 @@ display_expose_event (GtkWidget     * widget,
 			    widget->allocation.width - 2,
 			    widget->allocation.height - 2);
 
+	PangoLayout* layout = pango_layout_new (gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget)));
+	pango_layout_set_font_description (layout,
+					   widget->style->font_desc);
+	pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
+	{
+		PangoAttrList* attributes = pango_attr_list_new ();
+		PangoAttribute* attribute = pango_attr_size_new (0.8 *
+								 pango_font_description_get_size (widget->style->font_desc));
+		attribute->start_index = 0;
+		attribute->end_index   = G_MAXUINT;
+		pango_attr_list_insert (attributes, attribute);
+		pango_layout_set_attributes (layout, attributes);
+		pango_attr_list_unref (attributes);
+	}
+	pango_layout_set_width (layout, PANGO_SCALE * 33);
+
 	for (i = 0; i < G_N_ELEMENTS (years); i++) {
-		PangoLayout* layout = pango_layout_new (gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget)));
-		pango_layout_set_font_description (layout,
-						   widget->style->font_desc);
-		pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
-		{
-			PangoAttrList* attributes = pango_attr_list_new ();
-			PangoAttribute* attribute = pango_attr_size_new (0.8 *
-									 pango_font_description_get_size (widget->style->font_desc));
-			attribute->start_index = 0;
-			attribute->end_index   = G_MAXUINT;
-			pango_attr_list_insert (attributes, attribute);
-			pango_layout_set_attributes (layout, attributes);
-			pango_attr_list_unref (attributes);
-		}
-		pango_layout_set_width (layout, PANGO_SCALE * 33);
 		pango_layout_set_text (layout, years[i], -1);
 		gdk_draw_layout (widget->window,
 				 widget->style->black_gc,
 				 widget->allocation.x + i * 33 + 5,
 				 widget->allocation.y + 5,
 				 layout);
-		g_object_unref (layout);
 
 		if (G_LIKELY (i)) {
 			gdk_draw_line (widget->window,
@@ -115,6 +115,7 @@ display_expose_event (GtkWidget     * widget,
 				       widget->allocation.y + 5);
 		}
 	}
+	g_object_unref (layout);
 
 	return FALSE;
 }
