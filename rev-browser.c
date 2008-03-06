@@ -47,10 +47,6 @@ display_init (Display* self)
 {
 	GdkColor color = {0, 0xFFFF, 0xFFFF, 0xFFFF};
 	GTK_WIDGET_SET_FLAGS (self, GTK_NO_WINDOW);
-
-	gtk_widget_modify_bg (GTK_WIDGET (self),
-			      GTK_STATE_NORMAL,
-			      &color);
 }
 
 static gboolean
@@ -68,6 +64,16 @@ display_expose_event (GtkWidget     * widget,
 		       widget->allocation.y,
 		       widget->allocation.width,
 		       widget->allocation.height);
+
+	/* FIXME: get color/gc from theme */
+	gdk_draw_rectangle (widget->window,
+			    widget->style->white_gc,
+			    TRUE,
+			    widget->allocation.x + 1,
+			    widget->allocation.y + 1,
+			    widget->allocation.width - 2,
+			    widget->allocation.height - 2);
+
 	return FALSE;
 }
 
