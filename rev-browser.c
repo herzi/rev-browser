@@ -40,13 +40,18 @@ struct _DisplayClass {
 	GtkWidgetClass  base_class;
 };
 
+struct _DisplayPrivate {
+	gint element_size;
+};
+
 G_DEFINE_TYPE (Display, display, GTK_TYPE_WIDGET);
 
 static void
 display_init (Display* self)
 {
-	GdkColor color = {0, 0xFFFF, 0xFFFF, 0xFFFF};
 	GTK_WIDGET_SET_FLAGS (self, GTK_NO_WINDOW);
+
+	self->_private = G_TYPE_INSTANCE_GET_PRIVATE (self, display_get_type (), DisplayPrivate);
 }
 
 static gboolean
@@ -127,8 +132,10 @@ display_class_init (DisplayClass* self_class)
 {
 	GtkWidgetClass* widget_class = GTK_WIDGET_CLASS (self_class);
 
-	widget_class->expose_event = display_expose_event;
-	widget_class->size_request = display_size_request;
+	widget_class->expose_event  = display_expose_event;
+	widget_class->size_request  = display_size_request;
+
+	g_type_class_add_private (self_class, sizeof (DisplayPrivate));
 }
 
 /* END: DISPLAY WIDGET IMPLEMENTATION */
