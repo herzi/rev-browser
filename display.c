@@ -119,6 +119,17 @@ display_expose_event (GtkWidget     * widget,
 		       widget->allocation.height - 12);
 
 	/* display selected item */
+	gtk_paint_shadow (widget->style,
+			  widget->window,
+			  GTK_STATE_NORMAL,
+			  GTK_SHADOW_OUT,
+			  &widget->allocation,
+			  widget,
+			  NULL,
+			  widget->allocation.x + self->_private->element_size,
+			  widget->allocation.y,
+			  self->_private->element_size + 1,
+			  widget->allocation.height);
 
 	return FALSE;
 }
