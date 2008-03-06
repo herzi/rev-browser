@@ -24,7 +24,8 @@
 #include <gtk/gtk.h>
 
 static void
-add_button (GtkWidget* hbox)
+add_button (GtkWidget   * hbox,
+	    GtkArrowType  arrow)
 {
 	GtkWidget* button;
 
@@ -32,7 +33,7 @@ add_button (GtkWidget* hbox)
 	gtk_button_set_relief (GTK_BUTTON (button),
 			       GTK_RELIEF_NONE);
 	gtk_container_add (GTK_CONTAINER (button),
-			   gtk_arrow_new (GTK_ARROW_LEFT,
+			   gtk_arrow_new (arrow,
 					  GTK_SHADOW_IN));
 	gtk_box_pack_start (GTK_BOX (hbox),
 			    button,
@@ -58,7 +59,8 @@ main (int   argc,
 	gtk_container_add (GTK_CONTAINER (window),
 			   hbox);
 
-	add_button (hbox);
+	add_button (hbox,
+		    GTK_ARROW_LEFT);
 
 	gtk_widget_show_all (window);
 
