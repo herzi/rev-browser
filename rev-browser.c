@@ -78,14 +78,16 @@ display_expose_event (GtkWidget     * widget,
 			    widget->allocation.height - 2);
 
 	for (i = 0; i < G_N_ELEMENTS (years); i++) {
-		GdkFont* font = gdk_font_from_description (widget->style->font_desc);
-		gdk_draw_string (widget->window,
-				 font,
+		PangoLayout* layout = pango_layout_new (gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget)));
+		pango_layout_set_font_description (layout,
+						   widget->style->font_desc);
+		pango_layout_set_text (layout, years[i], -1);
+		gdk_draw_layout (widget->window,
 				 widget->style->black_gc,
 				 widget->allocation.x + i * 33 + 5,
-				 widget->allocation.y + 15,
-				 years[i]);
-		gdk_font_unref (font);
+				 widget->allocation.y + 5,
+				 layout);
+		g_object_unref (layout);
 
 		if (G_LIKELY (i)) {
 			gdk_draw_line (widget->window,
