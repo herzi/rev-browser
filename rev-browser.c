@@ -92,6 +92,8 @@ main (int   argc,
 
 	add_button (hbox,
 		    GTK_ARROW_LEFT);
+	gtk_box_pack_start_defaults (GTK_BOX (hbox),
+				     g_object_new (display_get_type (), NULL));
 	add_button (hbox,
 		    GTK_ARROW_RIGHT);
 
