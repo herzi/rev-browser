@@ -48,9 +48,20 @@ display_init (Display* self)
 	GTK_WIDGET_SET_FLAGS (self, GTK_NO_WINDOW);
 }
 
+static gboolean
+display_expose_event (GtkWidget     * widget,
+		      GdkEventExpose* event)
+{
+	return FALSE;
+}
+
 static void
 display_class_init (DisplayClass* self_class)
-{}
+{
+	GtkWidgetClass* widget_class = GTK_WIDGET_CLASS (self_class);
+
+	widget_class->expose_event = display_expose_event;
+}
 
 /* END: DISPLAY WIDGET IMPLEMENTATION */
 
