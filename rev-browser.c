@@ -25,11 +25,6 @@
 
 #include "display.h"
 
-/* START: DISPLAY WIDGET IMPLEMENTATION */
-
-
-/* END: DISPLAY WIDGET IMPLEMENTATION */
-
 static void
 add_button (GtkWidget   * hbox,
 	    GtkArrowType  arrow)
