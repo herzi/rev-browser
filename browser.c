@@ -79,8 +79,11 @@ main (int   argc,
 		    NULL);
 
 	vbox = gtk_vbox_new (TRUE, 0);
-	gtk_container_add (GTK_CONTAINER (hbox),
-			   vbox);
+	gtk_box_pack_start (GTK_BOX (hbox),
+			    vbox,
+			    FALSE,
+			    FALSE,
+			    0);
 	add_button (vbox,
 		    0,
 		    GTK_STOCK_ZOOM_IN);
