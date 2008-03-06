@@ -46,18 +46,17 @@ display_init (Display* self)
 }
 
 static void
-display_dispose (GObject* object)
+display_finalize (GObject* object)
 {
 	g_object_unref (DISPLAY (object)->_private->calendar);
 
-	G_OBJECT_CLASS (display_parent_class)->dispose (object);
+	G_OBJECT_CLASS (display_parent_class)->finalize (object);
 }
 
 static gboolean
 display_expose_event (GtkWidget     * widget,
 		      GdkEventExpose* event)
 {
-	gchar const* years[] = {"2006", "2007", "2008"};
 	Display* self = DISPLAY (widget);
 	gsize i;
 
@@ -86,7 +85,8 @@ display_expose_event (GtkWidget     * widget,
 	}
 	pango_layout_set_width (layout, PANGO_SCALE * self->_private->element_size);
 
-	for (i = 0; i < G_N_ELEMENTS (years); i++) {
+	for (i = 0; i < 3; i++) {
+		gchar* year = g_strdup_printf ("%d", 2006 + i);
 		gdk_draw_line (widget->window,
 			       widget->style->black_gc,
 			       widget->allocation.x + i * self->_private->element_size,
@@ -94,12 +94,14 @@ display_expose_event (GtkWidget     * widget,
 			       widget->allocation.x + i * self->_private->element_size,
 			       widget->allocation.y + 5);
 
-		pango_layout_set_text (layout, years[i], -1);
+		pango_layout_set_text (layout, year, -1);
 		gdk_draw_layout (widget->window,
 				 widget->style->black_gc,
 				 widget->allocation.x + i * self->_private->element_size + 5,
 				 widget->allocation.y + 5,
 				 layout);
+
+		g_free (year);
 	}
 	g_object_unref (layout);
 
@@ -135,7 +137,7 @@ display_class_init (DisplayClass* self_class)
 	GObjectClass  * object_class = G_OBJECT_CLASS (self_class);
 	GtkWidgetClass* widget_class = GTK_WIDGET_CLASS (self_class);
 
-	object_class->dispose = display_dispose;
+	object_class->finalize = display_finalize;
 
 	widget_class->expose_event  = display_expose_event;
 	widget_class->size_request  = display_size_request;
