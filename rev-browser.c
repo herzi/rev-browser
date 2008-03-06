@@ -29,6 +29,7 @@ main (int   argc,
 {
 	GtkWidget* window;
 	GtkWidget* hbox;
+	GtkWidget* button;
 
 	gtk_init (&argc, &argv);
 
@@ -40,7 +41,17 @@ main (int   argc,
 	gtk_container_add (GTK_CONTAINER (window),
 			   hbox);
 
-	gtk_widget_show (window);
+	button = gtk_button_new ();
+	gtk_container_add (GTK_CONTAINER (button),
+			   gtk_arrow_new (GTK_ARROW_LEFT,
+					  GTK_SHADOW_IN));
+	gtk_box_pack_start (GTK_BOX (hbox),
+			    button,
+			    FALSE,
+			    FALSE,
+			    0);
+
+	gtk_widget_show_all (window);
 
 	gtk_main ();
 
