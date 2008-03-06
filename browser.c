@@ -27,16 +27,19 @@
 
 static void
 add_button (GtkWidget   * hbox,
-	    GtkArrowType  arrow)
+	    GtkArrowType  arrow,
+	    gchar const * stock_id)
 {
 	GtkWidget* button;
 
+	if (!stock_id) {
 	button = gtk_button_new ();
-	gtk_button_set_relief (GTK_BUTTON (button),
-			       GTK_RELIEF_NONE);
 	gtk_container_add (GTK_CONTAINER (button),
 			   gtk_arrow_new (arrow,
 					  GTK_SHADOW_IN));
+	}
+	gtk_button_set_relief (GTK_BUTTON (button),
+			       GTK_RELIEF_NONE);
 	gtk_box_pack_start (GTK_BOX (hbox),
 			    button,
 			    FALSE,
@@ -63,11 +66,13 @@ main (int   argc,
 			   hbox);
 
 	add_button (hbox,
-		    GTK_ARROW_LEFT);
+		    GTK_ARROW_LEFT,
+		    NULL);
 	gtk_box_pack_start_defaults (GTK_BOX (hbox),
 				     g_object_new (display_get_type (), NULL));
 	add_button (hbox,
-		    GTK_ARROW_RIGHT);
+		    GTK_ARROW_RIGHT,
+		    NULL);
 
 	vbox = gtk_vbox_new (TRUE, 0);
 	gtk_container_add (GTK_CONTAINER (hbox),
