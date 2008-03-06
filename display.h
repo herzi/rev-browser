@@ -24,7 +24,7 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include <glib-object.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
