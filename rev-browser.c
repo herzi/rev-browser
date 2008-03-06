@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 
 #include "calendar.h"
+#include "display.h"
 
 /* START: DISPLAY WIDGET IMPLEMENTATION */
 
