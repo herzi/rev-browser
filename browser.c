@@ -37,6 +37,8 @@ add_button (GtkWidget   * hbox,
 		gtk_container_add (GTK_CONTAINER (button),
 				   gtk_arrow_new (arrow,
 						  GTK_SHADOW_IN));
+	} else {
+		button = gtk_button_new_from_stock (stock_id);
 	}
 	gtk_button_set_relief (GTK_BUTTON (button),
 			       GTK_RELIEF_NONE);
@@ -77,6 +79,12 @@ main (int   argc,
 	vbox = gtk_vbox_new (TRUE, 0);
 	gtk_container_add (GTK_CONTAINER (hbox),
 			   vbox);
+	add_button (vbox,
+		    0,
+		    GTK_STOCK_ZOOM_IN);
+	add_button (vbox,
+		    0,
+		    GTK_STOCK_ZOOM_OUT);
 
 	gtk_widget_show_all (window);
 
