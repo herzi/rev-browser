@@ -33,10 +33,10 @@ add_button (GtkWidget   * hbox,
 	GtkWidget* button;
 
 	if (!stock_id) {
-	button = gtk_button_new ();
-	gtk_container_add (GTK_CONTAINER (button),
-			   gtk_arrow_new (arrow,
-					  GTK_SHADOW_IN));
+		button = gtk_button_new ();
+		gtk_container_add (GTK_CONTAINER (button),
+				   gtk_arrow_new (arrow,
+						  GTK_SHADOW_IN));
 	}
 	gtk_button_set_relief (GTK_BUTTON (button),
 			       GTK_RELIEF_NONE);
