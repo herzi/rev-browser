@@ -78,6 +78,15 @@ display_expose_event (GtkWidget     * widget,
 			    widget->allocation.height - 2);
 
 	for (i = 0; i < G_N_ELEMENTS (years); i++) {
+		GdkFont* font = gdk_font_from_description (widget->style->font_desc);
+		gdk_draw_string (widget->window,
+				 font,
+				 widget->style->black_gc,
+				 widget->allocation.x + i * 33 + 5,
+				 widget->allocation.y + 15,
+				 years[i]);
+		gdk_font_unref (font);
+
 		if (G_LIKELY (i)) {
 			gdk_draw_line (widget->window,
 				       widget->style->black_gc,
