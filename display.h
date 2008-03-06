@@ -24,5 +24,25 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
+#include <glib-object.h>
+
+G_BEGIN_DECLS
+
+typedef struct _Display        Display;
+typedef struct _DisplayPrivate DisplayPrivate;
+typedef struct _DisplayClass   DisplayClass;
+
+#define DISPLAY(i) G_TYPE_CHECK_INSTANCE_CAST ((i), display_get_type (), Display)
+
+struct _Display {
+	GtkWidget       base_instance;
+	DisplayPrivate* _private;
+};
+
+struct _DisplayClass {
+	GtkWidgetClass  base_class;
+};
+
+G_END_DECLS
 
 #endif /* !DISPLAY_H */
