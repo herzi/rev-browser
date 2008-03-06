@@ -31,6 +31,8 @@ typedef struct _Display        Display;
 typedef struct _DisplayPrivate DisplayPrivate;
 typedef struct _DisplayClass   DisplayClass;
 
+#define DISPLAY(i) G_TYPE_CHECK_INSTANCE_CAST (widget, display_get_type (), Display);
+
 struct _Display {
 	GtkWidget       base_instance;
 	DisplayPrivate* _private;
@@ -61,7 +63,7 @@ display_expose_event (GtkWidget     * widget,
 		      GdkEventExpose* event)
 {
 	gchar const* years[] = {"2006", "2007", "2008"};
-	Display* self = G_TYPE_CHECK_INSTANCE_CAST (widget, display_get_type (), Display);
+	Display* self = DISPLAY (widget);
 	gsize i;
 
 	/* FIXME: get color/gc from theme */
@@ -72,18 +74,6 @@ display_expose_event (GtkWidget     * widget,
 			    widget->allocation.y,
 			    widget->allocation.width,
 			    widget->allocation.height);
-
-	gtk_paint_shadow (widget->style,
-		       widget->window,
-		       GTK_STATE_NORMAL,
-		       GTK_SHADOW_IN,
-		       &widget->allocation,
-		       widget,
-		       NULL,
-		       widget->allocation.x,
-		       widget->allocation.y,
-		       widget->allocation.width,
-		       widget->allocation.height);
 
 	PangoLayout* layout = pango_layout_new (gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget)));
 	pango_layout_set_font_description (layout,
@@ -120,6 +110,18 @@ display_expose_event (GtkWidget     * widget,
 	}
 	g_object_unref (layout);
 
+	gtk_paint_shadow (widget->style,
+		       widget->window,
+		       GTK_STATE_NORMAL,
+		       GTK_SHADOW_IN,
+		       &widget->allocation,
+		       widget,
+		       NULL,
+		       widget->allocation.x,
+		       widget->allocation.y,
+		       widget->allocation.width,
+		       widget->allocation.height);
+
 	/* display selected item */
 
 	return FALSE;
@@ -129,7 +131,8 @@ static void
 display_size_request (GtkWidget     * widget,
 		      GtkRequisition* req)
 {
-	req->width = 100; /* FIXME: adjust to required size */
+	Display* self = DISPLAY (widget);
+	req->width = 3 * self->_private->element_size; /* FIXME: adjust to required size */
 	req->height = 3;
 }
 
