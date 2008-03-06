@@ -61,6 +61,8 @@ main (int   argc,
 
 	add_button (hbox,
 		    GTK_ARROW_LEFT);
+	add_button (hbox,
+		    GTK_ARROW_RIGHT);
 
 	gtk_widget_show_all (window);
 
