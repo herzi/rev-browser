@@ -32,13 +32,15 @@ add_button (GtkWidget   * hbox,
 {
 	GtkWidget* button;
 
+	button = gtk_button_new ();
 	if (!stock_id) {
-		button = gtk_button_new ();
 		gtk_container_add (GTK_CONTAINER (button),
 				   gtk_arrow_new (arrow,
 						  GTK_SHADOW_IN));
 	} else {
-		button = gtk_button_new_from_stock (stock_id);
+		gtk_container_add (GTK_CONTAINER (button),
+				   gtk_image_new_from_stock (stock_id,
+							     GTK_ICON_SIZE_MENU));
 	}
 	gtk_button_set_relief (GTK_BUTTON (button),
 			       GTK_RELIEF_NONE);
