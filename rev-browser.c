@@ -130,7 +130,7 @@ display_size_request (GtkWidget     * widget,
 		      GtkRequisition* req)
 {
 	Display* self = DISPLAY (widget);
-	req->width = 3 * self->_private->element_size; /* FIXME: adjust to required size */
+	req->width = 3 * (self->_private->element_size + 1) + 1;
 	req->height = 3;
 }
 
