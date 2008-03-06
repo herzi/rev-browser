@@ -27,6 +27,7 @@
 
 struct _DisplayPrivate {
 	Calendar* calendar;
+	guint     n_elements;
 	gint      element_size;
 };
 
@@ -85,7 +86,7 @@ display_expose_event (GtkWidget     * widget,
 	}
 	pango_layout_set_width (layout, PANGO_SCALE * self->_private->element_size);
 
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < self->_private->n_elements; i++) {
 		gchar* year = g_strdup_printf ("%d", 2006 + i);
 		gdk_draw_line (widget->window,
 			       widget->style->black_gc,
@@ -123,6 +124,17 @@ display_expose_event (GtkWidget     * widget,
 }
 
 static void
+display_size_allocate (GtkWidget    * widget,
+		       GtkAllocation* allocation)
+{
+	Display* self = DISPLAY (widget);
+
+	self->_private->n_elements = 3;
+
+	GTK_WIDGET_CLASS (display_parent_class)->size_allocate (widget, allocation);
+}
+
+static void
 display_size_request (GtkWidget     * widget,
 		      GtkRequisition* req)
 {
@@ -140,6 +152,7 @@ display_class_init (DisplayClass* self_class)
 	object_class->finalize = display_finalize;
 
 	widget_class->expose_event  = display_expose_event;
+	widget_class->size_allocate = display_size_allocate;
 	widget_class->size_request  = display_size_request;
 
 	g_type_class_add_private (self_class, sizeof (DisplayPrivate));
