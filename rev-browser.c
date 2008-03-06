@@ -23,6 +23,8 @@
 
 #include <gtk/gtk.h>
 
+#include "calendar.h"
+
 /* START: DISPLAY WIDGET IMPLEMENTATION */
 
 /* GType definition */
@@ -43,7 +45,8 @@ struct _DisplayClass {
 };
 
 struct _DisplayPrivate {
-	gint element_size;
+	Calendar* calendar;
+	gint      element_size;
 };
 
 G_DEFINE_TYPE (Display, display, GTK_TYPE_WIDGET);
