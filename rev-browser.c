@@ -75,7 +75,7 @@ static void
 display_size_request (GtkWidget     * widget,
 		      GtkRequisition* req)
 {
-	req->width = 3;
+	req->width = 100; /* FIXME: adjust to required size */
 	req->height = 3;
 }
 
