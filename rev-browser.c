@@ -33,7 +33,7 @@ typedef struct _Display        Display;
 typedef struct _DisplayPrivate DisplayPrivate;
 typedef struct _DisplayClass   DisplayClass;
 
-#define DISPLAY(i) G_TYPE_CHECK_INSTANCE_CAST (widget, display_get_type (), Display);
+#define DISPLAY(i) G_TYPE_CHECK_INSTANCE_CAST ((i), display_get_type (), Display)
 
 struct _Display {
 	GtkWidget       base_instance;
@@ -58,7 +58,16 @@ display_init (Display* self)
 
 	self->_private = G_TYPE_INSTANCE_GET_PRIVATE (self, display_get_type (), DisplayPrivate);
 
+	self->_private->calendar = calendar_new ();
 	self->_private->element_size = 33;
+}
+
+static void
+display_dispose (GObject* object)
+{
+	g_object_unref (DISPLAY (object)->_private->calendar);
+
+	G_OBJECT_CLASS (display_parent_class)->dispose (object);
 }
 
 static gboolean
@@ -140,7 +149,10 @@ display_size_request (GtkWidget     * widget,
 static void
 display_class_init (DisplayClass* self_class)
 {
+	GObjectClass  * object_class = G_OBJECT_CLASS (self_class);
 	GtkWidgetClass* widget_class = GTK_WIDGET_CLASS (self_class);
+
+	object_class->dispose = display_dispose;
 
 	widget_class->expose_event  = display_expose_event;
 	widget_class->size_request  = display_size_request;
