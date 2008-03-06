@@ -34,6 +34,8 @@ typedef struct _DisplayClass   DisplayClass;
 
 #define DISPLAY(i) G_TYPE_CHECK_INSTANCE_CAST ((i), display_get_type (), Display)
 
+GType display_get_type (void);
+
 struct _Display {
 	GtkWidget       base_instance;
 	DisplayPrivate* _private;
