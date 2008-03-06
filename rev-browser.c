@@ -45,14 +45,38 @@ G_DEFINE_TYPE (Display, display, GTK_TYPE_WIDGET);
 static void
 display_init (Display* self)
 {
+	GdkColor color = {0, 0xFFFF, 0xFFFF, 0xFFFF};
 	GTK_WIDGET_SET_FLAGS (self, GTK_NO_WINDOW);
+
+	gtk_widget_modify_bg (GTK_WIDGET (self),
+			      GTK_STATE_NORMAL,
+			      &color);
 }
 
 static gboolean
 display_expose_event (GtkWidget     * widget,
 		      GdkEventExpose* event)
 {
+	gtk_paint_box (widget->style,
+		       widget->window,
+		       GTK_STATE_NORMAL,
+		       GTK_SHADOW_IN,
+		       NULL,
+		       widget,
+		       NULL,
+		       widget->allocation.x,
+		       widget->allocation.y,
+		       widget->allocation.width,
+		       widget->allocation.height);
 	return FALSE;
+}
+
+static void
+display_size_request (GtkWidget     * widget,
+		      GtkRequisition* req)
+{
+	req->width = 3;
+	req->height = 3;
 }
 
 static void
@@ -61,6 +85,7 @@ display_class_init (DisplayClass* self_class)
 	GtkWidgetClass* widget_class = GTK_WIDGET_CLASS (self_class);
 
 	widget_class->expose_event = display_expose_event;
+	widget_class->size_request = display_size_request;
 }
 
 /* END: DISPLAY WIDGET IMPLEMENTATION */
