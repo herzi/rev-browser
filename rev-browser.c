@@ -92,14 +92,12 @@ display_expose_event (GtkWidget     * widget,
 	pango_layout_set_width (layout, PANGO_SCALE * self->_private->element_size);
 
 	for (i = 0; i < G_N_ELEMENTS (years); i++) {
-		if (G_LIKELY (i)) {
-			gdk_draw_line (widget->window,
-				       widget->style->black_gc,
-				       widget->allocation.x + i * self->_private->element_size,
-				       widget->allocation.y + 1,
-				       widget->allocation.x + i * self->_private->element_size,
-				       widget->allocation.y + 5);
-		}
+		gdk_draw_line (widget->window,
+			       widget->style->black_gc,
+			       widget->allocation.x + i * self->_private->element_size,
+			       widget->allocation.y + 1,
+			       widget->allocation.x + i * self->_private->element_size,
+			       widget->allocation.y + 5);
 
 		pango_layout_set_text (layout, years[i], -1);
 		gdk_draw_layout (widget->window,
