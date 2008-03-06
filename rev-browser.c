@@ -23,6 +23,35 @@
 
 #include <gtk/gtk.h>
 
+/* START: DISPLAY WIDGET IMPLEMENTATION */
+
+/* GType definition */
+
+typedef struct _Display        Display;
+typedef struct _DisplayPrivate DisplayPrivate;
+typedef struct _DisplayClass   DisplayClass;
+
+struct _Display {
+	GtkWidget       base_instance;
+	DisplayPrivate* _private;
+};
+
+struct _DisplayClass {
+	GtkWidgetClass  base_class;
+};
+
+G_DEFINE_TYPE (Display, display, GTK_TYPE_WIDGET);
+
+static void
+display_init (Display* self)
+{}
+
+static void
+display_class_init (DisplayClass* self_class)
+{}
+
+/* END: DISPLAY WIDGET IMPLEMENTATION */
+
 static void
 add_button (GtkWidget   * hbox,
 	    GtkArrowType  arrow)
