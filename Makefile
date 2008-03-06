@@ -4,7 +4,7 @@ rev-lister: rev-lister.c Makefile
 	gcc -o $@ $< $(shell pkg-config --cflags --libs glib-2.0)
 
 rev_browser_sources=\
-	rev-browser.c \
+	browser.c \
 	calendar.c \
 	calendar.h \
 	display.c \
