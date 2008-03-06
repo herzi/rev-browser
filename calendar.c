@@ -23,3 +23,23 @@
 
 #include "calendar.h"
 
+/* GType Implementation */
+
+G_DEFINE_TYPE (Calendar, calendar, G_TYPE_OBJECT);
+
+static void
+calendar_init (Calendar* self)
+{}
+
+static void
+calendar_class_init (CalendarClass* self_class)
+{}
+
+/* Public API */
+
+Calendar*
+calendar_new (void)
+{
+	return g_object_new (TYPE_CALENDAR, NULL);
+}
+
