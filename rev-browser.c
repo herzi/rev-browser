@@ -42,6 +42,8 @@ main (int   argc,
 			   hbox);
 
 	button = gtk_button_new ();
+	gtk_button_set_relief (GTK_BUTTON (button),
+			       GTK_RELIEF_NONE);
 	gtk_container_add (GTK_CONTAINER (button),
 			   gtk_arrow_new (GTK_ARROW_LEFT,
 					  GTK_SHADOW_IN));
