@@ -52,6 +52,8 @@ display_init (Display* self)
 	GTK_WIDGET_SET_FLAGS (self, GTK_NO_WINDOW);
 
 	self->_private = G_TYPE_INSTANCE_GET_PRIVATE (self, display_get_type (), DisplayPrivate);
+
+	self->_private->element_size = 33;
 }
 
 static gboolean
@@ -59,28 +61,29 @@ display_expose_event (GtkWidget     * widget,
 		      GdkEventExpose* event)
 {
 	gchar const* years[] = {"2006", "2007", "2008"};
+	Display* self = G_TYPE_CHECK_INSTANCE_CAST (widget, display_get_type (), Display);
 	gsize i;
 
-	gtk_paint_box (widget->style,
+	/* FIXME: get color/gc from theme */
+	gdk_draw_rectangle (widget->window,
+			    widget->style->white_gc,
+			    TRUE,
+			    widget->allocation.x,
+			    widget->allocation.y,
+			    widget->allocation.width,
+			    widget->allocation.height);
+
+	gtk_paint_shadow (widget->style,
 		       widget->window,
 		       GTK_STATE_NORMAL,
 		       GTK_SHADOW_IN,
-		       NULL,
+		       &widget->allocation,
 		       widget,
 		       NULL,
 		       widget->allocation.x,
 		       widget->allocation.y,
 		       widget->allocation.width,
 		       widget->allocation.height);
-
-	/* FIXME: get color/gc from theme */
-	gdk_draw_rectangle (widget->window,
-			    widget->style->white_gc,
-			    TRUE,
-			    widget->allocation.x + 1,
-			    widget->allocation.y + 1,
-			    widget->allocation.width - 2,
-			    widget->allocation.height - 2);
 
 	PangoLayout* layout = pango_layout_new (gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget)));
 	pango_layout_set_font_description (layout,
@@ -96,26 +99,28 @@ display_expose_event (GtkWidget     * widget,
 		pango_layout_set_attributes (layout, attributes);
 		pango_attr_list_unref (attributes);
 	}
-	pango_layout_set_width (layout, PANGO_SCALE * 33);
+	pango_layout_set_width (layout, PANGO_SCALE * self->_private->element_size);
 
 	for (i = 0; i < G_N_ELEMENTS (years); i++) {
 		if (G_LIKELY (i)) {
 			gdk_draw_line (widget->window,
 				       widget->style->black_gc,
-				       widget->allocation.x + i * 33,
+				       widget->allocation.x + i * self->_private->element_size,
 				       widget->allocation.y + 1,
-				       widget->allocation.x + i * 33,
+				       widget->allocation.x + i * self->_private->element_size,
 				       widget->allocation.y + 5);
 		}
 
 		pango_layout_set_text (layout, years[i], -1);
 		gdk_draw_layout (widget->window,
 				 widget->style->black_gc,
-				 widget->allocation.x + i * 33 + 5,
+				 widget->allocation.x + i * self->_private->element_size + 5,
 				 widget->allocation.y + 5,
 				 layout);
 	}
 	g_object_unref (layout);
+
+	/* display selected item */
 
 	return FALSE;
 }
