@@ -86,7 +86,6 @@ display_expose_event (GtkWidget     * widget,
 		PangoLayout* layout = pango_layout_new (gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget)));
 		pango_layout_set_font_description (layout,
 						   widget->style->font_desc);
-		pango_layout_set_text (layout, years[i], -1);
 		pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_END);
 		{
 			PangoAttrList* attributes = pango_attr_list_new ();
@@ -99,6 +98,7 @@ display_expose_event (GtkWidget     * widget,
 			pango_attr_list_unref (attributes);
 		}
 		pango_layout_set_width (layout, PANGO_SCALE * 33);
+		pango_layout_set_text (layout, years[i], -1);
 		gdk_draw_layout (widget->window,
 				 widget->style->black_gc,
 				 widget->allocation.x + i * 33 + 5,
