@@ -138,7 +138,7 @@ display_expose_event (GtkWidget     * widget,
 			    NULL,
 			    widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1),
 			    widget->allocation.y,
-			    (self->_private->element_size + 1),
+			    (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1),
 			    9);
 	gtk_paint_flat_box (widget->style,
 			    widget->window,
@@ -149,7 +149,7 @@ display_expose_event (GtkWidget     * widget,
 			    NULL,
 			    widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1),
 			    widget->allocation.y + widget->allocation.height - 9,
-			    self->_private->element_size + 1,
+			    (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1),
 			    9);
 	gtk_paint_flat_box (widget->style,
 			    widget->window,
@@ -182,7 +182,7 @@ display_expose_event (GtkWidget     * widget,
 			  NULL,
 			  widget->allocation.x + 3 + self->_private->selected_start * (self->_private->element_size + 1),
 			  widget->allocation.y + 9,
-			  self->_private->element_size + 1 - 5,
+			  (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1) - 5,
 			  widget->allocation.height - 18);
 	gtk_paint_shadow (widget->style,
 			  widget->window,
@@ -193,7 +193,7 @@ display_expose_event (GtkWidget     * widget,
 			  NULL,
 			  widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1),
 			  widget->allocation.y,
-			  self->_private->element_size + 1 + 1,
+			  (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1) + 1,
 			  widget->allocation.height);
 
 	if (GTK_WIDGET_HAS_FOCUS (widget)) {
@@ -205,7 +205,7 @@ display_expose_event (GtkWidget     * widget,
 				 NULL,
 				 widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1) + 2,
 				 widget->allocation.y + 2,
-				 (self->_private->element_size + 1) - 3,
+				 (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1) - 3,
 				 widget->allocation.height - 4);
 	}
 
