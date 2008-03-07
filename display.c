@@ -36,6 +36,7 @@ struct _DisplayPrivate {
 	guint     n_elements;
 	gint      element_size;
 	gint      start_year;
+	gint      end_year;
 };
 
 /* GType definition */
@@ -52,7 +53,8 @@ display_init (Display* self)
 
 	self->_private->calendar = calendar_new ();
 	self->_private->element_size = 33;
-	self->_private->start_year = 2006;
+	self->_private->start_year = 1982;
+	self->_private->end_year = 2008;
 }
 
 static void
