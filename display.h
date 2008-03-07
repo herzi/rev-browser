@@ -32,9 +32,16 @@ typedef struct _Display        Display;
 typedef struct _DisplayPrivate DisplayPrivate;
 typedef struct _DisplayClass   DisplayClass;
 
-#define DISPLAY(i) G_TYPE_CHECK_INSTANCE_CAST ((i), display_get_type (), Display)
+#define TYPE_DISPLAY         (display_get_type ())
+#define DISPLAY(i)           (G_TYPE_CHECK_INSTANCE_CAST ((i), TYPE_DISPLAY, Display))
+#define DISPLAY_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), TYPE_DISPLAY, DisplayClass))
+#define IS_DISPLAY(i)        (G_TYPE_CHECK_INSTANCE_TYPE ((i), TYPE_DISPLAY))
+#define IS_DISPLAY_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_DISPLAY))
+#define DISPLAY_GET_CLASS(i) (G_TYPE_INSTANCE_GET_CLASS ((i), TYPE_DISPLAY, DisplayClass))
 
 GType display_get_type (void);
+
+GtkWidget* display_new (void);
 
 struct _Display {
 	GtkWidget       base_instance;

@@ -310,3 +310,11 @@ display_class_init (DisplayClass* self_class)
 	g_type_class_add_private (self_class, sizeof (DisplayPrivate));
 }
 
+/* Public API Implementation */
+
+GtkWidget*
+display_new (void)
+{
+	return g_object_new (TYPE_DISPLAY, NULL);
+}
+
