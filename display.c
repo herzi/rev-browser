@@ -25,6 +25,8 @@
 
 #include "calendar.h"
 
+#define DEFAULT_SIZE 30 /* the default size and minimum of an element */
+
 struct _DisplayPrivate {
 	Calendar* calendar;
 	guint     n_elements;
@@ -195,7 +197,7 @@ display_size_allocate (GtkWidget    * widget,
 {
 	Display* self = DISPLAY (widget);
 
-	self->_private->n_elements = allocation->width / 30;
+	self->_private->n_elements = allocation->width / DEFAULT_SIZE;
 	self->_private->element_size = allocation->width / self->_private->n_elements;
 
 	GTK_WIDGET_CLASS (display_parent_class)->size_allocate (widget, allocation);
@@ -206,7 +208,7 @@ display_size_request (GtkWidget     * widget,
 		      GtkRequisition* req)
 {
 	Display* self = DISPLAY (widget);
-	req->width = 3 * (30 /* default element size */ + 1) + 1;
+	req->width = 3 * (DEFAULT_SIZE + 1) + 1;
 	req->height = 3;
 }
 
