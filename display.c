@@ -121,16 +121,16 @@ display_expose_event (GtkWidget     * widget,
 	g_object_unref (layout);
 
 	gtk_paint_shadow (widget->style,
-		       widget->window,
-		       GTK_STATE_NORMAL,
-		       GTK_SHADOW_IN,
-		       &widget->allocation,
-		       widget,
-		       NULL,
-		       widget->allocation.x,
-		       widget->allocation.y + 6,
-		       widget->allocation.width,
-		       widget->allocation.height - 12);
+			  widget->window,
+			  GTK_STATE_NORMAL,
+			  GTK_SHADOW_IN,
+			  &widget->allocation,
+			  widget,
+			  NULL,
+			  widget->allocation.x,
+			  widget->allocation.y + 6,
+			  widget->allocation.width,
+			  widget->allocation.height - 12);
 
 	/* display selected item */
 	gtk_paint_flat_box (widget->style,
