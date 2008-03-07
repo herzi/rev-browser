@@ -210,6 +210,13 @@ display_expose_event (GtkWidget     * widget,
 	return FALSE;
 }
 
+static gboolean
+display_key_press_event (GtkWidget  * widget,
+			 GdkEventKey* event)
+{
+	return FALSE;
+}
+
 static void
 display_size_allocate (GtkWidget    * widget,
 		       GtkAllocation* allocation)
@@ -242,9 +249,10 @@ display_class_init (DisplayClass* self_class)
 
 	object_class->finalize = display_finalize;
 
-	widget_class->expose_event  = display_expose_event;
-	widget_class->size_allocate = display_size_allocate;
-	widget_class->size_request  = display_size_request;
+	widget_class->expose_event    = display_expose_event;
+	widget_class->key_press_event = display_key_press_event;
+	widget_class->size_allocate   = display_size_allocate;
+	widget_class->size_request    = display_size_request;
 
 	g_type_class_add_private (self_class, sizeof (DisplayPrivate));
 }
