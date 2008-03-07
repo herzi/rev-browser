@@ -128,7 +128,7 @@ display_expose_event (GtkWidget     * widget,
 	pango_layout_set_width (layout, PANGO_SCALE * self->_private->element_size);
 
 	for (i = 0; i < self->_private->n_elements; i++) {
-		gchar* year = g_strdup_printf ("%d", self->_private->start_year + i);
+		gchar* year = g_strdup_printf ("%d", self->_private->start_year + self->_private->offset + i);
 
 		if (G_LIKELY (i)) {
 			gdk_draw_line (widget->window,
@@ -170,7 +170,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1),
+			    widget->allocation.x + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1),
 			    widget->allocation.y,
 			    (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1),
 			    9);
@@ -181,7 +181,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1),
+			    widget->allocation.x + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1),
 			    widget->allocation.y + widget->allocation.height - 9,
 			    (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1),
 			    9);
@@ -192,7 +192,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1),
+			    widget->allocation.x + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1),
 			    widget->allocation.y + 9,
 			    3,
 			    widget->allocation.height - 18);
@@ -203,7 +203,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + (self->_private->selected_end + 1) * (self->_private->element_size + 1) - 4,
+			    widget->allocation.x + (self->_private->selected_end + 1 - self->_private->offset) * (self->_private->element_size + 1) - 4,
 			    widget->allocation.y + 9,
 			    3,
 			    widget->allocation.height - 18);
@@ -214,7 +214,7 @@ display_expose_event (GtkWidget     * widget,
 			  &widget->allocation,
 			  widget,
 			  NULL,
-			  widget->allocation.x + 3 + self->_private->selected_start * (self->_private->element_size + 1),
+			  widget->allocation.x + 3 + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1),
 			  widget->allocation.y + 9,
 			  (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1) - 5,
 			  widget->allocation.height - 18);
@@ -225,7 +225,7 @@ display_expose_event (GtkWidget     * widget,
 			  &widget->allocation,
 			  widget,
 			  NULL,
-			  widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1),
+			  widget->allocation.x + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1),
 			  widget->allocation.y,
 			  (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1) + 1,
 			  widget->allocation.height);
@@ -237,7 +237,7 @@ display_expose_event (GtkWidget     * widget,
 				 &widget->allocation,
 				 widget,
 				 NULL,
-				 widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1) + 2,
+				 widget->allocation.x + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1) + 2,
 				 widget->allocation.y + 2,
 				 (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1) - 3,
 				 widget->allocation.height - 4);
