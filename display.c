@@ -23,6 +23,8 @@
 
 #include "display.h"
 
+#include <gdk/gdkkeysyms.h>
+
 #include "calendar.h"
 
 #define DEFAULT_SIZE 40 /* the default size and minimum of an element */
@@ -214,6 +216,14 @@ static gboolean
 display_key_press_event (GtkWidget  * widget,
 			 GdkEventKey* event)
 {
+	if ((event->state & GDK_CONTROL_MASK) == 0) {
+		switch (event->keyval) {
+		case GDK_Left:
+		case GDK_Right:
+			return TRUE;
+		}
+	}
+
 	return FALSE;
 }
 
