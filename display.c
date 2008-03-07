@@ -43,7 +43,8 @@ struct _DisplayPrivate {
 enum {
 	PROP_0,
 	PROP_CAN_STEP_LEFT,
-	PROP_CAN_STEP_RIGHT
+	PROP_CAN_STEP_RIGHT,
+	PROP_CAN_ZOOM_IN
 };
 
 /* GType definition */
@@ -80,6 +81,10 @@ display_get_property (GObject   * object,
 	case PROP_CAN_STEP_RIGHT:
 		g_value_set_boolean (value,
 				     display_can_step_right (self));
+		break;
+	case PROP_CAN_ZOOM_IN:
+		g_value_set_boolean (value,
+				     display_can_zoom_in (self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -251,6 +256,7 @@ notify_changes (Display* self)
 {
 	g_object_notify (G_OBJECT (self), "can-step-left");
 	g_object_notify (G_OBJECT (self), "can-step-right");
+	g_object_notify (G_OBJECT (self), "can-zoom-in");
 }
 
 static gboolean
@@ -363,6 +369,9 @@ display_class_init (DisplayClass* self_class)
 	g_object_class_install_property (object_class, PROP_CAN_STEP_RIGHT,
 					 g_param_spec_boolean ("can-step-right", NULL, NULL,
 							       FALSE, G_PARAM_READABLE));
+	g_object_class_install_property (object_class, PROP_CAN_ZOOM_IN,
+					 g_param_spec_boolean ("can-zoom-in", NULL, NULL,
+							       FALSE, G_PARAM_READABLE));
 
 	g_type_class_add_private (self_class, sizeof (DisplayPrivate));
 }
@@ -390,6 +399,14 @@ display_can_step_right (Display const* self)
 
 	return (self->_private->offset +
 	       self->_private->n_elements) < (1 + self->_private->end_year - self->_private->start_year);
+}
+
+gboolean
+display_can_zoom_in (Display const* self)
+{
+	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
+
+	return FALSE; /* FIXME: implement properly */
 }
 
 void
