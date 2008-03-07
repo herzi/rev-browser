@@ -35,6 +35,7 @@ struct _DisplayPrivate {
 	guint     selected_end;
 	guint     n_elements;
 	gint      element_size;
+	gint      start_year;
 };
 
 /* GType definition */
@@ -51,6 +52,7 @@ display_init (Display* self)
 
 	self->_private->calendar = calendar_new ();
 	self->_private->element_size = 33;
+	self->_private->start_year = 2006;
 }
 
 static void
@@ -94,7 +96,7 @@ display_expose_event (GtkWidget     * widget,
 	pango_layout_set_width (layout, PANGO_SCALE * self->_private->element_size);
 
 	for (i = 0; i < self->_private->n_elements; i++) {
-		gchar* year = g_strdup_printf ("%d", 2006 + i);
+		gchar* year = g_strdup_printf ("%d", self->_private->start_year + i);
 
 		if (G_LIKELY (i)) {
 			gdk_draw_line (widget->window,
