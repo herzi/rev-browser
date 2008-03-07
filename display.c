@@ -25,7 +25,7 @@
 
 #include "calendar.h"
 
-#define DEFAULT_SIZE 30 /* the default size and minimum of an element */
+#define DEFAULT_SIZE 40 /* the default size and minimum of an element */
 
 struct _DisplayPrivate {
 	Calendar* calendar;
@@ -90,12 +90,15 @@ display_expose_event (GtkWidget     * widget,
 
 	for (i = 0; i < self->_private->n_elements; i++) {
 		gchar* year = g_strdup_printf ("%d", 2006 + i);
-		gdk_draw_line (widget->window,
-			       widget->style->black_gc,
-			       widget->allocation.x + i * (self->_private->element_size + 1),
-			       widget->allocation.y + 6 + 1,
-			       widget->allocation.x + i * (self->_private->element_size + 1),
-			       widget->allocation.y + 6 + 5);
+
+		if (G_LIKELY (i)) {
+			gdk_draw_line (widget->window,
+				       widget->style->black_gc,
+				       widget->allocation.x + i * (self->_private->element_size + 1),
+				       widget->allocation.y + 6 + 1,
+				       widget->allocation.x + i * (self->_private->element_size + 1),
+				       widget->allocation.y + 6 + 5);
+		}
 
 		pango_layout_set_text (layout, year, -1);
 		gdk_draw_layout (widget->window,
