@@ -212,7 +212,10 @@ display_size_request (GtkWidget     * widget,
 {
 	Display* self = DISPLAY (widget);
 	req->width = 3 * (DEFAULT_SIZE + 1) + 1;
-	req->height = 3;
+	req->height = 12 /* default white box size */
+		      + 12 /* 6 pixels above and below the white box */
+		      + 6 /* 3 pixels above and below the inner shadow */
+		      + 4 /* ~2*shadow-width */;
 }
 
 static void
