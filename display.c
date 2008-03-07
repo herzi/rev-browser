@@ -32,6 +32,7 @@
 struct _DisplayPrivate {
 	Calendar* calendar;
 	guint     selected_start;
+	guint     selected_end;
 	guint     n_elements;
 	gint      element_size;
 };
@@ -168,7 +169,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + (self->_private->selected_start + 1) * (self->_private->element_size + 1) - 4,
+			    widget->allocation.x + (self->_private->selected_end + 1) * (self->_private->element_size + 1) - 4,
 			    widget->allocation.y + 9,
 			    3,
 			    widget->allocation.height - 18);
@@ -222,6 +223,7 @@ display_key_press_event (GtkWidget  * widget,
 		case GDK_Left:
 			if (self->_private->selected_start > 0) {
 				self->_private->selected_start--;
+				self->_private->selected_end--;
 				gtk_widget_queue_draw (widget);
 				return TRUE;
 			}
@@ -229,6 +231,7 @@ display_key_press_event (GtkWidget  * widget,
 		case GDK_Right:
 			if (self->_private->selected_start < (self->_private->n_elements - 1)) {
 				self->_private->selected_start++;
+				self->_private->selected_end++;
 				gtk_widget_queue_draw (widget);
 				return TRUE;
 			}
