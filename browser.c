@@ -57,6 +57,7 @@ main (int   argc,
 {
 	GtkWidget* window;
 	GtkWidget* hbox;
+	GtkWidget* display;
 	GtkWidget* vbox;
 
 	gtk_init (&argc, &argv);
@@ -72,8 +73,9 @@ main (int   argc,
 	add_button (hbox,
 		    GTK_ARROW_LEFT,
 		    NULL);
+	display = display_new ();
 	gtk_box_pack_start_defaults (GTK_BOX (hbox),
-				     display_new ());
+				     display);
 	add_button (hbox,
 		    GTK_ARROW_RIGHT,
 		    NULL);
