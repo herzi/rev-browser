@@ -31,7 +31,7 @@
 
 struct _DisplayPrivate {
 	Calendar* calendar;
-	guint     selected;
+	guint     selected_start;
 	guint     n_elements;
 	gint      element_size;
 };
@@ -50,7 +50,6 @@ display_init (Display* self)
 
 	self->_private->calendar = calendar_new ();
 	self->_private->element_size = 33;
-	self->_private->selected = 1;
 }
 
 static void
@@ -136,7 +135,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + self->_private->selected * (self->_private->element_size + 1),
+			    widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1),
 			    widget->allocation.y,
 			    (self->_private->element_size + 1),
 			    9);
@@ -147,7 +146,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + self->_private->selected * (self->_private->element_size + 1),
+			    widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1),
 			    widget->allocation.y + widget->allocation.height - 9,
 			    self->_private->element_size + 1,
 			    9);
@@ -158,7 +157,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + self->_private->selected * (self->_private->element_size + 1),
+			    widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1),
 			    widget->allocation.y + 9,
 			    3,
 			    widget->allocation.height - 18);
@@ -169,7 +168,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + (self->_private->selected + 1) * (self->_private->element_size + 1) - 4,
+			    widget->allocation.x + (self->_private->selected_start + 1) * (self->_private->element_size + 1) - 4,
 			    widget->allocation.y + 9,
 			    3,
 			    widget->allocation.height - 18);
@@ -180,7 +179,7 @@ display_expose_event (GtkWidget     * widget,
 			  &widget->allocation,
 			  widget,
 			  NULL,
-			  widget->allocation.x + 3 + self->_private->selected * (self->_private->element_size + 1),
+			  widget->allocation.x + 3 + self->_private->selected_start * (self->_private->element_size + 1),
 			  widget->allocation.y + 9,
 			  self->_private->element_size + 1 - 5,
 			  widget->allocation.height - 18);
@@ -191,7 +190,7 @@ display_expose_event (GtkWidget     * widget,
 			  &widget->allocation,
 			  widget,
 			  NULL,
-			  widget->allocation.x + self->_private->selected * (self->_private->element_size + 1),
+			  widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1),
 			  widget->allocation.y,
 			  self->_private->element_size + 1 + 1,
 			  widget->allocation.height);
@@ -203,7 +202,7 @@ display_expose_event (GtkWidget     * widget,
 				 &widget->allocation,
 				 widget,
 				 NULL,
-				 widget->allocation.x + self->_private->selected * (self->_private->element_size + 1) + 2,
+				 widget->allocation.x + self->_private->selected_start * (self->_private->element_size + 1) + 2,
 				 widget->allocation.y + 2,
 				 (self->_private->element_size + 1) - 3,
 				 widget->allocation.height - 4);
@@ -221,15 +220,15 @@ display_key_press_event (GtkWidget  * widget,
 
 		switch (event->keyval) {
 		case GDK_Left:
-			if (self->_private->selected > 0) {
-				self->_private->selected--;
+			if (self->_private->selected_start > 0) {
+				self->_private->selected_start--;
 				gtk_widget_queue_draw (widget);
 				return TRUE;
 			}
 			break;
 		case GDK_Right:
-			if (self->_private->selected < (self->_private->n_elements - 1)) {
-				self->_private->selected++;
+			if (self->_private->selected_start < (self->_private->n_elements - 1)) {
+				self->_private->selected_start++;
 				gtk_widget_queue_draw (widget);
 				return TRUE;
 			}
