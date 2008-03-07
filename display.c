@@ -54,7 +54,7 @@ display_init (Display* self)
 	self->_private->calendar = calendar_new ();
 	self->_private->element_size = 33;
 	self->_private->start_year = 1982;
-	self->_private->end_year = 2008;
+	self->_private->end_year = 1988;
 }
 
 static void
@@ -78,7 +78,7 @@ display_expose_event (GtkWidget     * widget,
 			    TRUE,
 			    widget->allocation.x,
 			    widget->allocation.y + 6,
-			    widget->allocation.width,
+			    MIN (widget->allocation.width, 1 + (1 + self->_private->end_year - self->_private->start_year)*(self->_private->element_size + 1)),
 			    widget->allocation.height - 12);
 
 	PangoLayout* layout = pango_layout_new (gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget)));
