@@ -41,7 +41,8 @@ typedef struct _DisplayClass   DisplayClass;
 
 GType display_get_type (void);
 
-GtkWidget* display_new (void);
+GtkWidget* display_new            (void);
+gboolean   display_can_step_right (Display const* self);
 
 struct _Display {
 	GtkWidget       base_instance;

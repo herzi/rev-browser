@@ -39,6 +39,11 @@ struct _DisplayPrivate {
 	gint      end_year;
 };
 
+enum {
+	PROP_0,
+	PROP_CAN_STEP_RIGHT
+};
+
 /* GType definition */
 
 G_DEFINE_TYPE (Display, display, GTK_TYPE_WIDGET);
@@ -55,6 +60,25 @@ display_init (Display* self)
 	self->_private->element_size = 33;
 	self->_private->start_year = 1982;
 	self->_private->end_year = 1988;
+}
+
+static void
+display_get_property (GObject   * object,
+		      guint       prop_id,
+		      GValue    * value,
+		      GParamSpec* pspec)
+{
+	Display* self = DISPLAY (object);
+
+	switch (prop_id) {
+	case PROP_CAN_STEP_RIGHT:
+		g_value_set_boolean (value,
+				     display_can_step_right (self));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
 }
 
 static void
@@ -216,6 +240,12 @@ display_expose_event (GtkWidget     * widget,
 	return FALSE;
 }
 
+static void
+notify_changes (Display* self)
+{
+	g_object_notify (G_OBJECT (self), "can-step-right");
+}
+
 static gboolean
 display_key_press_event (GtkWidget  * widget,
 			 GdkEventKey* event)
@@ -230,16 +260,19 @@ display_key_press_event (GtkWidget  * widget,
 					self->_private->selected_start--;
 					self->_private->selected_end = self->_private->selected_start;
 					gtk_widget_queue_draw (widget);
+					notify_changes (self);
 					return TRUE;
 				} else if (self->_private->selected_end > 0) {
 					self->_private->selected_end = self->_private->selected_start;
 					gtk_widget_queue_draw (widget);
+					notify_changes (self);
 					return TRUE;
 				}
 			} else {
 				if (self->_private->selected_start > 0) {
 					self->_private->selected_start--;
 					gtk_widget_queue_draw (widget);
+					notify_changes (self);
 					return TRUE;
 				}
 			}
@@ -250,16 +283,19 @@ display_key_press_event (GtkWidget  * widget,
 					self->_private->selected_end++;
 					self->_private->selected_start = self->_private->selected_end;
 					gtk_widget_queue_draw (widget);
+					notify_changes (self);
 					return TRUE;
 				} else if (self->_private->selected_start < MIN (self->_private->n_elements - 1, self->_private->end_year - self->_private->start_year)) {
 					self->_private->selected_start = self->_private->selected_end;
 					gtk_widget_queue_draw (widget);
+					notify_changes (self);
 					return TRUE;
 				}
 			} else {
 				if (self->_private->selected_end < MIN (self->_private->n_elements - 1, self->_private->end_year - self->_private->start_year)) {
 					self->_private->selected_end++;
 					gtk_widget_queue_draw (widget);
+					notify_changes (self);
 					return TRUE;
 				}
 			}
@@ -280,6 +316,8 @@ display_size_allocate (GtkWidget    * widget,
 	self->_private->element_size = (allocation->width - 1) / self->_private->n_elements - 1;
 
 	GTK_WIDGET_CLASS (display_parent_class)->size_allocate (widget, allocation);
+
+	notify_changes (self);
 }
 
 static void
@@ -300,12 +338,17 @@ display_class_init (DisplayClass* self_class)
 	GObjectClass  * object_class = G_OBJECT_CLASS (self_class);
 	GtkWidgetClass* widget_class = GTK_WIDGET_CLASS (self_class);
 
-	object_class->finalize = display_finalize;
+	object_class->get_property = display_get_property;
+	object_class->finalize     = display_finalize;
 
 	widget_class->expose_event    = display_expose_event;
 	widget_class->key_press_event = display_key_press_event;
 	widget_class->size_allocate   = display_size_allocate;
 	widget_class->size_request    = display_size_request;
+
+	g_object_class_install_property (object_class, PROP_CAN_STEP_RIGHT,
+					 g_param_spec_boolean ("can-step-right", NULL, NULL,
+							       FALSE, G_PARAM_READABLE));
 
 	g_type_class_add_private (self_class, sizeof (DisplayPrivate));
 }
@@ -316,5 +359,14 @@ GtkWidget*
 display_new (void)
 {
 	return g_object_new (TYPE_DISPLAY, NULL);
+}
+
+gboolean
+display_can_step_right (Display const* self)
+{
+	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
+
+	return /* self->_private->offset + */
+	       self->_private->n_elements < 1 + self->_private->end_year - self->_private->start_year;
 }
 
