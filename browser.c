@@ -73,7 +73,7 @@ main (int   argc,
 		    GTK_ARROW_LEFT,
 		    NULL);
 	gtk_box_pack_start_defaults (GTK_BOX (hbox),
-				     g_object_new (display_get_type (), NULL));
+				     display_new ());
 	add_button (hbox,
 		    GTK_ARROW_RIGHT,
 		    NULL);
