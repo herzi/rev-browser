@@ -221,13 +221,19 @@ display_key_press_event (GtkWidget  * widget,
 
 		switch (event->keyval) {
 		case GDK_Left:
-			return TRUE;
+			if (self->_private->selected > 0) {
+				self->_private->selected--;
+				gtk_widget_queue_draw (widget);
+				return TRUE;
+			}
+			break;
 		case GDK_Right:
 			if (self->_private->selected < (self->_private->n_elements - 1)) {
 				self->_private->selected++;
 				gtk_widget_queue_draw (widget);
 				return TRUE;
 			}
+			break;
 		}
 	}
 
