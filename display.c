@@ -376,7 +376,7 @@ display_can_step_left (Display const* self)
 {
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
-	return FALSE;
+	return self->_private->offset > 0;
 }
 
 gboolean
@@ -386,6 +386,18 @@ display_can_step_right (Display const* self)
 
 	return (self->_private->offset +
 	       self->_private->n_elements) < (1 + self->_private->end_year - self->_private->start_year);
+}
+
+void
+display_step_left (Display* self)
+{
+	g_return_if_fail (IS_DISPLAY (self));
+	g_return_if_fail (display_can_step_left (self));
+
+	self->_private->offset--;
+	gtk_widget_queue_draw (GTK_WIDGET (self));
+
+	notify_changes (self);
 }
 
 void

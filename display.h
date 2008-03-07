@@ -44,6 +44,7 @@ GType display_get_type (void);
 GtkWidget* display_new            (void);
 gboolean   display_can_step_left  (Display const* self);
 gboolean   display_can_step_right (Display const* self);
+void       display_step_left      (Display      * self);
 void       display_step_right     (Display      * self);
 
 struct _Display {

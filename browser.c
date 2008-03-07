@@ -63,6 +63,8 @@ add_button (GtkWidget   * hbox,
 		} else {
 			g_signal_connect (display, "notify::can-step-left",
 					  G_CALLBACK (display_notify_can_step_left), button);
+			g_signal_connect_swapped (button, "clicked",
+						  G_CALLBACK (display_step_left), display);
 		}
 	} else {
 		gtk_container_add (GTK_CONTAINER (button),
