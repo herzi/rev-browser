@@ -29,6 +29,7 @@
 
 struct _DisplayPrivate {
 	Calendar* calendar;
+	guint     selected;
 	guint     n_elements;
 	gint      element_size;
 };
@@ -46,6 +47,7 @@ display_init (Display* self)
 
 	self->_private->calendar = calendar_new ();
 	self->_private->element_size = 33;
+	self->_private->selected = 1;
 }
 
 static void
@@ -131,7 +133,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + self->_private->element_size,
+			    widget->allocation.x + self->_private->selected * (self->_private->element_size + 1),
 			    widget->allocation.y,
 			    (self->_private->element_size + 1),
 			    9);
@@ -142,7 +144,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + (self->_private->element_size + 1),
+			    widget->allocation.x + self->_private->selected * (self->_private->element_size + 1),
 			    widget->allocation.y + widget->allocation.height - 9,
 			    self->_private->element_size + 1,
 			    9);
@@ -153,7 +155,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + (self->_private->element_size + 1),
+			    widget->allocation.x + self->_private->selected * (self->_private->element_size + 1),
 			    widget->allocation.y + 9,
 			    3,
 			    widget->allocation.height - 18);
@@ -164,7 +166,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + 2 * (self->_private->element_size + 1) - 4,
+			    widget->allocation.x + (self->_private->selected + 1) * (self->_private->element_size + 1) - 4,
 			    widget->allocation.y + 9,
 			    3,
 			    widget->allocation.height - 18);
@@ -175,7 +177,7 @@ display_expose_event (GtkWidget     * widget,
 			  &widget->allocation,
 			  widget,
 			  NULL,
-			  widget->allocation.x + 3 + (self->_private->element_size + 1),
+			  widget->allocation.x + 3 + self->_private->selected * (self->_private->element_size + 1),
 			  widget->allocation.y + 9,
 			  self->_private->element_size + 1 - 6,
 			  widget->allocation.height - 18);
@@ -186,7 +188,7 @@ display_expose_event (GtkWidget     * widget,
 			  &widget->allocation,
 			  widget,
 			  NULL,
-			  widget->allocation.x + (self->_private->element_size + 1),
+			  widget->allocation.x + self->_private->selected * (self->_private->element_size + 1),
 			  widget->allocation.y,
 			  self->_private->element_size + 1 + 1,
 			  widget->allocation.height);
@@ -214,8 +216,8 @@ display_size_request (GtkWidget     * widget,
 	req->width = 3 * (DEFAULT_SIZE + 1) + 1;
 	req->height = 12 /* default white box size */
 		      + 12 /* 6 pixels above and below the white box */
-		      + 6 /* 3 pixels above and below the inner shadow */
-		      + 4 /* ~2*shadow-width */;
+		      + 6  /* 3 pixels above and below the inner shadow */
+		      + 4  /* ~2*shadow-width */;
 }
 
 static void
