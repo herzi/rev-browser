@@ -92,15 +92,15 @@ display_expose_event (GtkWidget     * widget,
 		gchar* year = g_strdup_printf ("%d", 2006 + i);
 		gdk_draw_line (widget->window,
 			       widget->style->black_gc,
-			       widget->allocation.x + i * self->_private->element_size,
+			       widget->allocation.x + i * (self->_private->element_size + 1),
 			       widget->allocation.y + 6 + 1,
-			       widget->allocation.x + i * self->_private->element_size,
+			       widget->allocation.x + i * (self->_private->element_size + 1),
 			       widget->allocation.y + 6 + 5);
 
 		pango_layout_set_text (layout, year, -1);
 		gdk_draw_layout (widget->window,
 				 widget->style->black_gc,
-				 widget->allocation.x + i * self->_private->element_size + 5,
+				 widget->allocation.x + i * (self->_private->element_size + 1) + 5,
 				 widget->allocation.y + 6 + 5,
 				 layout);
 
@@ -130,7 +130,7 @@ display_expose_event (GtkWidget     * widget,
 			    NULL,
 			    widget->allocation.x + self->_private->element_size,
 			    widget->allocation.y,
-			    self->_private->element_size + 1,
+			    (self->_private->element_size + 1),
 			    9);
 	gtk_paint_flat_box (widget->style,
 			    widget->window,
@@ -139,7 +139,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + self->_private->element_size,
+			    widget->allocation.x + (self->_private->element_size + 1),
 			    widget->allocation.y + widget->allocation.height - 9,
 			    self->_private->element_size + 1,
 			    9);
@@ -150,7 +150,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + self->_private->element_size,
+			    widget->allocation.x + (self->_private->element_size + 1),
 			    widget->allocation.y + 9,
 			    3,
 			    widget->allocation.height - 18);
@@ -161,7 +161,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + 2*self->_private->element_size + 1 - 3,
+			    widget->allocation.x + 2 * (self->_private->element_size + 1) - 4,
 			    widget->allocation.y + 9,
 			    3,
 			    widget->allocation.height - 18);
@@ -172,7 +172,7 @@ display_expose_event (GtkWidget     * widget,
 			  &widget->allocation,
 			  widget,
 			  NULL,
-			  widget->allocation.x + 3 + self->_private->element_size,
+			  widget->allocation.x + 3 + (self->_private->element_size + 1),
 			  widget->allocation.y + 9,
 			  self->_private->element_size + 1 - 6,
 			  widget->allocation.height - 18);
@@ -183,9 +183,9 @@ display_expose_event (GtkWidget     * widget,
 			  &widget->allocation,
 			  widget,
 			  NULL,
-			  widget->allocation.x + self->_private->element_size,
+			  widget->allocation.x + (self->_private->element_size + 1),
 			  widget->allocation.y,
-			  self->_private->element_size + 1,
+			  self->_private->element_size + 1 + 1,
 			  widget->allocation.height);
 
 	return FALSE;
@@ -197,8 +197,8 @@ display_size_allocate (GtkWidget    * widget,
 {
 	Display* self = DISPLAY (widget);
 
-	self->_private->n_elements = allocation->width / DEFAULT_SIZE;
-	self->_private->element_size = allocation->width / self->_private->n_elements;
+	self->_private->n_elements = (allocation->width - 1) / (DEFAULT_SIZE + 1);
+	self->_private->element_size = (allocation->width - 1) / self->_private->n_elements - 1;
 
 	GTK_WIDGET_CLASS (display_parent_class)->size_allocate (widget, allocation);
 }
