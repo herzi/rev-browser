@@ -58,6 +58,8 @@ add_button (GtkWidget   * hbox,
 		if (arrow == GTK_ARROW_RIGHT) {
 			g_signal_connect (display, "notify::can-step-right",
 					  G_CALLBACK (display_notify_can_step_right), button);
+			g_signal_connect_swapped (button, "clicked",
+						  G_CALLBACK (display_step_right), display);
 		} else {
 			g_signal_connect (display, "notify::can-step-left",
 					  G_CALLBACK (display_notify_can_step_left), button);
