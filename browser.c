@@ -26,6 +26,14 @@
 #include "display.h"
 
 static void
+display_notify_can_step_left (GObject   * object,
+			      GParamSpec* pspec,
+			      GtkWidget * button)
+{
+	gtk_widget_set_sensitive (button, display_can_step_left (DISPLAY (object)));
+}
+
+static void
 display_notify_can_step_right (GObject   * object,
 			       GParamSpec* pspec,
 			       GtkWidget * button)
@@ -50,6 +58,9 @@ add_button (GtkWidget   * hbox,
 		if (arrow == GTK_ARROW_RIGHT) {
 			g_signal_connect (display, "notify::can-step-right",
 					  G_CALLBACK (display_notify_can_step_right), button);
+		} else {
+			g_signal_connect (display, "notify::can-step-left",
+					  G_CALLBACK (display_notify_can_step_left), button);
 		}
 	} else {
 		gtk_container_add (GTK_CONTAINER (button),
@@ -84,11 +95,12 @@ main (int   argc,
 	gtk_container_add (GTK_CONTAINER (window),
 			   hbox);
 
+	display = display_new ();
+
 	add_button (hbox,
 		    GTK_ARROW_LEFT,
 		    NULL,
-		    NULL);
-	display = display_new ();
+		    display);
 	gtk_box_pack_start_defaults (GTK_BOX (hbox),
 				     display);
 	add_button (hbox,
@@ -105,11 +117,11 @@ main (int   argc,
 	add_button (vbox,
 		    0,
 		    GTK_STOCK_ZOOM_IN,
-		    NULL);
+		    display);
 	add_button (vbox,
 		    0,
 		    GTK_STOCK_ZOOM_OUT,
-		    NULL);
+		    display);
 
 	gtk_widget_show_all (window);
 
