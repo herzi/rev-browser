@@ -29,15 +29,20 @@
 
 #define DEFAULT_SIZE 40 /* the default size and minimum of an element */
 
+typedef enum {
+	ZOOM_YEARS
+} DisplayZoom;
+
 struct _DisplayPrivate {
-	Calendar* calendar;
-	guint     selected_start;
-	guint     selected_end;
-	guint     n_elements;
-	gint      element_size;
-	gint      start_year;
-	gint      end_year;
-	gint      offset;
+	Calendar*    calendar;
+	guint        selected_start;
+	guint        selected_end;
+	guint        n_elements;
+	gint         element_size;
+	gint         start_year;
+	gint         end_year;
+	gint         offset;
+	DisplayZoom  zoom;
 };
 
 enum {
@@ -423,7 +428,7 @@ display_can_zoom_out (Display const* self)
 {
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
-	return FALSE; /* FIXME: implement properly */
+	return self->_private->zoom < ZOOM_YEARS;
 }
 
 void
