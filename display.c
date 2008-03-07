@@ -41,6 +41,7 @@ struct _DisplayPrivate {
 
 enum {
 	PROP_0,
+	PROP_CAN_STEP_LEFT,
 	PROP_CAN_STEP_RIGHT
 };
 
@@ -71,6 +72,10 @@ display_get_property (GObject   * object,
 	Display* self = DISPLAY (object);
 
 	switch (prop_id) {
+	case PROP_CAN_STEP_LEFT:
+		g_value_set_boolean (value,
+				     display_can_step_left (self));
+		break;
 	case PROP_CAN_STEP_RIGHT:
 		g_value_set_boolean (value,
 				     display_can_step_right (self));
@@ -243,6 +248,7 @@ display_expose_event (GtkWidget     * widget,
 static void
 notify_changes (Display* self)
 {
+	g_object_notify (G_OBJECT (self), "can-step-left");
 	g_object_notify (G_OBJECT (self), "can-step-right");
 }
 
@@ -346,6 +352,9 @@ display_class_init (DisplayClass* self_class)
 	widget_class->size_allocate   = display_size_allocate;
 	widget_class->size_request    = display_size_request;
 
+	g_object_class_install_property (object_class, PROP_CAN_STEP_LEFT,
+					 g_param_spec_boolean ("can-step-left", NULL, NULL,
+							       FALSE, G_PARAM_READABLE));
 	g_object_class_install_property (object_class, PROP_CAN_STEP_RIGHT,
 					 g_param_spec_boolean ("can-step-right", NULL, NULL,
 							       FALSE, G_PARAM_READABLE));
@@ -359,6 +368,14 @@ GtkWidget*
 display_new (void)
 {
 	return g_object_new (TYPE_DISPLAY, NULL);
+}
+
+gboolean
+display_can_step_left (Display const* self)
+{
+	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
+
+	return FALSE;
 }
 
 gboolean
