@@ -30,7 +30,8 @@
 #define DEFAULT_SIZE 40 /* the default size and minimum of an element */
 
 typedef enum {
-	ZOOM_YEARS
+	ZOOM_YEARS,
+	ZOOM_MONTHS
 } DisplayZoom;
 
 struct _DisplayPrivate {
@@ -69,6 +70,7 @@ display_init (Display* self)
 	self->_private->element_size = 33;
 	self->_private->start_year = 1982;
 	self->_private->end_year = 1988;
+	self->_private->zoom = ZOOM_YEARS;
 }
 
 static void
@@ -420,7 +422,7 @@ display_can_zoom_in (Display const* self)
 {
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
-	return FALSE; /* FIXME: implement properly */
+	return self->_private->zoom < ZOOM_MONTHS;
 }
 
 gboolean
@@ -428,7 +430,7 @@ display_can_zoom_out (Display const* self)
 {
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
-	return self->_private->zoom < ZOOM_YEARS;
+	return self->_private->zoom > ZOOM_YEARS;
 }
 
 void
