@@ -44,7 +44,8 @@ enum {
 	PROP_0,
 	PROP_CAN_STEP_LEFT,
 	PROP_CAN_STEP_RIGHT,
-	PROP_CAN_ZOOM_IN
+	PROP_CAN_ZOOM_IN,
+	PROP_CAN_ZOOM_OUT
 };
 
 /* GType definition */
@@ -85,6 +86,10 @@ display_get_property (GObject   * object,
 	case PROP_CAN_ZOOM_IN:
 		g_value_set_boolean (value,
 				     display_can_zoom_in (self));
+		break;
+	case PROP_CAN_ZOOM_OUT:
+		g_value_set_boolean (value,
+				     display_can_zoom_out (self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -257,6 +262,7 @@ notify_changes (Display* self)
 	g_object_notify (G_OBJECT (self), "can-step-left");
 	g_object_notify (G_OBJECT (self), "can-step-right");
 	g_object_notify (G_OBJECT (self), "can-zoom-in");
+	g_object_notify (G_OBJECT (self), "can-zoom-out");
 }
 
 static gboolean
@@ -372,6 +378,9 @@ display_class_init (DisplayClass* self_class)
 	g_object_class_install_property (object_class, PROP_CAN_ZOOM_IN,
 					 g_param_spec_boolean ("can-zoom-in", NULL, NULL,
 							       FALSE, G_PARAM_READABLE));
+	g_object_class_install_property (object_class, PROP_CAN_ZOOM_OUT,
+					 g_param_spec_boolean ("can-zoom-out", NULL, NULL,
+							       FALSE, G_PARAM_READABLE));
 
 	g_type_class_add_private (self_class, sizeof (DisplayPrivate));
 }
@@ -403,6 +412,14 @@ display_can_step_right (Display const* self)
 
 gboolean
 display_can_zoom_in (Display const* self)
+{
+	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
+
+	return FALSE; /* FIXME: implement properly */
+}
+
+gboolean
+display_can_zoom_out (Display const* self)
 {
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
