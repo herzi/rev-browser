@@ -28,7 +28,8 @@
 static void
 add_button (GtkWidget   * hbox,
 	    GtkArrowType  arrow,
-	    gchar const * stock_id)
+	    gchar const * stock_id,
+	    GtkWidget   * display)
 {
 	GtkWidget* button;
 
@@ -72,12 +73,14 @@ main (int   argc,
 
 	add_button (hbox,
 		    GTK_ARROW_LEFT,
+		    NULL,
 		    NULL);
 	display = display_new ();
 	gtk_box_pack_start_defaults (GTK_BOX (hbox),
 				     display);
 	add_button (hbox,
 		    GTK_ARROW_RIGHT,
+		    NULL,
 		    NULL);
 
 	vbox = gtk_vbox_new (TRUE, 0);
@@ -88,10 +91,12 @@ main (int   argc,
 			    0);
 	add_button (vbox,
 		    0,
-		    GTK_STOCK_ZOOM_IN);
+		    GTK_STOCK_ZOOM_IN,
+		    NULL);
 	add_button (vbox,
 		    0,
-		    GTK_STOCK_ZOOM_OUT);
+		    GTK_STOCK_ZOOM_OUT,
+		    NULL);
 
 	gtk_widget_show_all (window);
 
