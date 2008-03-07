@@ -457,3 +457,27 @@ display_step_right (Display* self)
 	notify_changes (self);
 }
 
+void
+display_zoom_in (Display* self)
+{
+	g_return_if_fail (IS_DISPLAY (self));
+	g_return_if_fail (display_can_zoom_in (self));
+
+	self->_private->zoom++;
+	gtk_widget_queue_draw (GTK_WIDGET (self));
+
+	notify_changes (self);
+}
+
+void
+display_zoom_out (Display* self)
+{
+	g_return_if_fail (IS_DISPLAY (self));
+	g_return_if_fail (display_can_zoom_out (self));
+
+	self->_private->zoom--;
+	gtk_widget_queue_draw (GTK_WIDGET (self));
+
+	notify_changes (self);
+}
+

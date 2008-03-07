@@ -90,9 +90,13 @@ add_button (GtkWidget   * hbox,
 		if (!strcmp (stock_id, GTK_STOCK_ZOOM_IN)) {
 			g_signal_connect (display, "notify::can-zoom-in",
 					  G_CALLBACK (display_notify_can_zoom_in), button);
+			g_signal_connect_swapped (button, "clicked",
+						  G_CALLBACK (display_zoom_in), display);
 		} else {
 			g_signal_connect (display, "notify::can-zoom-out",
 					  G_CALLBACK (display_notify_can_zoom_out), button);
+			g_signal_connect_swapped (button, "clicked",
+						  G_CALLBACK (display_zoom_out), display);
 		}
 	}
 	gtk_button_set_relief (GTK_BUTTON (button),

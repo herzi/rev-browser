@@ -48,6 +48,8 @@ gboolean   display_can_zoom_in    (Display const* self);
 gboolean   display_can_zoom_out   (Display const* self);
 void       display_step_left      (Display      * self);
 void       display_step_right     (Display      * self);
+void       display_zoom_in        (Display      * self);
+void       display_zoom_out       (Display      * self);
 
 struct _Display {
 	GtkWidget       base_instance;
