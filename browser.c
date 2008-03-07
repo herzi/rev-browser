@@ -42,6 +42,14 @@ display_notify_can_step_right (GObject   * object,
 }
 
 static void
+display_notify_can_zoom_in (GObject   * object,
+			    GParamSpec* pspec,
+			    GtkWidget * button)
+{
+	gtk_widget_set_sensitive (button, display_can_zoom_in (DISPLAY (object)));
+}
+
+static void
 add_button (GtkWidget   * hbox,
 	    GtkArrowType  arrow,
 	    gchar const * stock_id,
@@ -70,6 +78,11 @@ add_button (GtkWidget   * hbox,
 		gtk_container_add (GTK_CONTAINER (button),
 				   gtk_image_new_from_stock (stock_id,
 							     GTK_ICON_SIZE_MENU));
+
+		if (!strcmp (stock_id, GTK_STOCK_ZOOM_IN)) {
+			g_signal_connect (display, "notify::can-zoom-in",
+					  G_CALLBACK (display_notify_can_zoom_in), button);
+		}
 	}
 	gtk_button_set_relief (GTK_BUTTON (button),
 			       GTK_RELIEF_NONE);
