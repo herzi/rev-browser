@@ -246,12 +246,12 @@ display_key_press_event (GtkWidget  * widget,
 			break;
 		case GDK_Right:
 			if ((event->state & GDK_SHIFT_MASK) == 0) {
-				if (self->_private->selected_end < (self->_private->n_elements - 1)) {
+				if (self->_private->selected_end < MIN (self->_private->n_elements - 1, self->_private->end_year - self->_private->start_year)) {
 					self->_private->selected_end++;
 					self->_private->selected_start = self->_private->selected_end;
 					gtk_widget_queue_draw (widget);
 					return TRUE;
-				} else if (self->_private->selected_start < (self->_private->n_elements - 1)) {
+				} else if (self->_private->selected_start < MIN (self->_private->n_elements - 1, self->_private->end_year - self->_private->start_year)) {
 					self->_private->selected_start = self->_private->selected_end;
 					gtk_widget_queue_draw (widget);
 					return TRUE;
