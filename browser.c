@@ -50,6 +50,14 @@ display_notify_can_zoom_in (GObject   * object,
 }
 
 static void
+display_notify_can_zoom_out (GObject   * object,
+			     GParamSpec* pspec,
+			     GtkWidget * button)
+{
+	gtk_widget_set_sensitive (button, display_can_zoom_out (DISPLAY (object)));
+}
+
+static void
 add_button (GtkWidget   * hbox,
 	    GtkArrowType  arrow,
 	    gchar const * stock_id,
@@ -82,6 +90,9 @@ add_button (GtkWidget   * hbox,
 		if (!strcmp (stock_id, GTK_STOCK_ZOOM_IN)) {
 			g_signal_connect (display, "notify::can-zoom-in",
 					  G_CALLBACK (display_notify_can_zoom_in), button);
+		} else {
+			g_signal_connect (display, "notify::can-zoom-out",
+					  G_CALLBACK (display_notify_can_zoom_out), button);
 		}
 	}
 	gtk_button_set_relief (GTK_BUTTON (button),
