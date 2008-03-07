@@ -217,10 +217,17 @@ display_key_press_event (GtkWidget  * widget,
 			 GdkEventKey* event)
 {
 	if ((event->state & GDK_CONTROL_MASK) == 0) {
+		Display* self = DISPLAY (widget);
+
 		switch (event->keyval) {
 		case GDK_Left:
-		case GDK_Right:
 			return TRUE;
+		case GDK_Right:
+			if (self->_private->selected < (self->_private->n_elements - 1)) {
+				self->_private->selected++;
+				gtk_widget_queue_draw (widget);
+				return TRUE;
+			}
 		}
 	}
 
