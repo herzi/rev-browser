@@ -39,6 +39,7 @@ struct _DisplayPrivate {
 	guint        selected_start;
 	guint        selected_end;
 	Date       * date_start;
+	Date       * date_end;
 	guint        n_elements;
 	gint         element_size;
 	gint         end_year;
@@ -69,6 +70,7 @@ display_init (Display* self)
 	self->_private->element_size = 33;
 	self->_private->date_start = date_new (1, 1, 1982);
 	self->_private->end_year = 1988;
+	self->_private->date_end   = date_new (31, 12, self->_private->end_year);
 	self->_private->zoom = ZOOM_YEARS;
 }
 
