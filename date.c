@@ -23,17 +23,25 @@
 
 #include "date.h"
 
+struct _DatePrivate {
+	guint year;
+};
+
 /* GType Implementation */
 
 G_DEFINE_TYPE (Date, date, G_TYPE_OBJECT);
 
 static void
 date_init (Date* self)
-{}
+{
+	self->_private = G_TYPE_INSTANCE_GET_PRIVATE (self, TYPE_DATE, DatePrivate);
+}
 
 static void
 date_class_init (DateClass* self_class)
-{}
+{
+	g_type_class_add_private (self_class, sizeof (DatePrivate));
+}
 
 /* Public API Implementation */
 
