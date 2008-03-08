@@ -42,7 +42,6 @@ struct _DisplayPrivate {
 	Date       * date_end;
 	guint        n_elements;
 	gint         element_size;
-	gint         end_year;
 	gint         offset;
 	DisplayZoom  zoom;
 };
@@ -69,8 +68,7 @@ display_init (Display* self)
 
 	self->_private->element_size = 33;
 	self->_private->date_start = date_new (1, 1, 1982);
-	self->_private->end_year = 1988;
-	self->_private->date_end   = date_new (31, 12, self->_private->end_year);
+	self->_private->date_end   = date_new (31, 12, 1988);
 	self->_private->zoom = ZOOM_YEARS;
 }
 
@@ -124,7 +122,7 @@ display_expose_event (GtkWidget     * widget,
 			    TRUE,
 			    widget->allocation.x,
 			    widget->allocation.y + 6,
-			    MIN (widget->allocation.width, 1 + (1 + self->_private->end_year - date_get_year (self->_private->date_start))*(self->_private->element_size + 1)),
+			    MIN (widget->allocation.width, 1 + (1 + date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start))*(self->_private->element_size + 1)),
 			    widget->allocation.height - 12);
 
 	PangoLayout* layout = pango_layout_new (gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget)));
@@ -304,20 +302,20 @@ display_key_press_event (GtkWidget  * widget,
 			break;
 		case GDK_Right:
 			if ((event->state & GDK_SHIFT_MASK) == 0) {
-				if (self->_private->selected_end < MIN (self->_private->n_elements - 1, self->_private->end_year - date_get_year (self->_private->date_start))) {
+				if (self->_private->selected_end < MIN (self->_private->n_elements - 1, date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start))) {
 					self->_private->selected_end++;
 					self->_private->selected_start = self->_private->selected_end;
 					gtk_widget_queue_draw (widget);
 					notify_changes (self);
 					return TRUE;
-				} else if (self->_private->selected_start < MIN (self->_private->n_elements - 1, self->_private->end_year - date_get_year (self->_private->date_start))) {
+				} else if (self->_private->selected_start < MIN (self->_private->n_elements - 1, date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start))) {
 					self->_private->selected_start = self->_private->selected_end;
 					gtk_widget_queue_draw (widget);
 					notify_changes (self);
 					return TRUE;
 				}
 			} else {
-				if (self->_private->selected_end < MIN (self->_private->n_elements - 1, self->_private->end_year - date_get_year (self->_private->date_start))) {
+				if (self->_private->selected_end < MIN (self->_private->n_elements - 1, date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start))) {
 					self->_private->selected_end++;
 					gtk_widget_queue_draw (widget);
 					notify_changes (self);
@@ -341,7 +339,7 @@ display_size_allocate (GtkWidget    * widget,
 	self->_private->element_size = (allocation->width - 1) / self->_private->n_elements - 1;
 
 	if (self->_private->offset != 0) {
-		self->_private->offset = MIN (self->_private->offset, 1 + self->_private->end_year - date_get_year (self->_private->date_start) - self->_private->n_elements);
+		self->_private->offset = MIN (self->_private->offset, 1 + date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start) - self->_private->n_elements);
 	}
 
 	GTK_WIDGET_CLASS (display_parent_class)->size_allocate (widget, allocation);
@@ -413,7 +411,7 @@ display_can_step_right (Display const* self)
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
 	return (self->_private->offset +
-	       self->_private->n_elements) < (1 + self->_private->end_year - date_get_year (self->_private->date_start));
+	       self->_private->n_elements) < (1 + date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start));
 }
 
 gboolean
