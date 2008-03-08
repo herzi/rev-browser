@@ -26,6 +26,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "calendar.h"
+#include "date.h"
 
 #define DEFAULT_SIZE 40 /* the default size and minimum of an element */
 
@@ -37,6 +38,7 @@ typedef enum {
 struct _DisplayPrivate {
 	guint        selected_start;
 	guint        selected_end;
+	Date       * date_start;
 	guint        n_elements;
 	gint         element_size;
 	gint         start_year;
@@ -67,6 +69,7 @@ display_init (Display* self)
 
 	self->_private->element_size = 33;
 	self->_private->start_year = 1982;
+	self->_private->date_start = date_new (1, 1, self->_private->start_year);
 	self->_private->end_year = 1988;
 	self->_private->zoom = ZOOM_YEARS;
 }
