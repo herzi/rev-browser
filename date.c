@@ -43,9 +43,29 @@ date_init (Date* self)
 }
 
 static void
+date_set_property (GObject     * object,
+		   guint         prop_id,
+		   GValue const* value,
+		   GParamSpec  * pspec)
+{
+	Date* self = DATE (object);
+
+	switch (prop_id) {
+	case PROP_YEAR:
+		self->_private->year = g_value_get_int (value);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
 date_class_init (DateClass* self_class)
 {
 	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
+
+	object_class->set_property = date_set_property;
 
 	g_object_class_install_property (object_class, PROP_YEAR,
 					 g_param_spec_int ("year", NULL, NULL,
