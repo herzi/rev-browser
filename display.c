@@ -35,7 +35,6 @@ typedef enum {
 } DisplayZoom;
 
 struct _DisplayPrivate {
-	Calendar*    calendar;
 	guint        selected_start;
 	guint        selected_end;
 	guint        n_elements;
@@ -66,7 +65,6 @@ display_init (Display* self)
 
 	self->_private = G_TYPE_INSTANCE_GET_PRIVATE (self, display_get_type (), DisplayPrivate);
 
-	self->_private->calendar = calendar_new ();
 	self->_private->element_size = 33;
 	self->_private->start_year = 1982;
 	self->_private->end_year = 1988;
@@ -107,8 +105,6 @@ display_get_property (GObject   * object,
 static void
 display_finalize (GObject* object)
 {
-	g_object_unref (DISPLAY (object)->_private->calendar);
-
 	G_OBJECT_CLASS (display_parent_class)->finalize (object);
 }
 
