@@ -7,6 +7,8 @@ rev_browser_sources=\
 	browser.c \
 	calendar.c \
 	calendar.h \
+	date.c \
+	date.h \
 	display.c \
 	display.h
 rev-browser: $(rev_browser_sources) Makefile
