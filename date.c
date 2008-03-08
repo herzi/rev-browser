@@ -24,11 +24,13 @@
 #include "date.h"
 
 struct _DatePrivate {
+	guint month;
 	guint year;
 };
 
 enum {
 	PROP_0,
+	PROP_MONTH,
 	PROP_YEAR
 };
 
@@ -51,6 +53,9 @@ date_get_property (GObject   * object,
 	Date* self = DATE (object);
 
 	switch (prop_id) {
+	case PROP_MONTH:
+		g_value_set_int (value, date_get_month (self));
+		break;
 	case PROP_YEAR:
 		g_value_set_int (value, date_get_year (self));
 		break;
@@ -69,6 +74,9 @@ date_set_property (GObject     * object,
 	Date* self = DATE (object);
 
 	switch (prop_id) {
+	case PROP_MONTH:
+		self->_private->month = g_value_get_int (value);
+		break;
 	case PROP_YEAR:
 		self->_private->year = g_value_get_int (value);
 		break;
@@ -86,6 +94,9 @@ date_class_init (DateClass* self_class)
 	object_class->get_property = date_get_property;
 	object_class->set_property = date_set_property;
 
+	g_object_class_install_property (object_class, PROP_MONTH,
+					 g_param_spec_int ("month", NULL, NULL,
+							   G_MININT, G_MAXINT, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 	g_object_class_install_property (object_class, PROP_YEAR,
 					 g_param_spec_int ("year", NULL, NULL,
 							   G_MININT, G_MAXINT, 1900, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
@@ -105,9 +116,18 @@ date_new (guint day, guint month, guint year)
 }
 
 guint
+date_get_month (Date const* self)
+{
+	g_return_val_if_fail (IS_DATE (self), 0);
+
+	return self->_private->month;
+}
+
+guint
 date_get_year (Date const* self)
 {
 	g_return_val_if_fail (IS_DATE (self), 1900);
 
 	return self->_private->year;
 }
+
