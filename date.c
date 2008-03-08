@@ -52,7 +52,7 @@ date_get_property (GObject   * object,
 
 	switch (prop_id) {
 	case PROP_YEAR:
-		g_value_set_int (value, self->_private->year);
+		g_value_set_int (value, date_get_year (self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -102,3 +102,10 @@ date_new (guint day, guint month, guint year)
 	return g_object_new (TYPE_DATE, NULL);
 }
 
+guint
+date_get_year (Date const* self)
+{
+	g_return_val_if_fail (IS_DATE (self), 1900);
+
+	return self->_private->year;
+}

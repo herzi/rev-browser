@@ -41,9 +41,10 @@ typedef struct _DateClass   DateClass;
 
 GType date_get_type (void);
 
-Date* date_new (guint day,
-		guint month,
-		guint year);
+Date* date_new      (guint day,
+		     guint month,
+		     guint year);
+guint date_get_year (Date const* self);
 
 struct _Date {
 	GObject       base_instance;
