@@ -23,3 +23,24 @@
 
 #include "date.h"
 
+/* GType Implementation */
+
+G_DEFINE_TYPE (Date, date, G_TYPE_OBJECT);
+
+static void
+date_init (Date* self)
+{}
+
+static void
+date_class_init (DateClass* self_class)
+{}
+
+/* Public API Implementation */
+
+Date*
+date_new (guint day, guint month, guint year)
+{
+	g_warning ("finish implementation");
+	return g_object_new (TYPE_DATE, NULL);
+}
+

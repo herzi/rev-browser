@@ -24,5 +24,36 @@
 #ifndef DATE_H
 #define DATE_H
 
+#include <glib-object.h>
+
+G_BEGIN_DECLS
+
+typedef struct _Date        Date;
+typedef struct _DatePrivate DatePrivate;
+typedef struct _DateClass   DateClass;
+
+#define TYPE_DATE         (date_get_type ())
+#define DATE(i)           (G_TYPE_CHECK_INSTANCE_CAST ((i), TYPE_DATE, Date))
+#define DATE_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), TYPE_DATE, DateClass))
+#define IS_DATE(i)        (G_TYPE_CHECK_INSTANCE_TYPE ((i), TYPE_DATE))
+#define IS_DATE_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_DATE))
+#define DATE_GET_CLASS(i) (G_TYPE_INSTANCE_GET_CLASS ((i), TYPE_DATE, DateClass))
+
+GType date_get_type (void);
+
+Date* date_new (guint day,
+		guint month,
+		guint year);
+
+struct _Date {
+	GObject       base_instance;
+	DatePrivate*  _private;
+};
+
+struct _DateClass {
+	GObjectClass  base_class;
+};
+
+G_END_DECLS
 
 #endif /* !DATE_H */
