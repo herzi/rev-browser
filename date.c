@@ -27,6 +27,11 @@ struct _DatePrivate {
 	guint year;
 };
 
+enum {
+	PROP_0,
+	PROP_YEAR
+};
+
 /* GType Implementation */
 
 G_DEFINE_TYPE (Date, date, G_TYPE_OBJECT);
@@ -40,6 +45,12 @@ date_init (Date* self)
 static void
 date_class_init (DateClass* self_class)
 {
+	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
+
+	g_object_class_install_property (object_class, PROP_YEAR,
+					 g_param_spec_int ("year", NULL, NULL,
+							   G_MININT, G_MAXINT, 1900, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
 	g_type_class_add_private (self_class, sizeof (DatePrivate));
 }
 
