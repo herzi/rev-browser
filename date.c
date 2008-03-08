@@ -99,7 +99,9 @@ Date*
 date_new (guint day, guint month, guint year)
 {
 	g_warning ("finish implementation");
-	return g_object_new (TYPE_DATE, NULL);
+	return g_object_new (TYPE_DATE,
+			     "year", year,
+			     NULL);
 }
 
 guint
