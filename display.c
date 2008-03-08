@@ -109,6 +109,12 @@ display_finalize (GObject* object)
 	G_OBJECT_CLASS (display_parent_class)->finalize (object);
 }
 
+static guint
+display_get_range_size (Display* self)
+{
+	return 1 + date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start);
+}
+
 static gboolean
 display_expose_event (GtkWidget     * widget,
 		      GdkEventExpose* event)
@@ -122,7 +128,7 @@ display_expose_event (GtkWidget     * widget,
 			    TRUE,
 			    widget->allocation.x,
 			    widget->allocation.y + 6,
-			    MIN (widget->allocation.width, 1 + (1 + date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start))*(self->_private->element_size + 1)),
+			    MIN (widget->allocation.width, 1 + display_get_range_size (self) *(self->_private->element_size + 1)),
 			    widget->allocation.height - 12);
 
 	PangoLayout* layout = pango_layout_new (gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget)));
