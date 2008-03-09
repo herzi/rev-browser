@@ -40,7 +40,7 @@ struct _DisplayPrivate {
 	guint        selected_end;
 	Date       * date_start;
 	Date       * date_end;
-	guint        n_elements;
+	guint        elements_visible;
 	gint         element_size;
 	gint         offset;
 	DisplayZoom  zoom;
@@ -147,7 +147,7 @@ display_expose_event (GtkWidget     * widget,
 	}
 	pango_layout_set_width (layout, PANGO_SCALE * self->_private->element_size);
 
-	for (i = 0; i < self->_private->n_elements; i++) {
+	for (i = 0; i < self->_private->elements_visible; i++) {
 		gchar* year = g_strdup_printf ("%d", date_get_year (self->_private->date_start) + self->_private->offset + i);
 
 		if (G_LIKELY (i)) {
@@ -308,20 +308,20 @@ display_key_press_event (GtkWidget  * widget,
 			break;
 		case GDK_Right:
 			if ((event->state & GDK_SHIFT_MASK) == 0) {
-				if (self->_private->selected_end < MIN (self->_private->n_elements, display_get_range_size (self)) - 1) {
+				if (self->_private->selected_end < MIN (self->_private->elements_visible, display_get_range_size (self)) - 1) {
 					self->_private->selected_end++;
 					self->_private->selected_start = self->_private->selected_end;
 					gtk_widget_queue_draw (widget);
 					notify_changes (self);
 					return TRUE;
-				} else if (self->_private->selected_start < MIN (self->_private->n_elements, display_get_range_size (self)) - 1) {
+				} else if (self->_private->selected_start < MIN (self->_private->elements_visible, display_get_range_size (self)) - 1) {
 					self->_private->selected_start = self->_private->selected_end;
 					gtk_widget_queue_draw (widget);
 					notify_changes (self);
 					return TRUE;
 				}
 			} else {
-				if (self->_private->selected_end < MIN (self->_private->n_elements, display_get_range_size (self)) - 1) {
+				if (self->_private->selected_end < MIN (self->_private->elements_visible, display_get_range_size (self)) - 1) {
 					self->_private->selected_end++;
 					gtk_widget_queue_draw (widget);
 					notify_changes (self);
@@ -341,11 +341,11 @@ display_size_allocate (GtkWidget    * widget,
 {
 	Display* self = DISPLAY (widget);
 
-	self->_private->n_elements = (allocation->width - 1) / (DEFAULT_SIZE + 1);
-	self->_private->element_size = (allocation->width - 1) / self->_private->n_elements - 1;
+	self->_private->elements_visible = (allocation->width - 1) / (DEFAULT_SIZE + 1);
+	self->_private->element_size = (allocation->width - 1) / self->_private->elements_visible - 1;
 
 	if (self->_private->offset != 0) {
-		self->_private->offset = MIN (self->_private->offset, display_get_range_size (self) - self->_private->n_elements);
+		self->_private->offset = MIN (self->_private->offset, display_get_range_size (self) - self->_private->elements_visible);
 	}
 
 	GTK_WIDGET_CLASS (display_parent_class)->size_allocate (widget, allocation);
@@ -416,7 +416,7 @@ display_can_step_right (Display const* self)
 {
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
-	return (self->_private->offset + self->_private->n_elements) < display_get_range_size (self);
+	return (self->_private->offset + self->_private->elements_visible) < display_get_range_size (self);
 }
 
 gboolean
