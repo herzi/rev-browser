@@ -110,7 +110,7 @@ display_finalize (GObject* object)
 }
 
 static guint
-display_get_range_size (Display* self)
+display_get_range_size (Display const* self)
 {
 	return 1 + date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start);
 }
@@ -416,8 +416,7 @@ display_can_step_right (Display const* self)
 {
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
-	return (self->_private->offset +
-	       self->_private->n_elements) < (1 + date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start));
+	return (self->_private->offset + self->_private->n_elements) < display_get_range_size (self);
 }
 
 gboolean
