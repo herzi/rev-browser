@@ -321,7 +321,7 @@ display_key_press_event (GtkWidget  * widget,
 					return TRUE;
 				}
 			} else {
-				if (self->_private->selected_end < MIN (self->_private->n_elements, 1 + date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start)) - 1) {
+				if (self->_private->selected_end < MIN (self->_private->n_elements, display_get_range_size (self)) - 1) {
 					self->_private->selected_end++;
 					gtk_widget_queue_draw (widget);
 					notify_changes (self);
