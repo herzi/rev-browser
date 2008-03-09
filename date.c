@@ -109,7 +109,8 @@ date_class_init (DateClass* self_class)
 Date*
 date_new (guint day, guint month, guint year)
 {
-	g_warning ("finish implementation");
+	g_warning ("%s(%s): finish implementation",
+		   G_STRFUNC, G_STRLOC);
 	return g_object_new (TYPE_DATE,
 			     "year", year,
 			     NULL);
