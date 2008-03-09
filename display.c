@@ -345,7 +345,7 @@ display_size_allocate (GtkWidget    * widget,
 	self->_private->element_size = (allocation->width - 1) / self->_private->n_elements - 1;
 
 	if (self->_private->offset != 0) {
-		self->_private->offset = MIN (self->_private->offset, 1 + date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start) - self->_private->n_elements);
+		self->_private->offset = MIN (self->_private->offset, display_get_range_size (self) - self->_private->n_elements);
 	}
 
 	GTK_WIDGET_CLASS (display_parent_class)->size_allocate (widget, allocation);
