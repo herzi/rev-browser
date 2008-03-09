@@ -36,12 +36,17 @@ typedef enum {
 } DisplayZoom;
 
 struct _DisplayPrivate {
-	guint        selected_start;
-	guint        selected_end;
+	/* range settings */
 	Date       * date_start;
 	Date       * date_end;
+	guint        selected_start;
+	guint        selected_end;
+
+	/* size state */
 	guint        elements_visible;
 	gint         element_size;
+
+	/* display state */
 	gint         offset;
 	DisplayZoom  zoom;
 };
