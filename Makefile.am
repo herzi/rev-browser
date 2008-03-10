@@ -16,4 +16,4 @@ rev_browser_SOURCES=\
 	date.h \
 	display.c \
 	display.h
-rev_browser_CFLAGS=$(shell pkg-config --cflags --libs glib-2.0 gtk+-2.0)
+rev_browser_CFLAGS=$(GTK_CFLAGS) $(GTK_LIBS)
