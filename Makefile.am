@@ -1,9 +1,14 @@
-all: rev-lister rev-browser
+bin_PROGRAMS=\
+	rev-lister \
+	rev-browser \
+	$(NULL)
 
-rev-lister: rev-lister.c Makefile
-	gcc -o $@ $< $(shell pkg-config --cflags --libs glib-2.0)
+rev_lister_SOURCES=\
+	rev-lister.c
+	$(NULL)
+rev_lister_CFLAGS=$(shell pkg-config --cflags --libs glib-2.0)
 
-rev_browser_sources=\
+rev_browser_SOURCES=\
 	browser.c \
 	calendar.c \
 	calendar.h \
@@ -11,5 +16,4 @@ rev_browser_sources=\
 	date.h \
 	display.c \
 	display.h
-rev-browser: $(rev_browser_sources) Makefile
-	gcc -o $@ $(filter %.c,$(rev_browser_sources)) $(shell pkg-config --cflags --libs glib-2.0 gtk+-2.0)
+rev_browser_CFLAGS=$(shell pkg-config --cflags --libs glib-2.0 gtk+-2.0)
