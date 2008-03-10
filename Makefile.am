@@ -2,6 +2,10 @@ bin_PROGRAMS=\
 	rev-lister \
 	rev-browser \
 	$(NULL)
+check_PROGRAMS=\
+	test-gdk-draw-rectangle \
+	$(NULL)
+TESTS=$(check_PROGRAMS)
 
 rev_lister_SOURCES=\
 	rev-lister.c

@@ -14,3 +14,4 @@ depcomp
 install-sh
 *.o
 missing
+test-gdk-draw-rectangle
