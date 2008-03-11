@@ -7,6 +7,9 @@ check_PROGRAMS=\
 	$(NULL)
 TESTS=$(check_PROGRAMS)
 
+test_gdk_draw_rectangle_CPPFLAGS=$(GTK_CFLAGS)
+test_gdk_draw_rectangle_LDADD=$(GTK_LIBS)
+
 rev_lister_SOURCES=\
 	rev-lister.c
 	$(NULL)
