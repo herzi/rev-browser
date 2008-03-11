@@ -25,6 +25,9 @@
 
 #include <gtk/gtk.h>
 
+#include <sys/types.h>
+#include <unistd.h>
+
 static void
 gdk_cairo_draw_rectangle (GdkDrawable* drawable,
 			  GdkGC      * gc,
@@ -100,9 +103,34 @@ main (int   argc,
 
 	for (index = 0; index < gdk_pixbuf_get_height (gdkpix) * gdk_pixbuf_get_rowstride (gdkpix); index++) {
 		if (gdkdata[index] != cairodata[index]) {
+			gchar* filepath;
 			g_warning ("Eeek! Differences at byte %d",
 				   index);
 			passed = FALSE;
+
+			filepath = g_strdup_printf ("%d-%s-gdk.png",
+						    getpid (),
+						    g_get_prgname ());
+			gdk_pixbuf_save (gdkpix,
+					 filepath,
+					 "png",
+					 NULL, /* FIXME: handle errors */
+					 NULL);
+			g_message ("=> wrote gdk image to \"%s\"",
+				   filepath);
+			g_free (filepath);
+
+			filepath = g_strdup_printf ("%d-%s-cairo.png",
+						    getpid (),
+						    g_get_prgname ());
+			gdk_pixbuf_save (cairopix,
+					 filepath,
+					 "png",
+					 NULL, /* FIXME: handle errors */
+					 NULL);
+			g_message ("=> wrote cairo image to \"%s\"",
+				   filepath);
+			g_free (filepath);
 			break;
 		}
 	}
