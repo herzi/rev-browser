@@ -116,7 +116,7 @@ main (int   argc,
       char**argv)
 {
 	GtkWidget* window;
-	GtkWidget* hbox;
+	GtkWidget* time_bar;
 
 	gtk_init (&argc, &argv);
 
@@ -124,10 +124,10 @@ main (int   argc,
 	g_signal_connect (window, "destroy",
 			  G_CALLBACK (gtk_main_quit), NULL);
 
-	hbox = time_bar_new ();
-	gtk_widget_show (hbox);
+	time_bar = time_bar_new ();
+	gtk_widget_show (time_bar);
 	gtk_container_add (GTK_CONTAINER (window),
-			   hbox);
+			   time_bar);
 
 	gtk_widget_show (window);
 
