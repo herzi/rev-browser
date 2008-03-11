@@ -167,10 +167,10 @@ time_bar_init (TimeBar* self)
 	button = add_icon_button (GTK_BOX (PRIV(self)->vbox),
 				  GTK_STOCK_ZOOM_IN,
 				  PRIV(self)->display);
-		g_signal_connect (display, "notify::can-zoom-in",
-				  G_CALLBACK (display_notify_can_zoom_in), button);
-		g_signal_connect_swapped (button, "clicked",
-					  G_CALLBACK (display_zoom_in), display);
+	g_signal_connect (display, "notify::can-zoom-in",
+			  G_CALLBACK (display_notify_can_zoom_in), button);
+	g_signal_connect_swapped (button, "clicked",
+				  G_CALLBACK (display_zoom_in), display);
 
 	button = add_icon_button (GTK_BOX (PRIV(self)->vbox),
 				  GTK_STOCK_ZOOM_OUT,
