@@ -107,17 +107,17 @@ add_arrow_button (GtkBox      * box,
 {
 	GtkWidget* button = add_button (box, NULL, arrow, NULL, display);
 
-		if (arrow == GTK_ARROW_RIGHT) {
-			g_signal_connect (display, "notify::can-step-right",
-					  G_CALLBACK (display_notify_can_step_right), button);
-			g_signal_connect_swapped (button, "clicked",
-						  G_CALLBACK (display_step_right), display);
-		} else {
-			g_signal_connect (display, "notify::can-step-left",
-					  G_CALLBACK (display_notify_can_step_left), button);
-			g_signal_connect_swapped (button, "clicked",
-						  G_CALLBACK (display_step_left), display);
-		}
+	if (arrow == GTK_ARROW_RIGHT) {
+		g_signal_connect (display, "notify::can-step-right",
+				  G_CALLBACK (display_notify_can_step_right), button);
+		g_signal_connect_swapped (button, "clicked",
+					  G_CALLBACK (display_step_right), display);
+	} else {
+		g_signal_connect (display, "notify::can-step-left",
+				  G_CALLBACK (display_notify_can_step_left), button);
+		g_signal_connect_swapped (button, "clicked",
+					  G_CALLBACK (display_step_left), display);
+	}
 }
 
 static void
@@ -127,17 +127,17 @@ add_icon_button (GtkBox     * box,
 {
 	GtkWidget* button = add_button (box, NULL, 0, stock_id, display);
 
-		if (!strcmp (stock_id, GTK_STOCK_ZOOM_IN)) {
-			g_signal_connect (display, "notify::can-zoom-in",
-					  G_CALLBACK (display_notify_can_zoom_in), button);
-			g_signal_connect_swapped (button, "clicked",
-						  G_CALLBACK (display_zoom_in), display);
-		} else {
-			g_signal_connect (display, "notify::can-zoom-out",
-					  G_CALLBACK (display_notify_can_zoom_out), button);
-			g_signal_connect_swapped (button, "clicked",
-						  G_CALLBACK (display_zoom_out), display);
-		}
+	if (!strcmp (stock_id, GTK_STOCK_ZOOM_IN)) {
+		g_signal_connect (display, "notify::can-zoom-in",
+				  G_CALLBACK (display_notify_can_zoom_in), button);
+		g_signal_connect_swapped (button, "clicked",
+					  G_CALLBACK (display_zoom_in), display);
+	} else {
+		g_signal_connect (display, "notify::can-zoom-out",
+				  G_CALLBACK (display_notify_can_zoom_out), button);
+		g_signal_connect_swapped (button, "clicked",
+					  G_CALLBACK (display_zoom_out), display);
+	}
 }
 
 static void
