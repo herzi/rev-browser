@@ -38,11 +38,21 @@ G_DEFINE_TYPE (TimeBar, time_bar, GTK_TYPE_HBOX);
 static void
 time_bar_init (TimeBar* self)
 {
+	GtkWidget* display; /* FIXME: drop after extracting time-bar from main() */
+	GtkWidget* hbox = GTK_WIDGET (self); /* FIXME: drop */
+
 	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self,
 						  TYPE_TIME_BAR,
 						  TimeBarPrivate);
 
 	PRIV(self)->display = display_new ();
+
+	display = PRIV(self)->display;
+
+	add_button (hbox,
+		    GTK_ARROW_LEFT,
+		    NULL,
+		    display);
 }
 
 static void
