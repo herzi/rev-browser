@@ -130,7 +130,7 @@ main (int   argc,
 
 	display = time_bar_get_display (TIME_BAR (hbox));
 
-	vbox = gtk_vbox_new (TRUE, 0);
+	vbox = time_bar_get_vbox (TIME_BAR (hbox));
 	gtk_box_pack_start (GTK_BOX (hbox),
 			    vbox,
 			    FALSE,

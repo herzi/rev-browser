@@ -27,6 +27,7 @@
 
 struct _TimeBarPrivate {
 	GtkWidget* display;
+	GtkWidget* vbox;
 };
 
 #define PRIV(i) (TIME_BAR (i)->_private)
@@ -60,6 +61,7 @@ time_bar_init (TimeBar* self)
 		    NULL,
 		    display);
 
+	PRIV(self)->vbox = gtk_vbox_new (TRUE, 0);
 }
 
 static void
@@ -82,5 +84,13 @@ time_bar_get_display (TimeBar const* self)
 	g_return_val_if_fail (IS_TIME_BAR (self), NULL);
 
 	return PRIV (self)->display;
+}
+
+GtkWidget*
+time_bar_get_vbox (TimeBar const* self)
+{
+	g_return_val_if_fail (IS_TIME_BAR (self), NULL);
+
+	return PRIV (self)->vbox;
 }
 
