@@ -46,16 +46,21 @@ main (int   argc,
 	GdkPixmap* cairo;
 	GdkGC    * gdkgc;
 	GdkGC    * cairogc;
+	GdkPixbuf* gdkpix;
+	GdkPixbuf* cairopix;
+	gchar    * gdkdata;
+	gchar    * cairodata;
+	gsize      index;
 
 	/* prepare */
 	gtk_init (&argc, &argv);
 
 	gdk   = gdk_pixmap_new (NULL,
 				100, 80,
-				8);
+				24);
 	cairo = gdk_pixmap_new (NULL,
 				100, 80,
-				8);
+				24);
 	gdkgc   = gdk_gc_new (gdk);
 	cairogc = gdk_gc_new (cairo);
 
@@ -72,6 +77,38 @@ main (int   argc,
 				  100, 80);
 
 	/* verify */
+	gdkpix   = gdk_pixbuf_get_from_drawable (NULL,
+						 gdk,
+						 gdk_rgb_get_colormap (),
+						 0, 0,
+						 0, 0,
+						 100, 80);
+	cairopix = gdk_pixbuf_get_from_drawable (NULL,
+						 cairo,
+						 gdk_rgb_get_colormap (),
+						 0, 0,
+						 0, 0,
+						 100, 80);
+
+	gdkdata   = gdk_pixbuf_get_pixels (gdkpix);
+	cairodata = gdk_pixbuf_get_pixels (cairopix);
+
+	g_return_val_if_fail (gdk_pixbuf_get_rowstride (gdkpix) == gdk_pixbuf_get_rowstride (cairopix), 1);
+	g_return_val_if_fail (gdk_pixbuf_get_n_channels (gdkpix) == gdk_pixbuf_get_n_channels (cairopix), 1);
+	g_return_val_if_fail (gdk_pixbuf_get_height (gdkpix) == gdk_pixbuf_get_height (cairopix), 1);
+	g_return_val_if_fail (gdk_pixbuf_get_width (gdkpix) == gdk_pixbuf_get_width (cairopix), 1);
+
+	for (index = 0; index < gdk_pixbuf_get_height (gdkpix) * gdk_pixbuf_get_rowstride (gdkpix); index++) {
+		if (gdkdata[index] != cairodata[index]) {
+			g_warning ("Eeek! Differences at byte %d",
+				   index);
+			passed = FALSE;
+			break;
+		}
+	}
+
+	g_object_unref (gdkpix);
+	g_object_unref (cairopix);
 
 	/* cleanup */
 	g_object_unref (gdkgc);
