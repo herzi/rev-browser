@@ -133,10 +133,6 @@ main (int   argc,
 	vbox = time_bar_get_vbox (TIME_BAR (hbox));
 	add_button (vbox,
 		    0,
-		    GTK_STOCK_ZOOM_IN,
-		    display);
-	add_button (vbox,
-		    0,
 		    GTK_STOCK_ZOOM_OUT,
 		    display);
 

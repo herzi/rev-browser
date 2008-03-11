@@ -69,6 +69,10 @@ time_bar_init (TimeBar* self)
 			    FALSE,
 			    FALSE,
 			    0);
+	add_button (vbox,
+		    0,
+		    GTK_STOCK_ZOOM_IN,
+		    display);
 }
 
 static void
