@@ -58,7 +58,7 @@ display_notify_can_zoom_out (GObject   * object,
 	gtk_widget_set_sensitive (button, display_can_zoom_out (DISPLAY (object)));
 }
 
-static void
+void
 add_button (GtkWidget   * hbox,
 	    GtkArrowType  arrow,
 	    gchar const * stock_id,

@@ -41,6 +41,10 @@ typedef struct _TimeBarClass   TimeBarClass;
 
 GType      time_bar_get_type (void);
 GtkWidget* time_bar_new      (void);
+void       add_button        (GtkWidget   * hbox,
+			      GtkArrowType  arrow,
+			      gchar const * stock_id,
+			      GtkWidget   * display);
 
 struct _TimeBar {
 	GtkHBox         base_instance;
