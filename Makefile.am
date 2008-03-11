@@ -22,5 +22,8 @@ rev_browser_SOURCES=\
 	date.c \
 	date.h \
 	display.c \
-	display.h
+	display.h \
+	time-bar.h \
+	time-bar.c \
+	$(NULL)
 rev_browser_CFLAGS=$(GTK_CFLAGS) $(GTK_LIBS)
