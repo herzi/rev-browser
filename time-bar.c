@@ -23,17 +23,29 @@
 
 #include "time-bar.h"
 
+struct _TimeBarPrivate {
+	GtkWidget* display;
+};
+
+#define PRIV(i) (TIME_BAR (i)->_private)
+
 /* GType Implementation */
 
 G_DEFINE_TYPE (TimeBar, time_bar, GTK_TYPE_HBOX);
 
 static void
 time_bar_init (TimeBar* self)
-{}
+{
+	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self,
+						  TYPE_TIME_BAR,
+						  TimeBarPrivate);
+}
 
 static void
 time_bar_class_init (TimeBarClass* self_class)
-{}
+{
+	g_type_class_add_private (self_class, sizeof (TimeBarPrivate));
+}
 
 /* Public API */
 
