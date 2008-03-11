@@ -30,8 +30,20 @@ main (int   argc,
       char**argv)
 {
 	gboolean passed = TRUE;
+	GdkImage* gdk;
+	GdkImage* cairo;
 
 	gtk_init (&argc, &argv);
+
+	gdk   = gdk_image_new (GDK_IMAGE_NORMAL,
+			       gdk_rgb_get_visual (),
+			       100, 80);
+	cairo = gdk_image_new (GDK_IMAGE_NORMAL,
+			       gdk_rgb_get_visual (),
+			       100, 80);
+
+	g_object_unref (gdk);
+	g_object_unref (cairo);
 
 	return passed ? 0 : 1;
 }
