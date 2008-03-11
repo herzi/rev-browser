@@ -128,7 +128,7 @@ main (int   argc,
 	gtk_container_add (GTK_CONTAINER (window),
 			   hbox);
 
-	display = display_new ();
+	display = time_bar_get_display (TIME_BAR (hbox));
 
 	add_button (hbox,
 		    GTK_ARROW_LEFT,
