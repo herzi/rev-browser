@@ -122,6 +122,14 @@ add_button (GtkBox      * box,
 }
 
 static void
+add_arrow_button (GtkBox      * box,
+		  GtkArrowType  arrow,
+		  GtkWidget   * display)
+{
+	add_button (box, arrow, NULL, display);
+}
+
+static void
 time_bar_init (TimeBar* self)
 {
 	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self,
@@ -132,16 +140,14 @@ time_bar_init (TimeBar* self)
 
 	gtk_widget_show (PRIV(self)->display);
 
-	add_button (GTK_BOX (self),
-		    GTK_ARROW_LEFT,
-		    NULL,
-		    PRIV(self)->display);
+	add_arrow_button (GTK_BOX (self),
+			  GTK_ARROW_LEFT,
+			  PRIV(self)->display);
 	gtk_box_pack_start_defaults (GTK_BOX (self),
 				     PRIV(self)->display);
-	add_button (GTK_BOX (self),
-		    GTK_ARROW_RIGHT,
-		    NULL,
-		    PRIV(self)->display);
+	add_arrow_button (GTK_BOX (self),
+			  GTK_ARROW_RIGHT,
+			  PRIV(self)->display);
 
 	PRIV(self)->vbox = gtk_vbox_new (TRUE, 0);
 	gtk_widget_show (PRIV (self)->vbox);
