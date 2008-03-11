@@ -102,6 +102,8 @@ add_button (GtkWidget   * hbox,
 	}
 	gtk_button_set_relief (GTK_BUTTON (button),
 			       GTK_RELIEF_NONE);
+	gtk_widget_show (gtk_bin_get_child (GTK_BIN (button)));
+	gtk_widget_show (button);
 	gtk_box_pack_start (GTK_BOX (hbox),
 			    button,
 			    FALSE,
@@ -115,8 +117,6 @@ main (int   argc,
 {
 	GtkWidget* window;
 	GtkWidget* hbox;
-	GtkWidget* display;
-	GtkWidget* vbox;
 
 	gtk_init (&argc, &argv);
 
@@ -125,14 +125,11 @@ main (int   argc,
 			  G_CALLBACK (gtk_main_quit), NULL);
 
 	hbox = time_bar_new ();
+	gtk_widget_show (hbox);
 	gtk_container_add (GTK_CONTAINER (window),
 			   hbox);
 
-	display = time_bar_get_display (TIME_BAR (hbox));
-
-	vbox = time_bar_get_vbox (TIME_BAR (hbox));
-
-	gtk_widget_show_all (window);
+	gtk_widget_show (window);
 
 	gtk_main ();
 

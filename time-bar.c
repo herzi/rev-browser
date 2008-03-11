@@ -50,6 +50,7 @@ time_bar_init (TimeBar* self)
 	PRIV(self)->display = display_new ();
 
 	display = PRIV(self)->display;
+	gtk_widget_show (display);
 
 	add_button (hbox,
 		    GTK_ARROW_LEFT,
@@ -64,6 +65,7 @@ time_bar_init (TimeBar* self)
 
 	PRIV(self)->vbox = gtk_vbox_new (TRUE, 0);
 	vbox = PRIV(self)->vbox;
+	gtk_widget_show (PRIV (self)->vbox);
 	gtk_box_pack_start (GTK_BOX (hbox),
 			    vbox,
 			    FALSE,
