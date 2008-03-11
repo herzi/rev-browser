@@ -116,21 +116,15 @@ add_arrow_button (GtkBox      * box,
 	return button;
 }
 
-static GtkWidget*
+static inline GtkWidget*
 add_icon_button (GtkBox     * box,
 		 gchar const* stock_id,
 		 GtkWidget  * display)
 {
-	GtkWidget* button = add_button (box,
-					gtk_image_new_from_stock (stock_id,
-								  GTK_ICON_SIZE_MENU),
-					display);
-
-	if (!strcmp (stock_id, GTK_STOCK_ZOOM_IN)) {
-	} else {
-	}
-
-	return button;
+	return add_button (box,
+			   gtk_image_new_from_stock (stock_id,
+						     GTK_ICON_SIZE_MENU),
+			   display);
 }
 
 static void
@@ -164,6 +158,7 @@ time_bar_init (TimeBar* self)
 			    FALSE,
 			    FALSE,
 			    0);
+
 	button = add_icon_button (GTK_BOX (PRIV(self)->vbox),
 				  GTK_STOCK_ZOOM_IN,
 				  PRIV(self)->display);
