@@ -13,7 +13,8 @@ test_gdk_draw_rectangle_LDADD=$(GTK_LIBS)
 rev_lister_SOURCES=\
 	rev-lister.c
 	$(NULL)
-rev_lister_CFLAGS=$(GLIB_CFLAGS) $(GLIB_LIBS)
+rev_lister_CPPFLAGS=$(GLIB_CFLAGS)
+rev_lister_LDADD=$(GLIB_LIBS)
 
 rev_browser_SOURCES=\
 	browser.c \
@@ -26,4 +27,5 @@ rev_browser_SOURCES=\
 	time-bar.h \
 	time-bar.c \
 	$(NULL)
-rev_browser_CFLAGS=$(GTK_CFLAGS) $(GTK_LIBS)
+rev_browser_CPPFLAGS=$(GTK_CFLAGS)
+rev_browser_LDADD=$(GTK_LIBS)
