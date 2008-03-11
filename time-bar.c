@@ -114,7 +114,7 @@ add_button (GtkBox      * box,
 			       GTK_RELIEF_NONE);
 	gtk_widget_show (gtk_bin_get_child (GTK_BIN (button)));
 	gtk_widget_show (button);
-	gtk_box_pack_start (GTK_BOX (box),
+	gtk_box_pack_start (box,
 			    button,
 			    FALSE,
 			    FALSE,
