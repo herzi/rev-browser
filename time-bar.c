@@ -37,6 +37,91 @@ struct _TimeBarPrivate {
 G_DEFINE_TYPE (TimeBar, time_bar, GTK_TYPE_HBOX);
 
 static void
+display_notify_can_step_left (GObject   * object,
+			      GParamSpec* pspec,
+			      GtkWidget * button)
+{
+	gtk_widget_set_sensitive (button, display_can_step_left (DISPLAY (object)));
+}
+
+static void
+display_notify_can_step_right (GObject   * object,
+			       GParamSpec* pspec,
+			       GtkWidget * button)
+{
+	gtk_widget_set_sensitive (button, display_can_step_right (DISPLAY (object)));
+}
+
+static void
+display_notify_can_zoom_in (GObject   * object,
+			    GParamSpec* pspec,
+			    GtkWidget * button)
+{
+	gtk_widget_set_sensitive (button, display_can_zoom_in (DISPLAY (object)));
+}
+
+static void
+display_notify_can_zoom_out (GObject   * object,
+			     GParamSpec* pspec,
+			     GtkWidget * button)
+{
+	gtk_widget_set_sensitive (button, display_can_zoom_out (DISPLAY (object)));
+}
+
+void
+add_button (GtkWidget   * hbox,
+	    GtkArrowType  arrow,
+	    gchar const * stock_id,
+	    GtkWidget   * display)
+{
+	GtkWidget* button;
+
+	button = gtk_button_new ();
+	if (!stock_id) {
+		gtk_container_add (GTK_CONTAINER (button),
+				   gtk_arrow_new (arrow,
+						  GTK_SHADOW_IN));
+
+		if (arrow == GTK_ARROW_RIGHT) {
+			g_signal_connect (display, "notify::can-step-right",
+					  G_CALLBACK (display_notify_can_step_right), button);
+			g_signal_connect_swapped (button, "clicked",
+						  G_CALLBACK (display_step_right), display);
+		} else {
+			g_signal_connect (display, "notify::can-step-left",
+					  G_CALLBACK (display_notify_can_step_left), button);
+			g_signal_connect_swapped (button, "clicked",
+						  G_CALLBACK (display_step_left), display);
+		}
+	} else {
+		gtk_container_add (GTK_CONTAINER (button),
+				   gtk_image_new_from_stock (stock_id,
+							     GTK_ICON_SIZE_MENU));
+
+		if (!strcmp (stock_id, GTK_STOCK_ZOOM_IN)) {
+			g_signal_connect (display, "notify::can-zoom-in",
+					  G_CALLBACK (display_notify_can_zoom_in), button);
+			g_signal_connect_swapped (button, "clicked",
+						  G_CALLBACK (display_zoom_in), display);
+		} else {
+			g_signal_connect (display, "notify::can-zoom-out",
+					  G_CALLBACK (display_notify_can_zoom_out), button);
+			g_signal_connect_swapped (button, "clicked",
+						  G_CALLBACK (display_zoom_out), display);
+		}
+	}
+	gtk_button_set_relief (GTK_BUTTON (button),
+			       GTK_RELIEF_NONE);
+	gtk_widget_show (gtk_bin_get_child (GTK_BIN (button)));
+	gtk_widget_show (button);
+	gtk_box_pack_start (GTK_BOX (hbox),
+			    button,
+			    FALSE,
+			    FALSE,
+			    0);
+}
+
+static void
 time_bar_init (TimeBar* self)
 {
 	GtkWidget* display; /* FIXME: drop after extracting time-bar from main() */
