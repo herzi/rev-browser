@@ -23,6 +23,8 @@
 
 #include "time-bar.h"
 
+#include "display.h"
+
 struct _TimeBarPrivate {
 	GtkWidget* display;
 };
@@ -39,6 +41,8 @@ time_bar_init (TimeBar* self)
 	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self,
 						  TYPE_TIME_BAR,
 						  TimeBarPrivate);
+
+	PRIV(self)->display = display_new ();
 }
 
 static void
@@ -53,5 +57,13 @@ GtkWidget*
 time_bar_new (void)
 {
 	return g_object_new (TYPE_TIME_BAR, NULL);
+}
+
+GtkWidget*
+time_bar_get_display (TimeBar const* self)
+{
+	g_return_val_if_fail (IS_TIME_BAR (self), NULL);
+
+	return PRIV (self)->display;
 }
 

@@ -39,12 +39,13 @@ typedef struct _TimeBarClass   TimeBarClass;
 #define IS_TIME_BAR_CLASS(c)  (G_TYPE_CHECK_CLASS_CAST ((c), TYPE_TIME_BAR))
 #define TIME_BAR_GET_CLASS(i) (G_TYPE_INSTANCE_GET_CLASS ((i), TYPE_TIME_BAR, TimeBarClass))
 
-GType      time_bar_get_type (void);
-GtkWidget* time_bar_new      (void);
-void       add_button        (GtkWidget   * hbox,
-			      GtkArrowType  arrow,
-			      gchar const * stock_id,
-			      GtkWidget   * display);
+GType      time_bar_get_type    (void);
+GtkWidget* time_bar_new         (void);
+GtkWidget* time_bar_get_display (TimeBar const* self);
+void       add_button           (GtkWidget   * hbox,
+				 GtkArrowType  arrow,
+				 gchar const * stock_id,
+				 GtkWidget   * display);
 
 struct _TimeBar {
 	GtkHBox         base_instance;
