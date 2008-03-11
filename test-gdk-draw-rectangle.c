@@ -23,10 +23,16 @@
  * if advised of the possibility of such damage.
  */
 
+#include <gtk/gtk.h>
+
 int
 main (int   argc,
       char**argv)
 {
-	return 0;
+	gboolean passed = TRUE;
+
+	gtk_init (&argc, &argv);
+
+	return passed ? 0 : 1;
 }
 
