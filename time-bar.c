@@ -55,6 +55,11 @@ time_bar_init (TimeBar* self)
 		    display);
 	gtk_box_pack_start_defaults (GTK_BOX (hbox),
 				     display);
+	add_button (hbox,
+		    GTK_ARROW_RIGHT,
+		    NULL,
+		    display);
+
 }
 
 static void

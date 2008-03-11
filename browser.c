@@ -130,11 +130,6 @@ main (int   argc,
 
 	display = time_bar_get_display (TIME_BAR (hbox));
 
-	add_button (hbox,
-		    GTK_ARROW_RIGHT,
-		    NULL,
-		    display);
-
 	vbox = gtk_vbox_new (TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (hbox),
 			    vbox,
