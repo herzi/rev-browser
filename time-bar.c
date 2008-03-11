@@ -132,10 +132,6 @@ add_icon_button (GtkBox     * box,
 		g_signal_connect_swapped (button, "clicked",
 					  G_CALLBACK (display_zoom_in), display);
 	} else {
-		g_signal_connect (display, "notify::can-zoom-out",
-				  G_CALLBACK (display_notify_can_zoom_out), button);
-		g_signal_connect_swapped (button, "clicked",
-					  G_CALLBACK (display_zoom_out), display);
 	}
 
 	return button;
@@ -145,14 +141,16 @@ static void
 time_bar_init (TimeBar* self)
 {
 	GtkWidget* button;
+	GtkWidget* display;
 
 	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self,
 						  TYPE_TIME_BAR,
 						  TimeBarPrivate);
 
 	PRIV(self)->display = display_new ();
-
 	gtk_widget_show (PRIV(self)->display);
+
+	display = PRIV(self)->display; /* FIXME: remove after refacotring */
 
 	button = add_arrow_button (GTK_BOX (self),
 				   GTK_ARROW_LEFT,
@@ -176,6 +174,10 @@ time_bar_init (TimeBar* self)
 	button = add_icon_button (GTK_BOX (PRIV(self)->vbox),
 				  GTK_STOCK_ZOOM_OUT,
 				  PRIV(self)->display);
+		g_signal_connect (display, "notify::can-zoom-out",
+				  G_CALLBACK (display_notify_can_zoom_out), button);
+		g_signal_connect_swapped (button, "clicked",
+					  G_CALLBACK (display_zoom_out), display);
 }
 
 static void
