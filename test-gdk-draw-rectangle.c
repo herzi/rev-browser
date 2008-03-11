@@ -32,6 +32,8 @@ main (int   argc,
 	gboolean passed = TRUE;
 	GdkPixmap* gdk;
 	GdkPixmap* cairo;
+	GdkGC    * gdkgc;
+	GdkGC    * cairogc;
 
 	gtk_init (&argc, &argv);
 
@@ -41,7 +43,11 @@ main (int   argc,
 	cairo = gdk_pixmap_new (NULL,
 				100, 80,
 				8);
+	gdkgc   = gdk_gc_new (gdk);
+	cairogc = gdk_gc_new (cairo);
 
+	g_object_unref (gdkgc);
+	g_object_unref (cairogc);
 	g_object_unref (gdk);
 	g_object_unref (cairo);
 
