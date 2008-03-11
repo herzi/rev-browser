@@ -25,6 +25,18 @@
 
 #include <gtk/gtk.h>
 
+static void
+gdk_cairo_draw_rectangle (GdkDrawable* drawable,
+			  GdkGC      * gc,
+			  gboolean     filled,
+			  gint         x,
+			  gint         y,
+			  gint         width,
+			  gint         height)
+{
+	/* FIXME: implement */
+}
+
 int
 main (int   argc,
       char**argv)
@@ -35,6 +47,7 @@ main (int   argc,
 	GdkGC    * gdkgc;
 	GdkGC    * cairogc;
 
+	/* prepare */
 	gtk_init (&argc, &argv);
 
 	gdk   = gdk_pixmap_new (NULL,
@@ -46,6 +59,21 @@ main (int   argc,
 	gdkgc   = gdk_gc_new (gdk);
 	cairogc = gdk_gc_new (cairo);
 
+	/* excercise */
+	gdk_draw_rectangle (gdk,
+			    gdkgc,
+			    TRUE,
+			    0, 0,
+			    100, 80);
+	gdk_cairo_draw_rectangle (cairo,
+				  cairogc,
+				  TRUE,
+				  0, 0,
+				  100, 80);
+
+	/* verify */
+
+	/* cleanup */
 	g_object_unref (gdkgc);
 	g_object_unref (cairogc);
 	g_object_unref (gdk);
