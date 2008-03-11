@@ -30,17 +30,17 @@ main (int   argc,
       char**argv)
 {
 	gboolean passed = TRUE;
-	GdkImage* gdk;
-	GdkImage* cairo;
+	GdkPixmap* gdk;
+	GdkPixmap* cairo;
 
 	gtk_init (&argc, &argv);
 
-	gdk   = gdk_image_new (GDK_IMAGE_NORMAL,
-			       gdk_rgb_get_visual (),
-			       100, 80);
-	cairo = gdk_image_new (GDK_IMAGE_NORMAL,
-			       gdk_rgb_get_visual (),
-			       100, 80);
+	gdk   = gdk_pixmap_new (NULL,
+				100, 80,
+				8);
+	cairo = gdk_pixmap_new (NULL,
+				100, 80,
+				8);
 
 	g_object_unref (gdk);
 	g_object_unref (cairo);
