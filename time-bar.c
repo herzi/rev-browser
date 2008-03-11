@@ -144,6 +144,8 @@ add_icon_button (GtkBox     * box,
 static void
 time_bar_init (TimeBar* self)
 {
+	GtkWidget* button;
+
 	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self,
 						  TYPE_TIME_BAR,
 						  TimeBarPrivate);
@@ -152,14 +154,14 @@ time_bar_init (TimeBar* self)
 
 	gtk_widget_show (PRIV(self)->display);
 
-	add_arrow_button (GTK_BOX (self),
-			  GTK_ARROW_LEFT,
-			  PRIV(self)->display);
+	button = add_arrow_button (GTK_BOX (self),
+				   GTK_ARROW_LEFT,
+				   PRIV(self)->display);
 	gtk_box_pack_start_defaults (GTK_BOX (self),
 				     PRIV(self)->display);
-	add_arrow_button (GTK_BOX (self),
-			  GTK_ARROW_RIGHT,
-			  PRIV(self)->display);
+	button = add_arrow_button (GTK_BOX (self),
+				   GTK_ARROW_RIGHT,
+				   PRIV(self)->display);
 
 	PRIV(self)->vbox = gtk_vbox_new (TRUE, 0);
 	gtk_widget_show (PRIV (self)->vbox);
@@ -168,12 +170,12 @@ time_bar_init (TimeBar* self)
 			    FALSE,
 			    FALSE,
 			    0);
-	add_icon_button (GTK_BOX (PRIV(self)->vbox),
-			 GTK_STOCK_ZOOM_IN,
-			 PRIV(self)->display);
-	add_icon_button (GTK_BOX (PRIV(self)->vbox),
-			 GTK_STOCK_ZOOM_OUT,
-			 PRIV(self)->display);
+	button = add_icon_button (GTK_BOX (PRIV(self)->vbox),
+				  GTK_STOCK_ZOOM_IN,
+				  PRIV(self)->display);
+	button = add_icon_button (GTK_BOX (PRIV(self)->vbox),
+				  GTK_STOCK_ZOOM_OUT,
+				  PRIV(self)->display);
 }
 
 static void
