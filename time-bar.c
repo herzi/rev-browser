@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -22,4 +22,24 @@
  */
 
 #include "time-bar.h"
+
+/* GType Implementation */
+
+G_DEFINE_TYPE (TimeBar, time_bar, GTK_TYPE_HBOX);
+
+static void
+time_bar_init (TimeBar* self)
+{}
+
+static void
+time_bar_class_init (TimeBarClass* self_class)
+{}
+
+/* Public API */
+
+GtkWidget*
+time_bar_new (void)
+{
+	return g_object_new (TYPE_TIME_BAR, NULL);
+}
 

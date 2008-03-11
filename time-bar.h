@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -24,5 +24,33 @@
 #ifndef TIME_BAR_H
 #define TIME_BAR_H
 
+#include <gtk/gtk.h>
+
+G_BEGIN_DECLS
+
+typedef struct _TimeBar        TimeBar;
+typedef struct _TimeBarPrivate TimeBarPrivate;
+typedef struct _TimeBarClass   TimeBarClass;
+
+#define TYPE_TIME_BAR         (time_bar_get_type ())
+#define TIME_BAR(i)           (G_TYPE_CHECK_INSTANCE_CAST ((i), TYPE_TIME_BAR, TimeBar))
+#define TIME_BAR_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), TYPE_TIME_BAR, TimeBarClass))
+#define IS_TIME_BAR(i)        (G_TYPE_CHECK_INSTANCE_TYPE ((i), TYPE_TIME_BAR))
+#define IS_TIME_BAR_CLASS(c)  (G_TYPE_CHECK_CLASS_CAST ((c), TYPE_TIME_BAR))
+#define TIME_BAR_GET_CLASS(i) (G_TYPE_INSTANCE_GET_CLASS ((i), TYPE_TIME_BAR, TimeBarClass))
+
+GType      time_bar_get_type (void);
+GtkWidget* time_bar_new      (void);
+
+struct _TimeBar {
+	GtkHBox         base_instance;
+	TimeBarPrivate* _private;
+};
+
+struct _TimeBarClass {
+	GtkHBoxClass    base_class;
+};
+
+G_END_DECLS
 
 #endif /* !TIME_BAR_H */
