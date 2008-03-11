@@ -131,10 +131,6 @@ main (int   argc,
 	display = time_bar_get_display (TIME_BAR (hbox));
 
 	vbox = time_bar_get_vbox (TIME_BAR (hbox));
-	add_button (vbox,
-		    0,
-		    GTK_STOCK_ZOOM_OUT,
-		    display);
 
 	gtk_widget_show_all (window);
 
