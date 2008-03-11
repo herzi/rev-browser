@@ -78,15 +78,8 @@ add_button (GtkBox      * box,
 	GtkWidget* button;
 
 	button = gtk_button_new ();
-	if (!stock_id) {
-		gtk_container_add (GTK_CONTAINER (button),
-				   gtk_arrow_new (arrow,
-						  GTK_SHADOW_IN));
-	} else {
-		gtk_container_add (GTK_CONTAINER (button),
-				   gtk_image_new_from_stock (stock_id,
-							     GTK_ICON_SIZE_MENU));
-	}
+	gtk_container_add (GTK_CONTAINER (button),
+			   child);
 	gtk_button_set_relief (GTK_BUTTON (button),
 			       GTK_RELIEF_NONE);
 	gtk_widget_show (gtk_bin_get_child (GTK_BIN (button)));
@@ -105,7 +98,12 @@ add_arrow_button (GtkBox      * box,
 		  GtkArrowType  arrow,
 		  GtkWidget   * display)
 {
-	GtkWidget* button = add_button (box, NULL, arrow, NULL, display);
+	GtkWidget* button = add_button (box,
+					gtk_arrow_new (arrow,
+						       GTK_SHADOW_IN),
+					arrow,
+					NULL,
+					display);
 
 	if (arrow == GTK_ARROW_RIGHT) {
 		g_signal_connect (display, "notify::can-step-right",
@@ -125,7 +123,12 @@ add_icon_button (GtkBox     * box,
 		 gchar const* stock_id,
 		 GtkWidget  * display)
 {
-	GtkWidget* button = add_button (box, NULL, 0, stock_id, display);
+	GtkWidget* button = add_button (box,
+					gtk_image_new_from_stock (stock_id,
+								  GTK_ICON_SIZE_MENU),
+					0,
+					stock_id,
+					display);
 
 	if (!strcmp (stock_id, GTK_STOCK_ZOOM_IN)) {
 		g_signal_connect (display, "notify::can-zoom-in",
