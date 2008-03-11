@@ -68,7 +68,7 @@ display_notify_can_zoom_out (GObject   * object,
 	gtk_widget_set_sensitive (button, display_can_zoom_out (DISPLAY (object)));
 }
 
-void
+static void
 add_button (GtkWidget   * hbox,
 	    GtkArrowType  arrow,
 	    gchar const * stock_id,
@@ -178,21 +178,5 @@ GtkWidget*
 time_bar_new (void)
 {
 	return g_object_new (TYPE_TIME_BAR, NULL);
-}
-
-GtkWidget*
-time_bar_get_display (TimeBar const* self)
-{
-	g_return_val_if_fail (IS_TIME_BAR (self), NULL);
-
-	return PRIV (self)->display;
-}
-
-GtkWidget*
-time_bar_get_vbox (TimeBar const* self)
-{
-	g_return_val_if_fail (IS_TIME_BAR (self), NULL);
-
-	return PRIV (self)->vbox;
 }
 
