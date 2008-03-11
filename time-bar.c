@@ -91,7 +91,7 @@ add_button (GtkBox      * box,
 	return button;
 }
 
-static void
+static GtkWidget*
 add_arrow_button (GtkBox      * box,
 		  GtkArrowType  arrow,
 		  GtkWidget   * display)
@@ -112,9 +112,11 @@ add_arrow_button (GtkBox      * box,
 		g_signal_connect_swapped (button, "clicked",
 					  G_CALLBACK (display_step_left), display);
 	}
+
+	return button;
 }
 
-static void
+static GtkWidget*
 add_icon_button (GtkBox     * box,
 		 gchar const* stock_id,
 		 GtkWidget  * display)
@@ -135,6 +137,8 @@ add_icon_button (GtkBox     * box,
 		g_signal_connect_swapped (button, "clicked",
 					  G_CALLBACK (display_zoom_out), display);
 	}
+
+	return button;
 }
 
 static void
