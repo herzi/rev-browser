@@ -68,7 +68,7 @@ display_notify_can_zoom_out (GObject   * object,
 	gtk_widget_set_sensitive (button, display_can_zoom_out (DISPLAY (object)));
 }
 
-static void
+static GtkWidget*
 add_button (GtkBox      * box,
 	    GtkWidget   * child,
 	    GtkArrowType  arrow,
@@ -120,6 +120,8 @@ add_button (GtkBox      * box,
 			    FALSE,
 			    FALSE,
 			    0);
+
+	return button;
 }
 
 static void
