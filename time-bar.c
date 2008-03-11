@@ -69,7 +69,7 @@ display_notify_can_zoom_out (GObject   * object,
 }
 
 static void
-add_button (GtkBox      * hbox,
+add_button (GtkBox      * box,
 	    GtkArrowType  arrow,
 	    gchar const * stock_id,
 	    GtkWidget   * display)
@@ -114,7 +114,7 @@ add_button (GtkBox      * hbox,
 			       GTK_RELIEF_NONE);
 	gtk_widget_show (gtk_bin_get_child (GTK_BIN (button)));
 	gtk_widget_show (button);
-	gtk_box_pack_start (GTK_BOX (hbox),
+	gtk_box_pack_start (GTK_BOX (box),
 			    button,
 			    FALSE,
 			    FALSE,
