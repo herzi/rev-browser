@@ -70,6 +70,7 @@ display_notify_can_zoom_out (GObject   * object,
 
 static void
 add_button (GtkBox      * box,
+	    GtkWidget   * child,
 	    GtkArrowType  arrow,
 	    gchar const * stock_id,
 	    GtkWidget   * display)
@@ -126,7 +127,7 @@ add_arrow_button (GtkBox      * box,
 		  GtkArrowType  arrow,
 		  GtkWidget   * display)
 {
-	add_button (box, arrow, NULL, display);
+	add_button (box, NULL, arrow, NULL, display);
 }
 
 static void
@@ -134,7 +135,7 @@ add_icon_button (GtkBox     * box,
 		 gchar const* stock,
 		 GtkWidget  * display)
 {
-	add_button (box, 0, stock, display);
+	add_button (box, NULL, 0, stock, display);
 }
 
 static void
