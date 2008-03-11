@@ -29,13 +29,13 @@
 #include <unistd.h>
 
 static void
-gdk_cairo_draw_rectangle (GdkDrawable* drawable,
-			  GdkGC      * gc,
-			  gboolean     filled,
-			  gint         x,
-			  gint         y,
-			  gint         width,
-			  gint         height)
+gdk_cairo_draw_rectangle (cairo_t * cr,
+			  GdkGC   * gc,
+			  gboolean  filled,
+			  gint      x,
+			  gint      y,
+			  gint      width,
+			  gint      height)
 {
 	/* FIXME: implement */
 }
@@ -54,6 +54,7 @@ main (int   argc,
 	gchar    * gdkdata;
 	gchar    * cairodata;
 	gsize      index;
+	cairo_t  * cr;
 
 	/* prepare */
 	gtk_init (&argc, &argv);
@@ -73,11 +74,14 @@ main (int   argc,
 			    TRUE,
 			    0, 0,
 			    100, 80);
-	gdk_cairo_draw_rectangle (cairo,
+
+	cr = gdk_cairo_create (cairo);
+	gdk_cairo_draw_rectangle (cr,
 				  cairogc,
 				  TRUE,
 				  0, 0,
 				  100, 80);
+	cairo_destroy (cr);
 
 	/* verify */
 	gdkpix   = gdk_pixbuf_get_from_drawable (NULL,
