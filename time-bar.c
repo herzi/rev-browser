@@ -41,6 +41,7 @@ time_bar_init (TimeBar* self)
 {
 	GtkWidget* display; /* FIXME: drop after extracting time-bar from main() */
 	GtkWidget* hbox = GTK_WIDGET (self); /* FIXME: drop */
+	GtkWidget* vbox; /* FIXME: drop */
 
 	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self,
 						  TYPE_TIME_BAR,
@@ -62,6 +63,12 @@ time_bar_init (TimeBar* self)
 		    display);
 
 	PRIV(self)->vbox = gtk_vbox_new (TRUE, 0);
+	vbox = PRIV(self)->vbox;
+	gtk_box_pack_start (GTK_BOX (hbox),
+			    vbox,
+			    FALSE,
+			    FALSE,
+			    0);
 }
 
 static void
