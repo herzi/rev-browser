@@ -47,9 +47,13 @@ gdk_cairo_draw_rectangle (cairo_t * cr,
 	//g_print ("%s\n", gdk_color_to_string (&values.foreground));
 
 	cairo_save (cr);
-
+	gdk_cairo_set_source_color (cr, &values.foreground);
 	if (filled) {
-		g_warning ("filled rectangles are not supported yet");
+		cairo_rectangle (cr,
+				 x, y,
+				 width,
+				 height);
+		cairo_fill (cr);
 	} else {
 		g_warning ("stroked rectangles are not supported yet");
 	}
