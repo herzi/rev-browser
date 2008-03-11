@@ -37,7 +37,24 @@ gdk_cairo_draw_rectangle (cairo_t * cr,
 			  gint      width,
 			  gint      height)
 {
-	/* FIXME: implement */
+	GdkGCValues values;
+
+	gdk_gc_get_values (gc, &values);
+	gdk_colormap_query_color (gdk_gc_get_colormap (gc),
+				  values.foreground.pixel,
+				  &values.foreground);
+
+	//g_print ("%s\n", gdk_color_to_string (&values.foreground));
+
+	cairo_save (cr);
+
+	if (filled) {
+		g_warning ("filled rectangles are not supported yet");
+	} else {
+		g_warning ("stroked rectangles are not supported yet");
+	}
+
+	cairo_restore (cr);
 }
 
 int
