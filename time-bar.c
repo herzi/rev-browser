@@ -69,7 +69,7 @@ display_notify_can_zoom_out (GObject   * object,
 }
 
 static void
-add_button (GtkWidget   * hbox,
+add_button (GtkBox      * hbox,
 	    GtkArrowType  arrow,
 	    gchar const * stock_id,
 	    GtkWidget   * display)
@@ -124,46 +124,40 @@ add_button (GtkWidget   * hbox,
 static void
 time_bar_init (TimeBar* self)
 {
-	GtkWidget* display; /* FIXME: drop after extracting time-bar from main() */
-	GtkWidget* hbox = GTK_WIDGET (self); /* FIXME: drop */
-	GtkWidget* vbox; /* FIXME: drop */
-
 	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self,
 						  TYPE_TIME_BAR,
 						  TimeBarPrivate);
 
 	PRIV(self)->display = display_new ();
 
-	display = PRIV(self)->display;
-	gtk_widget_show (display);
+	gtk_widget_show (PRIV(self)->display);
 
-	add_button (hbox,
+	add_button (GTK_BOX (self),
 		    GTK_ARROW_LEFT,
 		    NULL,
-		    display);
-	gtk_box_pack_start_defaults (GTK_BOX (hbox),
-				     display);
-	add_button (hbox,
+		    PRIV(self)->display);
+	gtk_box_pack_start_defaults (GTK_BOX (self),
+				     PRIV(self)->display);
+	add_button (GTK_BOX (self),
 		    GTK_ARROW_RIGHT,
 		    NULL,
-		    display);
+		    PRIV(self)->display);
 
 	PRIV(self)->vbox = gtk_vbox_new (TRUE, 0);
-	vbox = PRIV(self)->vbox;
 	gtk_widget_show (PRIV (self)->vbox);
-	gtk_box_pack_start (GTK_BOX (hbox),
-			    vbox,
+	gtk_box_pack_start (GTK_BOX (self),
+			    PRIV(self)->vbox,
 			    FALSE,
 			    FALSE,
 			    0);
-	add_button (vbox,
+	add_button (GTK_BOX (PRIV(self)->vbox),
 		    0,
 		    GTK_STOCK_ZOOM_IN,
-		    display);
-	add_button (vbox,
+		    PRIV(self)->display);
+	add_button (GTK_BOX (PRIV(self)->vbox),
 		    0,
 		    GTK_STOCK_ZOOM_OUT,
-		    display);
+		    PRIV(self)->display);
 }
 
 static void
