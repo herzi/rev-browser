@@ -71,8 +71,6 @@ display_notify_can_zoom_out (GObject   * object,
 static GtkWidget*
 add_button (GtkBox      * box,
 	    GtkWidget   * child,
-	    GtkArrowType  arrow,
-	    gchar const * stock_id,
 	    GtkWidget   * display)
 {
 	GtkWidget* button;
@@ -101,8 +99,6 @@ add_arrow_button (GtkBox      * box,
 	GtkWidget* button = add_button (box,
 					gtk_arrow_new (arrow,
 						       GTK_SHADOW_IN),
-					arrow,
-					NULL,
 					display);
 
 	if (arrow == GTK_ARROW_RIGHT) {
@@ -126,8 +122,6 @@ add_icon_button (GtkBox     * box,
 	GtkWidget* button = add_button (box,
 					gtk_image_new_from_stock (stock_id,
 								  GTK_ICON_SIZE_MENU),
-					0,
-					stock_id,
 					display);
 
 	if (!strcmp (stock_id, GTK_STOCK_ZOOM_IN)) {
