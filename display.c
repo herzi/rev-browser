@@ -304,8 +304,11 @@ notify_changes (Display* self)
 static void
 allocate_selector (Display* self)
 {
+	GtkAllocation allocation = GTK_WIDGET (self)->allocation;
+	allocation.x = get_selector_x (self);
+	allocation.width -= allocation.x - GTK_WIDGET (self)->allocation.x;
 	gtk_widget_size_allocate (self->_private->selector,
-				  &GTK_WIDGET (self)->allocation);
+				  &allocation);
 }
 
 static gboolean
