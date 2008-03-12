@@ -492,6 +492,7 @@ display_step_left (Display* self)
 	g_return_if_fail (display_can_step_left (self));
 
 	self->_private->offset--;
+	allocate_selector (self);
 	gtk_widget_queue_draw (GTK_WIDGET (self));
 
 	notify_changes (self);
@@ -504,6 +505,7 @@ display_step_right (Display* self)
 	g_return_if_fail (display_can_step_right (self));
 
 	self->_private->offset++;
+	allocate_selector (self);
 	gtk_widget_queue_draw (GTK_WIDGET (self));
 
 	notify_changes (self);
