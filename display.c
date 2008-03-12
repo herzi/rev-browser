@@ -314,11 +314,13 @@ display_key_press_event (GtkWidget  * widget,
 				if (self->_private->selected_start > 0) {
 					self->_private->selected_start--;
 					self->_private->selected_end = self->_private->selected_start;
+					allocate_selector (self);
 					gtk_widget_queue_draw (widget);
 					notify_changes (self);
 					return TRUE;
 				} else if (self->_private->selected_end > 0) {
 					self->_private->selected_end = self->_private->selected_start;
+					allocate_selector (self);
 					gtk_widget_queue_draw (widget);
 					notify_changes (self);
 					return TRUE;
