@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -22,4 +22,25 @@
  */
 
 #include "time-selector.h"
+
+/* GType Implementation */
+
+G_DEFINE_TYPE (TimeSelector, time_selector, GTK_TYPE_WIDGET);
+
+static void
+time_selector_init (TimeSelector* self)
+{}
+
+static void
+time_selector_class_init (TimeSelectorClass* self_class)
+{}
+
+/* Public API Implementation */
+
+GtkWidget*
+time_selector_new (void)
+{
+	return g_object_new (TYPE_TIME_SELECTOR,
+			     NULL);
+}
 

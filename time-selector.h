@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -24,5 +24,33 @@
 #ifndef TIME_SELECTOR_H
 #define TIME_SELECTOR_H
 
+#include <gtk/gtk.h>
+
+G_BEGIN_DECLS
+
+typedef struct _TimeSelector        TimeSelector;
+typedef struct _TimeSelectorPrivate TimeSelectorPrivate;
+typedef struct _TimeSelectorClass   TimeSelectorClass;
+
+#define TYPE_TIME_SELECTOR         (time_selector_get_type ())
+#define TIME_SELECTOR(i)           (G_TYPE_CHECK_INSTANCE_CAST ((i), TYPE_TIME_SELECTOR, TimeSelector))
+#define TIME_SELECTOR_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), TYPE_TIME_SELECTOR, TimeSelectorClass))
+#define IS_TIME_SELECTOR(i)        (G_TYPE_CHECK_INSTANCE_TYPE ((i), TYPE_TIME_SELECTOR))
+#define IS_TIME_SELECTOR_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_TIME_SELECTOR))
+#define TIME_SELECTOR_GET_CLASS(i) (G_TYPE_INSTANCE_GET_CLASS ((i), TYPE_TIME_SELECTOR, TimeSelectorClass))
+
+GType      time_selector_get_type (void);
+GtkWidget* time_selector_new      (void);
+
+struct _TimeSelector {
+	GtkWidget            base_instance;
+	TimeSelectorPrivate* _private;
+};
+
+struct _TimeSelectorClass {
+	GtkWidgetClass       base_class;
+};
+
+G_END_DECLS
 
 #endif /* !TIME_SELECTOR_H */
