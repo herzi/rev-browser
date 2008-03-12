@@ -52,12 +52,12 @@ void       display_zoom_in        (Display      * self);
 void       display_zoom_out       (Display      * self);
 
 struct _Display {
-	GtkWidget       base_instance;
+	GtkBin          base_instance;
 	DisplayPrivate* _private;
 };
 
 struct _DisplayClass {
-	GtkWidgetClass  base_class;
+	GtkBinClass     base_class;
 };
 
 G_END_DECLS

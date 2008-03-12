@@ -61,7 +61,7 @@ enum {
 
 /* GType definition */
 
-G_DEFINE_TYPE (Display, display, GTK_TYPE_WIDGET);
+G_DEFINE_TYPE (Display, display, GTK_TYPE_BIN);
 
 static void
 display_init (Display* self)
