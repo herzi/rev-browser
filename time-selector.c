@@ -29,7 +29,9 @@ G_DEFINE_TYPE (TimeSelector, time_selector, GTK_TYPE_WIDGET);
 
 static void
 time_selector_init (TimeSelector* self)
-{}
+{
+	GTK_WIDGET_SET_FLAGS (self, GTK_NO_WINDOW);
+}
 
 static void
 time_selector_class_init (TimeSelectorClass* self_class)
