@@ -43,7 +43,7 @@ update_highlight_pixbuf (GtkWidget* widget)
 					 widget->allocation.width,
 					 widget->allocation.height);
 
-		gdk_pixbuf_fill (pixbuf, 0xff00007f);
+		gdk_pixbuf_fill (pixbuf, 0xffff003f);
 
 		g_object_set_qdata_full (G_OBJECT (widget),
 					 highlight_pixbuf_quark,
