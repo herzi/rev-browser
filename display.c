@@ -137,6 +137,12 @@ get_selector_x (Display const* self)
 	return widget->allocation.x + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1);
 }
 
+static gint
+get_selector_width (Display const* self)
+{
+	return (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1);
+}
+
 static gboolean
 display_expose_event (GtkWidget     * widget,
 		      GdkEventExpose* event)
@@ -214,7 +220,7 @@ display_expose_event (GtkWidget     * widget,
 			    NULL,
 			    get_selector_x (self),
 			    widget->allocation.y,
-			    (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1),
+			    get_selector_width (self),
 			    9);
 	gtk_paint_flat_box (widget->style,
 			    widget->window,
@@ -225,7 +231,7 @@ display_expose_event (GtkWidget     * widget,
 			    NULL,
 			    get_selector_x (self),
 			    widget->allocation.y + widget->allocation.height - 9,
-			    (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1),
+			    get_selector_width (self),
 			    9);
 	gtk_paint_flat_box (widget->style,
 			    widget->window,
@@ -258,7 +264,7 @@ display_expose_event (GtkWidget     * widget,
 			  NULL,
 			  3 + get_selector_x (self),
 			  widget->allocation.y + 9,
-			  (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1) - 5,
+			  get_selector_width (self) - 5,
 			  widget->allocation.height - 18);
 	gtk_paint_shadow (widget->style,
 			  widget->window,
@@ -269,7 +275,7 @@ display_expose_event (GtkWidget     * widget,
 			  NULL,
 			  get_selector_x (self),
 			  widget->allocation.y,
-			  (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1) + 1,
+			  get_selector_width (self) + 1,
 			  widget->allocation.height);
 
 	if (GTK_WIDGET_HAS_FOCUS (widget)) {
@@ -281,7 +287,7 @@ display_expose_event (GtkWidget     * widget,
 				 NULL,
 				 get_selector_x (self) + 2,
 				 widget->allocation.y + 2,
-				 (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1) - 3,
+				 get_selector_width (self) - 3,
 				 widget->allocation.height - 4);
 	}
 
