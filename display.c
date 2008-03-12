@@ -312,7 +312,7 @@ allocate_selector (Display* self)
 {
 	GtkAllocation allocation = GTK_WIDGET (self)->allocation;
 	allocation.x = get_selector_x (self);
-	allocation.width -= allocation.x - GTK_WIDGET (self)->allocation.x;
+	allocation.width = get_selector_width (self);
 	gtk_widget_size_allocate (self->_private->selector,
 				  &allocation);
 }
