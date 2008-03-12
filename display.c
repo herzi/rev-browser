@@ -27,6 +27,7 @@
 
 #include "calendar.h"
 #include "date.h"
+#include "time-selector.h"
 
 #define DEFAULT_SIZE 40 /* the default size and minimum of an element */
 
@@ -36,6 +37,8 @@ typedef enum {
 } DisplayZoom;
 
 struct _DisplayPrivate {
+	GtkWidget  * selector;
+
 	/* range settings */
 	Date       * date_start;
 	Date       * date_end;
@@ -70,6 +73,11 @@ display_init (Display* self)
 	GTK_WIDGET_SET_FLAGS (self, GTK_CAN_FOCUS);
 
 	self->_private = G_TYPE_INSTANCE_GET_PRIVATE (self, display_get_type (), DisplayPrivate);
+
+	self->_private->selector = time_selector_new ();
+	gtk_widget_show (self->_private->selector);
+	gtk_container_add (GTK_CONTAINER (self),
+			   self->_private->selector);
 
 	self->_private->element_size = 33;
 	self->_private->date_start = date_new (1, 1, 1982);
