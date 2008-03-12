@@ -24,6 +24,8 @@ rev_browser_SOURCES=\
 	date.h \
 	display.c \
 	display.h \
+	highlight-widget.c \
+	highlight-widget.h \
 	time-bar.h \
 	time-bar.c \
 	time-selector.h \
