@@ -26,6 +26,8 @@ rev_browser_SOURCES=\
 	display.h \
 	time-bar.h \
 	time-bar.c \
+	time-selector.h \
+	time-selector.c \
 	$(NULL)
 rev_browser_CPPFLAGS=$(GTK_CFLAGS)
 rev_browser_LDADD=$(GTK_LIBS)
