@@ -278,6 +278,10 @@ display_expose_event (GtkWidget     * widget,
 				 widget->allocation.height - 4);
 	}
 
+	gtk_container_propagate_expose (GTK_CONTAINER (self),
+					self->_private->selector,
+					event);
+
 	return FALSE;
 }
 
@@ -288,6 +292,13 @@ notify_changes (Display* self)
 	g_object_notify (G_OBJECT (self), "can-step-right");
 	g_object_notify (G_OBJECT (self), "can-zoom-in");
 	g_object_notify (G_OBJECT (self), "can-zoom-out");
+}
+
+static void
+allocate_selector (Display* self)
+{
+	gtk_widget_size_allocate (self->_private->selector,
+				  &GTK_WIDGET (self)->allocation);
 }
 
 static gboolean
@@ -364,6 +375,8 @@ display_size_allocate (GtkWidget    * widget,
 	}
 
 	GTK_WIDGET_CLASS (display_parent_class)->size_allocate (widget, allocation);
+
+	allocate_selector (self);
 
 	notify_changes (self);
 }
