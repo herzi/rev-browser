@@ -52,6 +52,23 @@ update_highlight_pixbuf (GtkWidget* widget)
 	}
 }
 
+static void
+widget_render_highlight (GtkWidget     * widget,
+			 GdkEventExpose* event,
+			 gpointer        user_data G_GNUC_UNUSED)
+{
+	gdk_draw_pixbuf (widget->window,
+			 widget->style->white_gc,
+			 g_object_get_qdata (G_OBJECT (widget),
+					     highlight_pixbuf_quark),
+			 0, 0,
+			 widget->allocation.x,
+			 widget->allocation.y,
+			 -1, -1,
+			 GDK_RGB_DITHER_MAX,
+			 0, 0);
+}
+
 void
 highlight_widget (GtkWidget* widget)
 {
@@ -63,6 +80,8 @@ highlight_widget (GtkWidget* widget)
 
 	g_signal_connect_after (widget, "size-allocate",
 				G_CALLBACK (update_highlight_pixbuf), NULL);
+	g_signal_connect_after (widget, "expose-event",
+				G_CALLBACK (widget_render_highlight), NULL);
 
 	update_highlight_pixbuf (widget);
 }
