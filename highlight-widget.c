@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -24,4 +24,10 @@
  */
 
 #include "highlight-widget.h"
+
+void
+highlight_widget (GtkWidget* widget)
+{
+	g_return_if_fail (GTK_IS_WIDGET (widget));
+}
 
