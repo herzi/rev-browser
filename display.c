@@ -27,6 +27,7 @@
 
 #include "calendar.h"
 #include "date.h"
+#include "highlight-widget.h"
 #include "time-selector.h"
 
 #define DEFAULT_SIZE 40 /* the default size and minimum of an element */
@@ -75,6 +76,7 @@ display_init (Display* self)
 	self->_private = G_TYPE_INSTANCE_GET_PRIVATE (self, display_get_type (), DisplayPrivate);
 
 	self->_private->selector = time_selector_new ();
+	highlight_widget (self->_private->selector);
 	gtk_widget_show (self->_private->selector);
 	gtk_container_add (GTK_CONTAINER (self),
 			   self->_private->selector);
