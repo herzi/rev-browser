@@ -130,6 +130,13 @@ display_get_range_size (Display const* self)
 	return 1 + date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start);
 }
 
+static gint
+get_selector_x (Display const* self)
+{
+	GtkWidget const* widget = GTK_WIDGET (self);
+	return widget->allocation.x + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1);
+}
+
 static gboolean
 display_expose_event (GtkWidget     * widget,
 		      GdkEventExpose* event)
@@ -205,7 +212,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1),
+			    get_selector_x (self),
 			    widget->allocation.y,
 			    (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1),
 			    9);
@@ -216,7 +223,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1),
+			    get_selector_x (self),
 			    widget->allocation.y + widget->allocation.height - 9,
 			    (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1),
 			    9);
@@ -227,7 +234,7 @@ display_expose_event (GtkWidget     * widget,
 			    &widget->allocation,
 			    widget,
 			    NULL,
-			    widget->allocation.x + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1),
+			    get_selector_x (self),
 			    widget->allocation.y + 9,
 			    3,
 			    widget->allocation.height - 18);
@@ -249,7 +256,7 @@ display_expose_event (GtkWidget     * widget,
 			  &widget->allocation,
 			  widget,
 			  NULL,
-			  widget->allocation.x + 3 + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1),
+			  3 + get_selector_x (self),
 			  widget->allocation.y + 9,
 			  (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1) - 5,
 			  widget->allocation.height - 18);
@@ -260,7 +267,7 @@ display_expose_event (GtkWidget     * widget,
 			  &widget->allocation,
 			  widget,
 			  NULL,
-			  widget->allocation.x + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1),
+			  get_selector_x (self),
 			  widget->allocation.y,
 			  (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1) + 1,
 			  widget->allocation.height);
@@ -272,7 +279,7 @@ display_expose_event (GtkWidget     * widget,
 				 &widget->allocation,
 				 widget,
 				 NULL,
-				 widget->allocation.x + (self->_private->selected_start - self->_private->offset) * (self->_private->element_size + 1) + 2,
+				 get_selector_x (self) + 2,
 				 widget->allocation.y + 2,
 				 (1 + self->_private->selected_end - self->_private->selected_start) * (self->_private->element_size + 1) - 3,
 				 widget->allocation.height - 4);
