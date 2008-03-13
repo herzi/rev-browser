@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -24,5 +24,17 @@
 #ifndef GDK_CAIRO_H
 #define GDK_CAIRO_H
 
+#include <gdk/gdk.h>
 
+G_BEGIN_DECLS
+
+void gdk_cairo_draw_rectangle    (cairo_t * cr,
+				  GdkGC   * gc,
+				  gboolean  filled,
+				  gint      x,
+				  gint      y,
+				  gint      width,
+				  gint      height);
+
+G_END_DECLS
 #endif /* !GDK_CAIRO_H */

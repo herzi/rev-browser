@@ -28,7 +28,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-static void
+#include "gdk-cairo.h"
+
+void
 gdk_cairo_draw_rectangle (cairo_t * cr,
 			  GdkGC   * gc,
 			  gboolean  filled,
