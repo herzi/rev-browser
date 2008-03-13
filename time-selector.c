@@ -37,6 +37,19 @@ static gboolean
 selector_expose_event (GtkWidget     * widget,
 		       GdkEventExpose* event)
 {
+	/* box above the eye */
+	gtk_paint_flat_box (widget->style,
+			    widget->window,
+			    GTK_STATE_NORMAL,
+			    GTK_SHADOW_IN,
+			    &widget->allocation,
+			    widget,
+			    NULL,
+			    widget->allocation.x,
+			    widget->allocation.y,
+			    widget->allocation.width,
+			    9);
+
 	/* box below the eye */
 	gtk_paint_flat_box (widget->style,
 			    widget->window,
