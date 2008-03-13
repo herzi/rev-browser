@@ -50,5 +50,5 @@ libtest_la_CPPFLAGS=$(libctk_la_CPPFLAGS)
 libtest_la_LIBADD=$(libctk_la_LIBADD)
 
 test_gdk_draw_rectangle_CPPFLAGS=$(libctk_la_CPPFLAGS)
-test_gdk_draw_rectangle_LDADD=$(libctk_la_LIBADD) libctk.la
+test_gdk_draw_rectangle_LDADD=$(libctk_la_LIBADD) libtest.la libctk.la
 
