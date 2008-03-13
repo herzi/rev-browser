@@ -37,24 +37,33 @@ static gboolean
 selector_expose_event (GtkWidget     * widget,
 		       GdkEventExpose* event)
 {
-	GdkRectangle rectangle = widget->allocation;
+	GdkRectangle rectangles[] = {
+		/* above the eye */
+		{widget->allocation.x, widget->allocation.y,
+		 widget->allocation.width, 9}
+	};
+	gsize i;
+	GdkRectangle rectangle;
 
 	/* box above the eye */
 	rectangle.x      = widget->allocation.x;
 	rectangle.y      = widget->allocation.y;
 	rectangle.width  = widget->allocation.width;
 	rectangle.height = 9;
-	gtk_paint_box (widget->style,
-			    widget->window,
-			    GTK_STATE_NORMAL,
-			    GTK_SHADOW_OUT,
-			    &rectangle,
-			    widget,
-			    NULL,
-			    widget->allocation.x,
-			    widget->allocation.y,
-			    widget->allocation.width,
-			    widget->allocation.height);
+
+	for (i = 0; i < G_N_ELEMENTS (rectangles); i++) {
+		gtk_paint_box (widget->style,
+			       widget->window,
+			       GTK_STATE_NORMAL,
+			       GTK_SHADOW_OUT,
+			       &rectangles[i],
+			       widget,
+			       NULL,
+			       widget->allocation.x,
+			       widget->allocation.y,
+			       widget->allocation.width,
+			       widget->allocation.height);
+	}
 
 	/* box below the eye */
 	/* obsolete: rectangle.x      = widget->allocation.x; */
