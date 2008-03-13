@@ -25,17 +25,50 @@
 
 #include "testcase.h"
 
+struct _TestcasePrivate {
+	GdkPixmap* gdk_pixmap;
+	GdkPixmap* cairo_pixmap;
+};
+
+#define PRIV(i) (TESTCASE(i)->_private)
+
 /* GType Implementation */
 
 G_DEFINE_TYPE (Testcase, testcase, G_TYPE_OBJECT);
 
 static void
 testcase_init (Testcase* self)
-{}
+{
+	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self,
+						  TYPE_TESTCASE,
+						  TestcasePrivate);
+
+	PRIV(self)->gdk_pixmap   = gdk_pixmap_new (NULL,
+						   100, 80,
+						   24);
+	PRIV(self)->cairo_pixmap = gdk_pixmap_new (NULL,
+						   100, 80,
+						   24);
+}
+
+static void
+testcase_finalize (GObject* object)
+{
+	g_object_unref (PRIV(object)->gdk_pixmap);
+	g_object_unref (PRIV(object)->cairo_pixmap);
+
+	G_OBJECT_CLASS (testcase_parent_class)->finalize (object);
+}
 
 static void
 testcase_class_init (TestcaseClass* self_class)
-{}
+{
+	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
+
+	object_class->finalize = testcase_finalize;
+
+	g_type_class_add_private (self_class, sizeof (TestcasePrivate));
+}
 
 /* Public API Implementation */
 
