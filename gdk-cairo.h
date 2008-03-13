@@ -37,4 +37,5 @@ void gdk_cairo_draw_rectangle    (cairo_t * cr,
 				  gint      height);
 
 G_END_DECLS
+
 #endif /* !GDK_CAIRO_H */
