@@ -266,17 +266,6 @@ display_expose_event (GtkWidget     * widget,
 			  widget->allocation.y + 9,
 			  get_selector_width (self) - 5,
 			  widget->allocation.height - 18);
-	gtk_paint_shadow (widget->style,
-			  widget->window,
-			  GTK_STATE_NORMAL,
-			  GTK_SHADOW_OUT,
-			  &widget->allocation,
-			  widget,
-			  NULL,
-			  get_selector_x (self),
-			  widget->allocation.y,
-			  get_selector_width (self) + 1,
-			  widget->allocation.height);
 
 	gtk_container_propagate_expose (GTK_CONTAINER (self),
 					self->_private->selector,
