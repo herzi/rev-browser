@@ -49,6 +49,7 @@ gdk_cairo_draw_rectangle (cairo_t * cr,
 	cairo_save (cr);
 	gdk_cairo_set_source_color (cr, &values.foreground);
 	if (filled) {
+		/* FIXME: stroke, pattern, etc */
 		cairo_rectangle (cr,
 				 x, y,
 				 width,
