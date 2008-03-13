@@ -66,6 +66,10 @@ selector_expose_event (GtkWidget     * widget,
 			    9);
 
 	/* box left of the eye */
+	rectangle.x      = widget->allocation.x;
+	rectangle.y      = widget->allocation.y + 9;
+	rectangle.width  = 3;
+	rectangle.height = widget->allocation.height - 18;
 	gtk_paint_box (widget->style,
 			    widget->window,
 			    GTK_STATE_NORMAL,
@@ -74,15 +78,15 @@ selector_expose_event (GtkWidget     * widget,
 			    widget,
 			    NULL,
 			    widget->allocation.x,
-			    widget->allocation.y + 9,
-			    3,
-			    widget->allocation.height - 18);
+			    widget->allocation.y,
+			    widget->allocation.width,
+			    widget->allocation.height);
 
 	/* box right of the eye */
 	rectangle.x      = widget->allocation.x + widget->allocation.width - 3;
-	rectangle.y      = widget->allocation.y + 9;
-	rectangle.width  = 3;
-	rectangle.height = widget->allocation.height - 18;
+	/* obsolete: rectangle.y      = widget->allocation.y + 9; */
+	/* obsolete: rectangle.width  = 3; */
+	/* obsolete: rectangle.height = widget->allocation.height - 18; */
 	gtk_paint_box (widget->style,
 			    widget->window,
 			    GTK_STATE_NORMAL,
