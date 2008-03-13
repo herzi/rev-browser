@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -24,4 +24,25 @@
  */
 
 #include "testcase.h"
+
+/* GType Implementation */
+
+G_DEFINE_TYPE (Testcase, testcase, G_TYPE_OBJECT);
+
+static void
+testcase_init (Testcase* self)
+{}
+
+static void
+testcase_class_init (TestcaseClass* self_class)
+{}
+
+/* Public API Implementation */
+
+Testcase*
+testcase_new (void)
+{
+	return g_object_new (TYPE_TESTCASE,
+			     NULL);
+}
 
