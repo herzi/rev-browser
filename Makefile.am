@@ -36,7 +36,9 @@ libctk_la_SOURCES=\
 	gdk-cairo.c \
 	gdk-cairo.h \
 	$(NULL)
+libctk_la_CPPFLAGS=$(GTK_CFLAGS)
+libctk_la_LIBADD=$(GTK_LIBS)
 
-test_gdk_draw_rectangle_CPPFLAGS=$(GTK_CFLAGS)
-test_gdk_draw_rectangle_LDADD=$(GTK_LIBS) libctk.la
+test_gdk_draw_rectangle_CPPFLAGS=$(libctk_la_CPPFLAGS)
+test_gdk_draw_rectangle_LDADD=$(libctk_la_LIBADD) libctk.la
 
