@@ -1,4 +1,4 @@
-/* This file is part of herzi's playground
+/* This file is part of ref-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
