@@ -313,8 +313,17 @@ allocate_selector (Display* self)
 	GtkAllocation allocation = GTK_WIDGET (self)->allocation;
 	allocation.x = get_selector_x (self);
 	allocation.width = get_selector_width (self);
-	gtk_widget_size_allocate (self->_private->selector,
-				  &allocation);
+
+	if (allocation.x < GTK_WIDGET (self)->allocation.x) {
+		gtk_widget_hide (self->_private->selector);
+	} else if (allocation.x >= GTK_WIDGET (self)->allocation.x + GTK_WIDGET (self)->allocation.width) {
+		gtk_widget_hide (self->_private->selector);
+	} else {
+		gtk_widget_size_allocate (self->_private->selector,
+					  &allocation);
+
+		gtk_widget_show (self->_private->selector);
+	}
 }
 
 static gboolean
