@@ -1,3 +1,4 @@
+check_LTLIBRARIES=libctk.la
 bin_PROGRAMS=\
 	rev-lister \
 	rev-browser \
@@ -6,9 +7,6 @@ check_PROGRAMS=\
 	test-gdk-draw-rectangle \
 	$(NULL)
 TESTS=$(check_PROGRAMS)
-
-test_gdk_draw_rectangle_CPPFLAGS=$(GTK_CFLAGS)
-test_gdk_draw_rectangle_LDADD=$(GTK_LIBS)
 
 rev_lister_SOURCES=\
 	rev-lister.c
@@ -33,3 +31,12 @@ rev_browser_SOURCES=\
 	$(NULL)
 rev_browser_CPPFLAGS=$(GTK_CFLAGS)
 rev_browser_LDADD=$(GTK_LIBS)
+
+libctk_la_SOURCES=\
+	gdk-cairo.c \
+	gdk-cairo.h \
+	$(NULL)
+
+test_gdk_draw_rectangle_CPPFLAGS=$(GTK_CFLAGS)
+test_gdk_draw_rectangle_LDADD=$(GTK_LIBS) libctk.la
+
