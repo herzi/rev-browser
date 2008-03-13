@@ -278,6 +278,10 @@ display_expose_event (GtkWidget     * widget,
 			  get_selector_width (self) + 1,
 			  widget->allocation.height);
 
+	gtk_container_propagate_expose (GTK_CONTAINER (self),
+					self->_private->selector,
+					event);
+
 	if (GTK_WIDGET_HAS_FOCUS (widget)) {
 		gtk_paint_focus (widget->style,
 				 widget->window,
@@ -290,10 +294,6 @@ display_expose_event (GtkWidget     * widget,
 				 get_selector_width (self) - 3,
 				 widget->allocation.height - 4);
 	}
-
-	gtk_container_propagate_expose (GTK_CONTAINER (self),
-					self->_private->selector,
-					event);
 
 	return FALSE;
 }
