@@ -3,6 +3,9 @@ bin_PROGRAMS=\
 	rev-lister \
 	rev-browser \
 	$(NULL)
+check_LTLIBRARIES=\
+	libtest.la \
+	$(NULL)
 check_PROGRAMS=\
 	test-gdk-draw-rectangle \
 	$(NULL)
@@ -38,6 +41,13 @@ rev_browser_SOURCES=\
 	$(NULL)
 rev_browser_CPPFLAGS=$(libctk_la_CPPFLAGS)
 rev_browser_LDADD=$(libctk_la_LIBADD) libctk.la
+
+libtest_la_SOURCES=\
+	testcase.c \
+	testcase.h \
+	$(NULL)
+libtest_la_CPPFLAGS=$(libctk_la_CPPFLAGS)
+libtest_la_LIBADD=$(libctk_la_LIBADD)
 
 test_gdk_draw_rectangle_CPPFLAGS=$(libctk_la_CPPFLAGS)
 test_gdk_draw_rectangle_LDADD=$(libctk_la_LIBADD) libctk.la
