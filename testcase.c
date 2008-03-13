@@ -79,3 +79,19 @@ testcase_new (void)
 			     NULL);
 }
 
+GdkPixmap*
+testcase_get_pixmap_gdk (Testcase const* self)
+{
+	g_return_val_if_fail (IS_TESTCASE (self), NULL);
+
+	return PRIV(self)->gdk_pixmap;
+}
+
+GdkPixmap*
+testcase_get_pixmap_cairo (Testcase const* self)
+{
+	g_return_val_if_fail (IS_TESTCASE (self), NULL);
+
+	return PRIV(self)->cairo_pixmap;
+}
+

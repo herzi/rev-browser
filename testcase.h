@@ -41,8 +41,10 @@ typedef struct _TestcaseClass   TestcaseClass;
 #define IS_TESTCASE_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_TESTCASE))
 #define TESTCASE_GET_CLASS(i) (G_TYPE_INSTANCE_GET_CLASS ((i), TYPE_TESTCASE, TestcaseClass))
 
-GType     testcase_get_type (void);
-Testcase* testcase_new      (void);
+GType      testcase_get_type         (void);
+Testcase*  testcase_new              (void);
+GdkPixmap* testcase_get_pixmap_gdk   (Testcase const* self);
+GdkPixmap* testcase_get_pixmap_cairo (Testcase const* self);
 
 struct _Testcase {
 	GObject          base_instance;
