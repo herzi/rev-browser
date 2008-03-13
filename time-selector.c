@@ -23,6 +23,8 @@
 
 #include "time-selector.h"
 
+#define VERTICAL_BAR_WIDTH 3
+
 /* GType Implementation */
 
 G_DEFINE_TYPE (TimeSelector, time_selector, GTK_TYPE_WIDGET);
@@ -46,10 +48,10 @@ selector_expose_event (GtkWidget     * widget,
 		 widget->allocation.width, 9},
 		/* left of the eye */
 		{widget->allocation.x, widget->allocation.y + 9,
-		 3, widget->allocation.height - 18},
+		 VERTICAL_BAR_WIDTH, widget->allocation.height - 18},
 		/* right of the eye */
-		{widget->allocation.x + widget->allocation.width - 3, widget->allocation.y + 9,
-		 3, widget->allocation.height - 18}
+		{widget->allocation.x + widget->allocation.width - VERTICAL_BAR_WIDTH, widget->allocation.y + 9,
+		 VERTICAL_BAR_WIDTH, widget->allocation.height - 18}
 	};
 	gsize i;
 
