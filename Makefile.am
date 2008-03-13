@@ -8,6 +8,7 @@ check_LTLIBRARIES=\
 	$(NULL)
 check_PROGRAMS=\
 	test-gdk-draw-rectangle \
+	test-gdk-draw-line \
 	$(NULL)
 TESTS=$(check_PROGRAMS)
 
@@ -54,6 +55,8 @@ libtest_la_SOURCES=\
 libtest_la_CPPFLAGS=$(libctk_la_CPPFLAGS)
 libtest_la_LIBADD=$(libctk_la_LIBADD)
 
+test_gdk_draw_line_CPPFLAGS=$(libctk_la_CPPFLAGS)
+test_gdk_draw_line_LDADD=$(libctk_la_LIBADD) libtest.la libctk.la
 test_gdk_draw_rectangle_CPPFLAGS=$(libctk_la_CPPFLAGS)
 test_gdk_draw_rectangle_LDADD=$(libctk_la_LIBADD) libtest.la libctk.la
 
