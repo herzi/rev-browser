@@ -14,6 +14,13 @@ rev_lister_SOURCES=\
 rev_lister_CPPFLAGS=$(GLIB_CFLAGS)
 rev_lister_LDADD=$(GLIB_LIBS)
 
+libctk_la_SOURCES=\
+	gdk-cairo.c \
+	gdk-cairo.h \
+	$(NULL)
+libctk_la_CPPFLAGS=$(GTK_CFLAGS)
+libctk_la_LIBADD=$(GTK_LIBS)
+
 rev_browser_SOURCES=\
 	browser.c \
 	calendar.c \
@@ -31,13 +38,6 @@ rev_browser_SOURCES=\
 	$(NULL)
 rev_browser_CPPFLAGS=$(GTK_CFLAGS)
 rev_browser_LDADD=$(GTK_LIBS)
-
-libctk_la_SOURCES=\
-	gdk-cairo.c \
-	gdk-cairo.h \
-	$(NULL)
-libctk_la_CPPFLAGS=$(GTK_CFLAGS)
-libctk_la_LIBADD=$(GTK_LIBS)
 
 test_gdk_draw_rectangle_CPPFLAGS=$(libctk_la_CPPFLAGS)
 test_gdk_draw_rectangle_LDADD=$(libctk_la_LIBADD) libctk.la
