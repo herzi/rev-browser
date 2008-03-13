@@ -46,10 +46,12 @@ selector_expose_event (GtkWidget     * widget,
 		 widget->allocation.width, 9},
 		/* left of the eye */
 		{widget->allocation.x, widget->allocation.y + 9,
+		 3, widget->allocation.height - 18},
+		/* right of the eye */
+		{widget->allocation.x + widget->allocation.width - 3, widget->allocation.y + 9,
 		 3, widget->allocation.height - 18}
 	};
 	gsize i;
-	GdkRectangle rectangle;
 
 	for (i = 0; i < G_N_ELEMENTS (rectangles); i++) {
 		gtk_paint_box (widget->style,
@@ -64,23 +66,6 @@ selector_expose_event (GtkWidget     * widget,
 			       widget->allocation.width,
 			       widget->allocation.height);
 	}
-
-	/* box right of the eye */
-	rectangle.x      = widget->allocation.x + widget->allocation.width - 3;
-	rectangle.y      = widget->allocation.y + 9;
-	rectangle.width  = 3;
-	rectangle.height = widget->allocation.height - 18;
-	gtk_paint_box (widget->style,
-			    widget->window,
-			    GTK_STATE_NORMAL,
-			    GTK_SHADOW_OUT,
-			    &rectangle,
-			    widget,
-			    NULL,
-			    widget->allocation.x,
-			    widget->allocation.y,
-			    widget->allocation.width,
-			    widget->allocation.height);
 
 	/* inner shadow */
 	gtk_paint_shadow (widget->style,
