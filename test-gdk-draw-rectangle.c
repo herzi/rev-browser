@@ -53,12 +53,8 @@ main (int   argc,
 
 	testcase = testcase_new ();
 
-	gdk   = gdk_pixmap_new (NULL,
-				100, 80,
-				24);
-	cairo = gdk_pixmap_new (NULL,
-				100, 80,
-				24);
+	gdk   = testcase_get_pixmap_gdk   (testcase);
+	cairo = testcase_get_pixmap_cairo (testcase);
 	gdkgc   = gdk_gc_new (gdk);
 	cairogc = gdk_gc_new (cairo);
 
@@ -139,8 +135,6 @@ main (int   argc,
 	/* cleanup */
 	g_object_unref (gdkgc);
 	g_object_unref (cairogc);
-	g_object_unref (gdk);
-	g_object_unref (cairo);
 
 	g_object_unref (testcase);
 
