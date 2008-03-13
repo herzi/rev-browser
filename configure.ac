@@ -1,8 +1,13 @@
 AC_INIT(autotool,0.0.1,mailto:herzi@gnome-de.org)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
+dnl skip c++ and f77 checks
+CXX=no
+F77=no
+
 AC_PROG_CC
 AM_PROG_CC_C_O
+AC_PROG_LIBTOOL
 
 PKG_CHECK_MODULES(GLIB,[glib-2.0])
 PKG_CHECK_MODULES(GTK,[gtk+-2.0])
