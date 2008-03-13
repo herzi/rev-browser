@@ -38,10 +38,10 @@ selector_expose_event (GtkWidget     * widget,
 		       GdkEventExpose* event)
 {
 	/* box above the eye */
-	gtk_paint_flat_box (widget->style,
+	gtk_paint_box (widget->style,
 			    widget->window,
 			    GTK_STATE_NORMAL,
-			    GTK_SHADOW_IN,
+			    GTK_SHADOW_NONE,
 			    &widget->allocation,
 			    widget,
 			    NULL,
@@ -51,10 +51,10 @@ selector_expose_event (GtkWidget     * widget,
 			    9);
 
 	/* box below the eye */
-	gtk_paint_flat_box (widget->style,
+	gtk_paint_box (widget->style,
 			    widget->window,
 			    GTK_STATE_NORMAL,
-			    GTK_SHADOW_IN,
+			    GTK_SHADOW_NONE,
 			    &widget->allocation,
 			    widget,
 			    NULL,
@@ -64,10 +64,10 @@ selector_expose_event (GtkWidget     * widget,
 			    9);
 
 	/* box left of the eye */
-	gtk_paint_flat_box (widget->style,
+	gtk_paint_box (widget->style,
 			    widget->window,
 			    GTK_STATE_NORMAL,
-			    GTK_SHADOW_IN,
+			    GTK_SHADOW_NONE,
 			    &widget->allocation,
 			    widget,
 			    NULL,
@@ -77,10 +77,10 @@ selector_expose_event (GtkWidget     * widget,
 			    widget->allocation.height - 18);
 
 	/* box right of the eye */
-	gtk_paint_flat_box (widget->style,
+	gtk_paint_box (widget->style,
 			    widget->window,
 			    GTK_STATE_NORMAL,
-			    GTK_SHADOW_IN,
+			    GTK_SHADOW_NONE,
 			    &widget->allocation,
 			    widget,
 			    NULL,
