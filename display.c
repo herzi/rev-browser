@@ -24,13 +24,14 @@
 #include "display.h"
 
 #include <gdk/gdkkeysyms.h>
+#include "gdk-cairo.h"
 
 #include "calendar.h"
 #include "date.h"
 #include "highlight-widget.h"
 #include "time-selector.h"
 
-#define DEFAULT_SIZE 40 /* the default size and minimum of an element */
+#define DEFAULT_SIZE     40 /* the default size and minimum of an element */
 #define VERTICAL_PADDING 6
 
 typedef enum {
@@ -77,7 +78,6 @@ display_init (Display* self)
 	self->_private = G_TYPE_INSTANCE_GET_PRIVATE (self, display_get_type (), DisplayPrivate);
 
 	self->_private->selector = time_selector_new ();
-	//highlight_widget (self->_private->selector);
 	gtk_widget_show (self->_private->selector);
 	gtk_container_add (GTK_CONTAINER (self),
 			   self->_private->selector);
@@ -149,16 +149,20 @@ display_expose_event (GtkWidget     * widget,
 		      GdkEventExpose* event)
 {
 	Display* self = DISPLAY (widget);
+	cairo_t* cr;
 	gsize i;
 
 	/* FIXME: get color/gc from theme */
-	gdk_draw_rectangle (widget->window,
-			    widget->style->white_gc,
-			    TRUE,
-			    widget->allocation.x,
-			    widget->allocation.y + VERTICAL_PADDING,
-			    MIN (widget->allocation.width, 1 + display_get_range_size (self) *(self->_private->element_size + 1)),
-			    widget->allocation.height - 2 * VERTICAL_PADDING);
+	cr = gdk_cairo_create (widget->window);
+	gdk_cairo_draw_rectangle (cr,
+				  widget->style->white_gc,
+				  TRUE,
+				  widget->allocation.x,
+				  widget->allocation.y + VERTICAL_PADDING,
+				  MIN (widget->allocation.width,
+				       1 + display_get_range_size (self) *(self->_private->element_size + 1)),
+				  widget->allocation.height - 2 * VERTICAL_PADDING);
+	cairo_destroy (cr);
 
 	PangoLayout* layout = pango_layout_new (gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget)));
 	pango_layout_set_font_description (layout,
