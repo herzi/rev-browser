@@ -1,4 +1,4 @@
-check_LTLIBRARIES=libctk.la
+lib_LTLIBRARIES=libctk.la
 bin_PROGRAMS=\
 	rev-lister \
 	rev-browser \
@@ -36,8 +36,8 @@ rev_browser_SOURCES=\
 	time-selector.h \
 	time-selector.c \
 	$(NULL)
-rev_browser_CPPFLAGS=$(GTK_CFLAGS)
-rev_browser_LDADD=$(GTK_LIBS)
+rev_browser_CPPFLAGS=$(libctk_la_CPPFLAGS)
+rev_browser_LDADD=$(libctk_la_LIBADD) libctk.la
 
 test_gdk_draw_rectangle_CPPFLAGS=$(libctk_la_CPPFLAGS)
 test_gdk_draw_rectangle_LDADD=$(libctk_la_LIBADD) libctk.la
