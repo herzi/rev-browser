@@ -224,7 +224,7 @@ display_expose_event (GtkWidget     * widget,
 				 NULL,
 				 get_selector_x (self) + 2,
 				 widget->allocation.y + 2,
-				 get_selector_width (self) - 3,
+				 get_selector_width (self) - 4,
 				 widget->allocation.height - 4);
 	}
 

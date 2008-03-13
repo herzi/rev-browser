@@ -23,6 +23,7 @@
 
 #include "time-selector.h"
 
+#define HORIZONTAL_BAR_HEIGHT 9
 #define VERTICAL_BAR_WIDTH 3
 
 /* GType Implementation */
@@ -42,16 +43,18 @@ selector_expose_event (GtkWidget     * widget,
 	GdkRectangle rectangles[] = {
 		/* above the eye */
 		{widget->allocation.x, widget->allocation.y,
-		 widget->allocation.width, 9},
+		 widget->allocation.width, HORIZONTAL_BAR_HEIGHT},
 		/* below the eye */
-		{widget->allocation.x, widget->allocation.y + widget->allocation.height - 9,
-		 widget->allocation.width, 9},
+		{widget->allocation.x,
+		 widget->allocation.y + widget->allocation.height - HORIZONTAL_BAR_HEIGHT,
+		 widget->allocation.width, HORIZONTAL_BAR_HEIGHT},
 		/* left of the eye */
-		{widget->allocation.x, widget->allocation.y + 9,
-		 VERTICAL_BAR_WIDTH, widget->allocation.height - 18},
+		{widget->allocation.x, widget->allocation.y + HORIZONTAL_BAR_HEIGHT,
+		 VERTICAL_BAR_WIDTH, widget->allocation.height - 2 * HORIZONTAL_BAR_HEIGHT},
 		/* right of the eye */
-		{widget->allocation.x + widget->allocation.width - VERTICAL_BAR_WIDTH, widget->allocation.y + 9,
-		 VERTICAL_BAR_WIDTH, widget->allocation.height - 18}
+		{widget->allocation.x + widget->allocation.width - VERTICAL_BAR_WIDTH,
+		 widget->allocation.y + HORIZONTAL_BAR_HEIGHT,
+		 VERTICAL_BAR_WIDTH, widget->allocation.height - 2 * HORIZONTAL_BAR_HEIGHT}
 	};
 	gsize i;
 
@@ -77,10 +80,10 @@ selector_expose_event (GtkWidget     * widget,
 			  &widget->allocation,
 			  widget,
 			  NULL,
-			  widget->allocation.x + 3,
-			  widget->allocation.y + 9,
-			  widget->allocation.width - 6,
-			  widget->allocation.height - 18);
+			  widget->allocation.x + VERTICAL_BAR_WIDTH,
+			  widget->allocation.y + HORIZONTAL_BAR_HEIGHT,
+			  widget->allocation.width - 2 * VERTICAL_BAR_WIDTH,
+			  widget->allocation.height - 2 * HORIZONTAL_BAR_HEIGHT);
 
 	return FALSE;
 }
