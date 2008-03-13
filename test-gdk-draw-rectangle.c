@@ -30,40 +30,6 @@
 
 #include "gdk-cairo.h"
 
-void
-gdk_cairo_draw_rectangle (cairo_t * cr,
-			  GdkGC   * gc,
-			  gboolean  filled,
-			  gint      x,
-			  gint      y,
-			  gint      width,
-			  gint      height)
-{
-	GdkGCValues values;
-
-	gdk_gc_get_values (gc, &values);
-	gdk_colormap_query_color (gdk_gc_get_colormap (gc),
-				  values.foreground.pixel,
-				  &values.foreground);
-
-	//g_print ("%s\n", gdk_color_to_string (&values.foreground));
-
-	cairo_save (cr);
-	gdk_cairo_set_source_color (cr, &values.foreground);
-	if (filled) {
-		/* FIXME: stroke, pattern, etc */
-		cairo_rectangle (cr,
-				 x, y,
-				 width,
-				 height);
-		cairo_fill (cr);
-	} else {
-		g_warning ("stroked rectangles are not supported yet");
-	}
-
-	cairo_restore (cr);
-}
-
 int
 main (int   argc,
       char**argv)
