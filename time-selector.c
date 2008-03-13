@@ -37,6 +37,19 @@ static gboolean
 selector_expose_event (GtkWidget     * widget,
 		       GdkEventExpose* event)
 {
+	/* box right of the eye */
+	gtk_paint_flat_box (widget->style,
+			    widget->window,
+			    GTK_STATE_NORMAL,
+			    GTK_SHADOW_IN,
+			    &widget->allocation,
+			    widget,
+			    NULL,
+			    widget->allocation.x + widget->allocation.width - 3,
+			    widget->allocation.y + 9,
+			    3,
+			    widget->allocation.height - 18);
+
 	/* inner shadow */
 	gtk_paint_shadow (widget->style,
 			  widget->window,
