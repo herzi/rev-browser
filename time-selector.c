@@ -37,6 +37,20 @@ static gboolean
 selector_expose_event (GtkWidget     * widget,
 		       GdkEventExpose* event)
 {
+	/* inner shadow */
+	gtk_paint_shadow (widget->style,
+			  widget->window,
+			  GTK_STATE_NORMAL,
+			  GTK_SHADOW_IN,
+			  &widget->allocation,
+			  widget,
+			  NULL,
+			  widget->allocation.x + 3,
+			  widget->allocation.y + 9,
+			  widget->allocation.width - 6,
+			  widget->allocation.height - 18);
+
+	/* outer shadow */
 	gtk_paint_shadow (widget->style,
 			  widget->window,
 			  GTK_STATE_NORMAL,
