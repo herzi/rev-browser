@@ -33,9 +33,20 @@ time_selector_init (TimeSelector* self)
 	GTK_WIDGET_SET_FLAGS (self, GTK_NO_WINDOW);
 }
 
+static gboolean
+selector_expose_event (GtkWidget     * widget,
+		       GdkEventExpose* event)
+{
+	return FALSE;
+}
+
 static void
 time_selector_class_init (TimeSelectorClass* self_class)
-{}
+{
+	GtkWidgetClass* widget_class = GTK_WIDGET_CLASS (self_class);
+
+	widget_class->expose_event  = selector_expose_event;
+}
 
 /* Public API Implementation */
 
