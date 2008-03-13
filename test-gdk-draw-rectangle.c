@@ -29,12 +29,14 @@
 #include <unistd.h>
 
 #include "gdk-cairo.h"
+#include "testcase.h"
 
 int
 main (int   argc,
       char**argv)
 {
 	gboolean passed = TRUE;
+	Testcase * testcase;
 	GdkPixmap* gdk;
 	GdkPixmap* cairo;
 	GdkGC    * gdkgc;
@@ -48,6 +50,8 @@ main (int   argc,
 
 	/* prepare */
 	gtk_init (&argc, &argv);
+
+	testcase = testcase_new ();
 
 	gdk   = gdk_pixmap_new (NULL,
 				100, 80,
@@ -137,6 +141,8 @@ main (int   argc,
 	g_object_unref (cairogc);
 	g_object_unref (gdk);
 	g_object_unref (cairo);
+
+	g_object_unref (testcase);
 
 	return passed ? 0 : 1;
 }
