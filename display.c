@@ -31,6 +31,7 @@
 #include "time-selector.h"
 
 #define DEFAULT_SIZE 40 /* the default size and minimum of an element */
+#define VERTICAL_PADDING 6
 
 typedef enum {
 	ZOOM_YEARS,
@@ -155,9 +156,9 @@ display_expose_event (GtkWidget     * widget,
 			    widget->style->white_gc,
 			    TRUE,
 			    widget->allocation.x,
-			    widget->allocation.y + 6,
+			    widget->allocation.y + VERTICAL_PADDING,
 			    MIN (widget->allocation.width, 1 + display_get_range_size (self) *(self->_private->element_size + 1)),
-			    widget->allocation.height - 12);
+			    widget->allocation.height - 2 * VERTICAL_PADDING);
 
 	PangoLayout* layout = pango_layout_new (gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget)));
 	pango_layout_set_font_description (layout,
@@ -182,16 +183,16 @@ display_expose_event (GtkWidget     * widget,
 			gdk_draw_line (widget->window,
 				       widget->style->black_gc,
 				       widget->allocation.x + i * (self->_private->element_size + 1),
-				       widget->allocation.y + 6 + 1,
+				       widget->allocation.y + VERTICAL_PADDING,
 				       widget->allocation.x + i * (self->_private->element_size + 1),
-				       widget->allocation.y + 6 + 1 + 6);
+				       widget->allocation.y + VERTICAL_PADDING + 7);
 		}
 
 		pango_layout_set_text (layout, year, -1);
 		gdk_draw_layout (widget->window,
 				 widget->style->black_gc,
 				 widget->allocation.x + i * (self->_private->element_size + 1) + 5,
-				 widget->allocation.y + 6 + 5,
+				 widget->allocation.y + VERTICAL_PADDING + 5,
 				 layout);
 
 		g_free (year);
@@ -206,9 +207,9 @@ display_expose_event (GtkWidget     * widget,
 			  widget,
 			  NULL,
 			  widget->allocation.x,
-			  widget->allocation.y + 6,
+			  widget->allocation.y + VERTICAL_PADDING,
 			  widget->allocation.width,
-			  widget->allocation.height - 12);
+			  widget->allocation.height - 2 * VERTICAL_PADDING);
 
 	/* display selected item */
 	gtk_container_propagate_expose (GTK_CONTAINER (self),
