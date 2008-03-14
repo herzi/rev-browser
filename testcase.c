@@ -35,6 +35,7 @@ struct _TestcasePrivate {
 };
 
 enum {
+	EXERCISE_CAIRO,
 	EXERCISE_GDK,
 	N_SIGNALS
 };
@@ -84,6 +85,15 @@ testcase_class_init (TestcaseClass* self_class)
 
 	object_class->finalize = testcase_finalize;
 
+	testcase_signals[EXERCISE_CAIRO] =
+		g_signal_new ("exercise-cairo",
+			      TYPE_TESTCASE,
+			      G_SIGNAL_ACTION, 0,
+			      NULL, NULL,
+			      test_cclosure_marshal_NONE__POINTER_OBJECT, G_TYPE_NONE,
+			      2,
+			      G_TYPE_POINTER,
+			      GDK_TYPE_GC);
 	testcase_signals[EXERCISE_GDK] =
 		g_signal_new ("exercise-gdk",
 			      TYPE_TESTCASE,
@@ -109,6 +119,8 @@ testcase_new (void)
 void
 testcase_exercise (Testcase* self)
 {
+	cairo_t* cr;
+
 	g_return_if_fail (IS_TESTCASE (self));
 
 	g_signal_emit (self,
@@ -116,6 +128,14 @@ testcase_exercise (Testcase* self)
 		       0,
 		       testcase_get_pixmap_gdk (self),
 		       testcase_get_gc_gdk (self));
+
+	cr = gdk_cairo_create (PRIV(self)->cairo_pixmap);
+	g_signal_emit (self,
+		       testcase_signals[EXERCISE_CAIRO],
+		       0,
+		       cr,
+		       testcase_get_gc_cairo (self));
+	cairo_destroy (cr);
 }
 
 GdkGC*
