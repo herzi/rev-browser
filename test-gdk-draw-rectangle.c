@@ -93,13 +93,13 @@ main (int   argc,
 	gdkpix   = testcase_get_pixbuf_gdk (testcase);
 	cairopix = testcase_get_pixbuf_cairo (testcase);
 
-	gdkdata   = gdk_pixbuf_get_pixels (gdkpix);
-	cairodata = gdk_pixbuf_get_pixels (cairopix);
-
 	g_return_val_if_fail (gdk_pixbuf_get_rowstride (gdkpix) == gdk_pixbuf_get_rowstride (cairopix), 1);
 	g_return_val_if_fail (gdk_pixbuf_get_n_channels (gdkpix) == gdk_pixbuf_get_n_channels (cairopix), 1);
 	g_return_val_if_fail (gdk_pixbuf_get_height (gdkpix) == gdk_pixbuf_get_height (cairopix), 1);
 	g_return_val_if_fail (gdk_pixbuf_get_width (gdkpix) == gdk_pixbuf_get_width (cairopix), 1);
+
+	gdkdata   = gdk_pixbuf_get_pixels (gdkpix);
+	cairodata = gdk_pixbuf_get_pixels (cairopix);
 
 	for (index = 0; index < gdk_pixbuf_get_height (gdkpix) * gdk_pixbuf_get_rowstride (gdkpix); index++) {
 		if (gdkdata[index] != cairodata[index]) {
