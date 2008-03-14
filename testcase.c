@@ -25,12 +25,21 @@
 
 #include "testcase.h"
 
+#include "test-marshallers.h"
+
 struct _TestcasePrivate {
 	GdkPixmap* gdk_pixmap;
 	GdkPixmap* cairo_pixmap;
 	GdkGC    * gdk_gc;
 	GdkGC    * cairo_gc;
 };
+
+enum {
+	EXERCISE_GDK,
+	N_SIGNALS
+};
+
+static guint testcase_signals[N_SIGNALS] = {0};
 
 #define PRIV(i) (TESTCASE(i)->_private)
 
@@ -74,6 +83,16 @@ testcase_class_init (TestcaseClass* self_class)
 	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
 
 	object_class->finalize = testcase_finalize;
+
+	testcase_signals[EXERCISE_GDK] =
+		g_signal_new ("exercise-gdk",
+			      TYPE_TESTCASE,
+			      G_SIGNAL_ACTION, 0,
+			      NULL, NULL,
+			      test_cclosure_marshal_NONE__OBJECT_OBJECT, G_TYPE_NONE,
+			      2,
+			      GDK_TYPE_DRAWABLE,
+			      GDK_TYPE_GC);
 
 	g_type_class_add_private (self_class, sizeof (TestcasePrivate));
 }
