@@ -53,6 +53,8 @@ G_DEFINE_TYPE (Testcase, testcase, G_TYPE_OBJECT);
 static void
 testcase_init (Testcase* self)
 {
+	cairo_t* cr;
+
 	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self,
 						  TYPE_TESTCASE,
 						  TestcasePrivate);
@@ -66,6 +68,13 @@ testcase_init (Testcase* self)
 
 	PRIV(self)->gdk_gc   = gdk_gc_new (PRIV(self)->gdk_pixmap);
 	PRIV(self)->cairo_gc = gdk_gc_new (PRIV(self)->cairo_pixmap);
+
+	cr = gdk_cairo_create (PRIV(self)->gdk_pixmap);
+	cairo_paint (cr);
+	cairo_destroy (cr);
+	cr = gdk_cairo_create (PRIV(self)->cairo_pixmap);
+	cairo_paint (cr);
+	cairo_destroy (cr);
 }
 
 static void
