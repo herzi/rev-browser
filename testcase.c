@@ -32,8 +32,6 @@ struct _TestcasePrivate {
 	GdkPixmap* cairo_pixmap;
 	GdkGC    * gdk_gc;
 	GdkGC    * cairo_gc;
-	GdkPixbuf* gdk_pixbuf;
-	GdkPixbuf* cairo_pixbuf;
 
 	gboolean   passed;
 };
@@ -73,13 +71,6 @@ testcase_init (Testcase* self)
 static void
 testcase_finalize (GObject* object)
 {
-	if (PRIV(object)->gdk_pixbuf) {
-		g_object_unref (PRIV(object)->gdk_pixbuf);
-	}
-	if (PRIV(object)->cairo_pixbuf) {
-		g_object_unref (PRIV(object)->cairo_pixbuf);
-	}
-
 	g_object_unref (PRIV(object)->gdk_gc);
 	g_object_unref (PRIV(object)->cairo_gc);
 
@@ -133,6 +124,8 @@ testcase_exercise (Testcase* self)
 	gchar    * gdkdata;
 	gchar    * cairodata;
 	gsize      index;
+	GdkPixbuf* gdk_pixbuf;
+	GdkPixbuf* cairo_pixbuf;
 	cairo_t* cr;
 
 	g_return_if_fail (IS_TESTCASE (self));
@@ -151,30 +144,30 @@ testcase_exercise (Testcase* self)
 		       testcase_get_gc_cairo (self));
 	cairo_destroy (cr);
 
-	PRIV(self)->gdk_pixbuf   = gdk_pixbuf_get_from_drawable (NULL,
+	gdk_pixbuf   = gdk_pixbuf_get_from_drawable (NULL,
 								 testcase_get_pixmap_gdk (self),
 								 gdk_rgb_get_colormap (),
 								 0, 0,
 								 0, 0,
 								 100, 80);
-	PRIV(self)->cairo_pixbuf = gdk_pixbuf_get_from_drawable (NULL,
+	cairo_pixbuf = gdk_pixbuf_get_from_drawable (NULL,
 								 testcase_get_pixmap_cairo (self),
 								 gdk_rgb_get_colormap (),
 								 0, 0,
 								 0, 0,
 								 100, 80);
 
-	gdkdata   = gdk_pixbuf_get_pixels (PRIV(self)->gdk_pixbuf);
-	cairodata = gdk_pixbuf_get_pixels (PRIV(self)->cairo_pixbuf);
+	gdkdata   = gdk_pixbuf_get_pixels (gdk_pixbuf);
+	cairodata = gdk_pixbuf_get_pixels (cairo_pixbuf);
 
-	g_return_if_fail (gdk_pixbuf_get_rowstride (PRIV(self)->gdk_pixbuf) == gdk_pixbuf_get_rowstride (PRIV(self)->cairo_pixbuf));
-	g_return_if_fail (gdk_pixbuf_get_n_channels (PRIV(self)->gdk_pixbuf) == gdk_pixbuf_get_n_channels (PRIV(self)->cairo_pixbuf));
-	g_return_if_fail (gdk_pixbuf_get_height (PRIV(self)->gdk_pixbuf) == gdk_pixbuf_get_height (PRIV(self)->cairo_pixbuf));
-	g_return_if_fail (gdk_pixbuf_get_width (PRIV(self)->gdk_pixbuf) == gdk_pixbuf_get_width (PRIV(self)->cairo_pixbuf));
+	g_return_if_fail (gdk_pixbuf_get_rowstride (gdk_pixbuf) == gdk_pixbuf_get_rowstride (cairo_pixbuf));
+	g_return_if_fail (gdk_pixbuf_get_n_channels (gdk_pixbuf) == gdk_pixbuf_get_n_channels (cairo_pixbuf));
+	g_return_if_fail (gdk_pixbuf_get_height (gdk_pixbuf) == gdk_pixbuf_get_height (cairo_pixbuf));
+	g_return_if_fail (gdk_pixbuf_get_width (gdk_pixbuf) == gdk_pixbuf_get_width (cairo_pixbuf));
 
 	PRIV(self)->passed = TRUE;
 
-	for (index = 0; index < gdk_pixbuf_get_height (PRIV(self)->gdk_pixbuf) * gdk_pixbuf_get_rowstride (PRIV(self)->gdk_pixbuf); index++) {
+	for (index = 0; index < gdk_pixbuf_get_height (gdk_pixbuf) * gdk_pixbuf_get_rowstride (gdk_pixbuf); index++) {
 		if (gdkdata[index] != cairodata[index]) {
 			gchar* filepath;
 			g_warning ("Eeek! Differences at byte %d",
@@ -184,7 +177,7 @@ testcase_exercise (Testcase* self)
 			filepath = g_strdup_printf ("%d-%s-gdk.png",
 						    getpid (),
 						    g_get_prgname ());
-			gdk_pixbuf_save (PRIV(self)->gdk_pixbuf,
+			gdk_pixbuf_save (gdk_pixbuf,
 					 filepath,
 					 "png",
 					 NULL, /* FIXME: handle errors */
@@ -196,7 +189,7 @@ testcase_exercise (Testcase* self)
 			filepath = g_strdup_printf ("%d-%s-cairo.png",
 						    getpid (),
 						    g_get_prgname ());
-			gdk_pixbuf_save (PRIV(self)->cairo_pixbuf,
+			gdk_pixbuf_save (cairo_pixbuf,
 					 filepath,
 					 "png",
 					 NULL, /* FIXME: handle errors */
@@ -207,6 +200,9 @@ testcase_exercise (Testcase* self)
 			break;
 		}
 	}
+
+	g_object_unref (gdk_pixbuf);
+	g_object_unref (cairo_pixbuf);
 }
 
 GdkGC*
@@ -231,22 +227,6 @@ testcase_get_passed (Testcase const* self)
 	g_return_val_if_fail (IS_TESTCASE (self), FALSE);
 
 	return PRIV(self)->passed;
-}
-
-GdkPixbuf*
-testcase_get_pixbuf_gdk (Testcase const* self)
-{
-	g_return_val_if_fail (IS_TESTCASE (self), NULL);
-
-	return PRIV(self)->gdk_pixbuf;
-}
-
-GdkPixbuf*
-testcase_get_pixbuf_cairo (Testcase const* self)
-{
-	g_return_val_if_fail (IS_TESTCASE (self), NULL);
-
-	return PRIV(self)->cairo_pixbuf;
 }
 
 GdkPixmap*

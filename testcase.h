@@ -47,8 +47,6 @@ void       testcase_exercise         (Testcase      * self);
 
 GdkGC*     testcase_get_gc_gdk       (Testcase const* self);
 GdkGC*     testcase_get_gc_cairo     (Testcase const* self);
-GdkPixbuf* testcase_get_pixbuf_gdk   (Testcase const* self);
-GdkPixbuf* testcase_get_pixbuf_cairo (Testcase const* self);
 GdkPixmap* testcase_get_pixmap_gdk   (Testcase const* self);
 GdkPixmap* testcase_get_pixmap_cairo (Testcase const* self);
 
