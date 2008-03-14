@@ -90,18 +90,8 @@ main (int   argc,
 	testcase_exercise (testcase);
 
 	/* verify */
-	gdkpix   = gdk_pixbuf_get_from_drawable (NULL,
-						 gdk,
-						 gdk_rgb_get_colormap (),
-						 0, 0,
-						 0, 0,
-						 100, 80);
-	cairopix = gdk_pixbuf_get_from_drawable (NULL,
-						 cairo,
-						 gdk_rgb_get_colormap (),
-						 0, 0,
-						 0, 0,
-						 100, 80);
+	gdkpix   = testcase_get_pixbuf_gdk (testcase);
+	cairopix = testcase_get_pixbuf_cairo (testcase);
 
 	gdkdata   = gdk_pixbuf_get_pixels (gdkpix);
 	cairodata = gdk_pixbuf_get_pixels (cairopix);
@@ -144,9 +134,6 @@ main (int   argc,
 			break;
 		}
 	}
-
-	g_object_unref (gdkpix);
-	g_object_unref (cairopix);
 
 	/* cleanup */
 	g_object_unref (testcase);
