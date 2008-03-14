@@ -133,25 +133,25 @@ testcase_exercise (Testcase* self)
 	g_signal_emit (self,
 		       testcase_signals[EXERCISE_GDK],
 		       0,
-		       testcase_get_pixmap_gdk (self),
-		       testcase_get_gc_gdk (self));
+		       PRIV(self)->gdk_pixmap,
+		       PRIV(self)->gdk_gc);
 
 	cr = gdk_cairo_create (PRIV(self)->cairo_pixmap);
 	g_signal_emit (self,
 		       testcase_signals[EXERCISE_CAIRO],
 		       0,
 		       cr,
-		       testcase_get_gc_cairo (self));
+		       PRIV(self)->cairo_gc);
 	cairo_destroy (cr);
 
 	gdk_pixbuf   = gdk_pixbuf_get_from_drawable (NULL,
-								 testcase_get_pixmap_gdk (self),
+						     PRIV(self)->gdk_pixmap,
 								 gdk_rgb_get_colormap (),
 								 0, 0,
 								 0, 0,
 								 100, 80);
 	cairo_pixbuf = gdk_pixbuf_get_from_drawable (NULL,
-								 testcase_get_pixmap_cairo (self),
+						     PRIV(self)->cairo_pixmap,
 								 gdk_rgb_get_colormap (),
 								 0, 0,
 								 0, 0,
@@ -205,43 +205,11 @@ testcase_exercise (Testcase* self)
 	g_object_unref (cairo_pixbuf);
 }
 
-GdkGC*
-testcase_get_gc_gdk (Testcase const* self)
-{
-	g_return_val_if_fail (IS_TESTCASE (self), NULL);
-
-	return PRIV(self)->gdk_gc;
-}
-
-GdkGC*
-testcase_get_gc_cairo (Testcase const* self)
-{
-	g_return_val_if_fail (IS_TESTCASE (self), NULL);
-
-	return PRIV(self)->cairo_gc;
-}
-
 gboolean
 testcase_get_passed (Testcase const* self)
 {
 	g_return_val_if_fail (IS_TESTCASE (self), FALSE);
 
 	return PRIV(self)->passed;
-}
-
-GdkPixmap*
-testcase_get_pixmap_gdk (Testcase const* self)
-{
-	g_return_val_if_fail (IS_TESTCASE (self), NULL);
-
-	return PRIV(self)->gdk_pixmap;
-}
-
-GdkPixmap*
-testcase_get_pixmap_cairo (Testcase const* self)
-{
-	g_return_val_if_fail (IS_TESTCASE (self), NULL);
-
-	return PRIV(self)->cairo_pixmap;
 }
 

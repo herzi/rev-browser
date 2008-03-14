@@ -44,12 +44,6 @@ typedef struct _TestcaseClass   TestcaseClass;
 GType      testcase_get_type         (void);
 Testcase*  testcase_new              (void);
 void       testcase_exercise         (Testcase      * self);
-
-GdkGC*     testcase_get_gc_gdk       (Testcase const* self);
-GdkGC*     testcase_get_gc_cairo     (Testcase const* self);
-GdkPixmap* testcase_get_pixmap_gdk   (Testcase const* self);
-GdkPixmap* testcase_get_pixmap_cairo (Testcase const* self);
-
 gboolean   testcase_get_passed       (Testcase const* self);
 
 struct _Testcase {
