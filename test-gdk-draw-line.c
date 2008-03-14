@@ -25,10 +25,29 @@
 
 #include "gdk-cairo.h"
 
+#include "testcase.h"
+
 int
 main (int   argc,
       char**argv)
 {
-	return 0;
+	Testcase* testcase;
+	gboolean  passed = TRUE;
+
+	/* prepare */
+	gtk_init (&argc, &argv);
+
+	testcase = testcase_new ();
+
+	/* exercise */
+	testcase_exercise (testcase);
+
+	/* verify */
+	passed = testcase_get_passed (testcase);
+
+	/* cleanup */
+	g_object_unref (testcase);
+
+	return passed ? 0 : 1;
 }
 
