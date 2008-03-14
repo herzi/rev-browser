@@ -137,8 +137,6 @@ testcase_exercise (Testcase* self)
 
 	g_return_if_fail (IS_TESTCASE (self));
 
-	PRIV(self)->passed = TRUE;
-
 	g_signal_emit (self,
 		       testcase_signals[EXERCISE_GDK],
 		       0,
@@ -168,6 +166,13 @@ testcase_exercise (Testcase* self)
 
 	gdkdata   = gdk_pixbuf_get_pixels (PRIV(self)->gdk_pixbuf);
 	cairodata = gdk_pixbuf_get_pixels (PRIV(self)->cairo_pixbuf);
+
+	g_return_if_fail (gdk_pixbuf_get_rowstride (PRIV(self)->gdk_pixbuf) == gdk_pixbuf_get_rowstride (PRIV(self)->cairo_pixbuf));
+	g_return_if_fail (gdk_pixbuf_get_n_channels (PRIV(self)->gdk_pixbuf) == gdk_pixbuf_get_n_channels (PRIV(self)->cairo_pixbuf));
+	g_return_if_fail (gdk_pixbuf_get_height (PRIV(self)->gdk_pixbuf) == gdk_pixbuf_get_height (PRIV(self)->cairo_pixbuf));
+	g_return_if_fail (gdk_pixbuf_get_width (PRIV(self)->gdk_pixbuf) == gdk_pixbuf_get_width (PRIV(self)->cairo_pixbuf));
+
+	PRIV(self)->passed = TRUE;
 
 	for (index = 0; index < gdk_pixbuf_get_height (PRIV(self)->gdk_pixbuf) * gdk_pixbuf_get_rowstride (PRIV(self)->gdk_pixbuf); index++) {
 		if (gdkdata[index] != cairodata[index]) {
