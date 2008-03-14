@@ -43,6 +43,18 @@ test_gdk_cb (Testcase   * testcase,
 			    100, 80);
 }
 
+static void
+test_cairo_cb (Testcase* testcase,
+	       cairo_t * cr,
+	       GdkGC   * gc)
+{
+	gdk_cairo_draw_rectangle (cr,
+				  gc,
+				  TRUE,
+				  0, 0,
+				  100, 80);
+}
+
 int
 main (int   argc,
       char**argv)
@@ -73,15 +85,9 @@ main (int   argc,
 	/* excercise */
 	g_signal_connect (testcase, "exercise-gdk",
 			  G_CALLBACK (test_gdk_cb), NULL);
+	g_signal_connect (testcase, "exercise-cairo",
+			  G_CALLBACK (test_cairo_cb), NULL);
 	testcase_exercise (testcase);
-
-	cr = gdk_cairo_create (cairo);
-	gdk_cairo_draw_rectangle (cr,
-				  cairogc,
-				  TRUE,
-				  0, 0,
-				  100, 80);
-	cairo_destroy (cr);
 
 	/* verify */
 	gdkpix   = gdk_pixbuf_get_from_drawable (NULL,
