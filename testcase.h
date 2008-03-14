@@ -43,6 +43,8 @@ typedef struct _TestcaseClass   TestcaseClass;
 
 GType      testcase_get_type         (void);
 Testcase*  testcase_new              (void);
+GdkGC*     testcase_get_gc_gdk       (Testcase const* self);
+GdkGC*     testcase_get_gc_cairo     (Testcase const* self);
 GdkPixmap* testcase_get_pixmap_gdk   (Testcase const* self);
 GdkPixmap* testcase_get_pixmap_cairo (Testcase const* self);
 

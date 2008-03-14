@@ -28,6 +28,8 @@
 struct _TestcasePrivate {
 	GdkPixmap* gdk_pixmap;
 	GdkPixmap* cairo_pixmap;
+	GdkGC    * gdk_gc;
+	GdkGC    * cairo_gc;
 };
 
 #define PRIV(i) (TESTCASE(i)->_private)
@@ -49,11 +51,17 @@ testcase_init (Testcase* self)
 	PRIV(self)->cairo_pixmap = gdk_pixmap_new (NULL,
 						   100, 80,
 						   24);
+
+	PRIV(self)->gdk_gc   = gdk_gc_new (PRIV(self)->gdk_pixmap);
+	PRIV(self)->cairo_gc = gdk_gc_new (PRIV(self)->cairo_pixmap);
 }
 
 static void
 testcase_finalize (GObject* object)
 {
+	g_object_unref (PRIV(object)->gdk_gc);
+	g_object_unref (PRIV(object)->cairo_gc);
+
 	g_object_unref (PRIV(object)->gdk_pixmap);
 	g_object_unref (PRIV(object)->cairo_pixmap);
 
@@ -77,6 +85,22 @@ testcase_new (void)
 {
 	return g_object_new (TYPE_TESTCASE,
 			     NULL);
+}
+
+GdkGC*
+testcase_get_gc_gdk (Testcase const* self)
+{
+	g_return_val_if_fail (IS_TESTCASE (self), NULL);
+
+	return PRIV(self)->gdk_gc;
+}
+
+GdkGC*
+testcase_get_gc_cairo (Testcase const* self)
+{
+	g_return_val_if_fail (IS_TESTCASE (self), NULL);
+
+	return PRIV(self)->cairo_gc;
 }
 
 GdkPixmap*
