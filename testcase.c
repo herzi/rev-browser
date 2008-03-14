@@ -106,6 +106,18 @@ testcase_new (void)
 			     NULL);
 }
 
+void
+testcase_exercise (Testcase* self)
+{
+	g_return_if_fail (IS_TESTCASE (self));
+
+	g_signal_emit (self,
+		       testcase_signals[EXERCISE_GDK],
+		       0,
+		       testcase_get_pixmap_gdk (self),
+		       testcase_get_gc_gdk (self));
+}
+
 GdkGC*
 testcase_get_gc_gdk (Testcase const* self)
 {
