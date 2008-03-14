@@ -31,6 +31,18 @@
 #include "gdk-cairo.h"
 #include "testcase.h"
 
+static void
+test_gdk_cb (Testcase   * testcase,
+	     GdkDrawable* drawable,
+	     GdkGC      * gc)
+{
+	gdk_draw_rectangle (drawable,
+			    gc,
+			    TRUE,
+			    0, 0,
+			    100, 80);
+}
+
 int
 main (int   argc,
       char**argv)
@@ -59,11 +71,9 @@ main (int   argc,
 	cairogc = testcase_get_gc_cairo (testcase);
 
 	/* excercise */
-	gdk_draw_rectangle (gdk,
-			    gdkgc,
-			    TRUE,
-			    0, 0,
-			    100, 80);
+	test_gdk_cb (testcase,
+		     testcase_get_pixmap_gdk (testcase),
+		     testcase_get_gc_gdk (testcase));
 
 	cr = gdk_cairo_create (cairo);
 	gdk_cairo_draw_rectangle (cr,
