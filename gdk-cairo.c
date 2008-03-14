@@ -23,6 +23,17 @@
 
 #include "gdk-cairo.h"
 
+void gdk_cairo_draw_line (cairo_t * cr,
+			  GdkGC   * gc,
+			  gint      x1,
+			  gint      y1,
+			  gint      x2,
+			  gint      y2)
+{
+	g_warning ("%s(): FIXME: implement",
+		   G_STRFUNC);
+}
+
 void
 gdk_cairo_draw_rectangle (cairo_t * cr,
 			  GdkGC   * gc,

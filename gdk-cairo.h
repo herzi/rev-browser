@@ -28,6 +28,12 @@
 
 G_BEGIN_DECLS
 
+void gdk_cairo_draw_line         (cairo_t * cr,
+				  GdkGC   * gc,
+				  gint      x1,
+				  gint      y1,
+				  gint      x2,
+				  gint      y2);
 void gdk_cairo_draw_rectangle    (cairo_t * cr,
 				  GdkGC   * gc,
 				  gboolean  filled,
