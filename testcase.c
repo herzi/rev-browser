@@ -70,9 +70,11 @@ testcase_init (Testcase* self)
 	PRIV(self)->cairo_gc = gdk_gc_new (PRIV(self)->cairo_pixmap);
 
 	cr = gdk_cairo_create (PRIV(self)->gdk_pixmap);
+	cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
 	cairo_paint (cr);
 	cairo_destroy (cr);
 	cr = gdk_cairo_create (PRIV(self)->cairo_pixmap);
+	cairo_set_source_rgb (cr, 1.0, 1.0, 1.0);
 	cairo_paint (cr);
 	cairo_destroy (cr);
 }
