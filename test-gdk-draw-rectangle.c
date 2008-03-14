@@ -59,23 +59,13 @@ int
 main (int   argc,
       char**argv)
 {
-	gboolean passed = TRUE;
-	Testcase * testcase;
-	GdkPixmap* gdk;
-	GdkPixmap* cairo;
-	GdkGC    * gdkgc;
-	GdkGC    * cairogc;
-	cairo_t  * cr;
+	Testcase* testcase;
+	gboolean  passed = TRUE;
 
 	/* prepare */
 	gtk_init (&argc, &argv);
 
 	testcase = testcase_new ();
-
-	gdk   = testcase_get_pixmap_gdk   (testcase);
-	cairo = testcase_get_pixmap_cairo (testcase);
-	gdkgc   = testcase_get_gc_gdk   (testcase);
-	cairogc = testcase_get_gc_cairo (testcase);
 
 	/* excercise */
 	g_signal_connect (testcase, "exercise-gdk",
