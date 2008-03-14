@@ -32,6 +32,8 @@ struct _TestcasePrivate {
 	GdkPixmap* cairo_pixmap;
 	GdkGC    * gdk_gc;
 	GdkGC    * cairo_gc;
+	GdkPixbuf* gdk_pixbuf;
+	GdkPixbuf* cairo_pixbuf;
 };
 
 enum {
@@ -69,6 +71,13 @@ testcase_init (Testcase* self)
 static void
 testcase_finalize (GObject* object)
 {
+	if (PRIV(object)->gdk_pixbuf) {
+		g_object_unref (PRIV(object)->gdk_pixbuf);
+	}
+	if (PRIV(object)->cairo_pixbuf) {
+		g_object_unref (PRIV(object)->cairo_pixbuf);
+	}
+
 	g_object_unref (PRIV(object)->gdk_gc);
 	g_object_unref (PRIV(object)->cairo_gc);
 
@@ -136,6 +145,19 @@ testcase_exercise (Testcase* self)
 		       cr,
 		       testcase_get_gc_cairo (self));
 	cairo_destroy (cr);
+
+	PRIV(self)->gdk_pixbuf   = gdk_pixbuf_get_from_drawable (NULL,
+								 testcase_get_pixmap_gdk (self),
+								 gdk_rgb_get_colormap (),
+								 0, 0,
+								 0, 0,
+								 100, 80);
+	PRIV(self)->cairo_pixbuf = gdk_pixbuf_get_from_drawable (NULL,
+								 testcase_get_pixmap_cairo (self),
+								 gdk_rgb_get_colormap (),
+								 0, 0,
+								 0, 0,
+								 100, 80);
 }
 
 GdkGC*
@@ -152,6 +174,22 @@ testcase_get_gc_cairo (Testcase const* self)
 	g_return_val_if_fail (IS_TESTCASE (self), NULL);
 
 	return PRIV(self)->cairo_gc;
+}
+
+GdkPixbuf*
+testcase_get_pixbuf_gdk (Testcase const* self)
+{
+	g_return_val_if_fail (IS_TESTCASE (self), NULL);
+
+	return PRIV(self)->gdk_pixbuf;
+}
+
+GdkPixbuf*
+testcase_get_pixbuf_cairo (Testcase const* self)
+{
+	g_return_val_if_fail (IS_TESTCASE (self), NULL);
+
+	return PRIV(self)->cairo_pixbuf;
 }
 
 GdkPixmap*
