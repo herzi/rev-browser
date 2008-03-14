@@ -67,9 +67,6 @@ main (int   argc,
 	GdkGC    * cairogc;
 	GdkPixbuf* gdkpix;
 	GdkPixbuf* cairopix;
-	gchar    * gdkdata;
-	gchar    * cairodata;
-	gsize      index;
 	cairo_t  * cr;
 
 	/* prepare */
@@ -98,42 +95,7 @@ main (int   argc,
 	g_return_val_if_fail (gdk_pixbuf_get_height (gdkpix) == gdk_pixbuf_get_height (cairopix), 1);
 	g_return_val_if_fail (gdk_pixbuf_get_width (gdkpix) == gdk_pixbuf_get_width (cairopix), 1);
 
-	gdkdata   = gdk_pixbuf_get_pixels (gdkpix);
-	cairodata = gdk_pixbuf_get_pixels (cairopix);
-
-	for (index = 0; index < gdk_pixbuf_get_height (gdkpix) * gdk_pixbuf_get_rowstride (gdkpix); index++) {
-		if (gdkdata[index] != cairodata[index]) {
-			gchar* filepath;
-			g_warning ("Eeek! Differences at byte %d",
-				   index);
-			passed = FALSE;
-
-			filepath = g_strdup_printf ("%d-%s-gdk.png",
-						    getpid (),
-						    g_get_prgname ());
-			gdk_pixbuf_save (gdkpix,
-					 filepath,
-					 "png",
-					 NULL, /* FIXME: handle errors */
-					 NULL);
-			g_message ("=> wrote gdk image to \"%s\"",
-				   filepath);
-			g_free (filepath);
-
-			filepath = g_strdup_printf ("%d-%s-cairo.png",
-						    getpid (),
-						    g_get_prgname ());
-			gdk_pixbuf_save (cairopix,
-					 filepath,
-					 "png",
-					 NULL, /* FIXME: handle errors */
-					 NULL);
-			g_message ("=> wrote cairo image to \"%s\"",
-				   filepath);
-			g_free (filepath);
-			break;
-		}
-	}
+	passed = testcase_get_passed (testcase);
 
 	/* cleanup */
 	g_object_unref (testcase);

@@ -52,6 +52,8 @@ GdkPixbuf* testcase_get_pixbuf_cairo (Testcase const* self);
 GdkPixmap* testcase_get_pixmap_gdk   (Testcase const* self);
 GdkPixmap* testcase_get_pixmap_cairo (Testcase const* self);
 
+gboolean   testcase_get_passed       (Testcase const* self);
+
 struct _Testcase {
 	GObject          base_instance;
 	TestcasePrivate* _private;

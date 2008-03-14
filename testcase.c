@@ -34,6 +34,8 @@ struct _TestcasePrivate {
 	GdkGC    * cairo_gc;
 	GdkPixbuf* gdk_pixbuf;
 	GdkPixbuf* cairo_pixbuf;
+
+	gboolean   passed;
 };
 
 enum {
@@ -128,9 +130,14 @@ testcase_new (void)
 void
 testcase_exercise (Testcase* self)
 {
+	gchar    * gdkdata;
+	gchar    * cairodata;
+	gsize      index;
 	cairo_t* cr;
 
 	g_return_if_fail (IS_TESTCASE (self));
+
+	PRIV(self)->passed = TRUE;
 
 	g_signal_emit (self,
 		       testcase_signals[EXERCISE_GDK],
@@ -158,6 +165,43 @@ testcase_exercise (Testcase* self)
 								 0, 0,
 								 0, 0,
 								 100, 80);
+
+	gdkdata   = gdk_pixbuf_get_pixels (PRIV(self)->gdk_pixbuf);
+	cairodata = gdk_pixbuf_get_pixels (PRIV(self)->cairo_pixbuf);
+
+	for (index = 0; index < gdk_pixbuf_get_height (PRIV(self)->gdk_pixbuf) * gdk_pixbuf_get_rowstride (PRIV(self)->gdk_pixbuf); index++) {
+		if (gdkdata[index] != cairodata[index]) {
+			gchar* filepath;
+			g_warning ("Eeek! Differences at byte %d",
+				   index);
+			PRIV(self)->passed = FALSE;
+
+			filepath = g_strdup_printf ("%d-%s-gdk.png",
+						    getpid (),
+						    g_get_prgname ());
+			gdk_pixbuf_save (PRIV(self)->gdk_pixbuf,
+					 filepath,
+					 "png",
+					 NULL, /* FIXME: handle errors */
+					 NULL);
+			g_message ("=> wrote gdk image to \"%s\"",
+				   filepath);
+			g_free (filepath);
+
+			filepath = g_strdup_printf ("%d-%s-cairo.png",
+						    getpid (),
+						    g_get_prgname ());
+			gdk_pixbuf_save (PRIV(self)->cairo_pixbuf,
+					 filepath,
+					 "png",
+					 NULL, /* FIXME: handle errors */
+					 NULL);
+			g_message ("=> wrote cairo image to \"%s\"",
+				   filepath);
+			g_free (filepath);
+			break;
+		}
+	}
 }
 
 GdkGC*
@@ -174,6 +218,14 @@ testcase_get_gc_cairo (Testcase const* self)
 	g_return_val_if_fail (IS_TESTCASE (self), NULL);
 
 	return PRIV(self)->cairo_gc;
+}
+
+gboolean
+testcase_get_passed (Testcase const* self)
+{
+	g_return_val_if_fail (IS_TESTCASE (self), FALSE);
+
+	return PRIV(self)->passed;
 }
 
 GdkPixbuf*
