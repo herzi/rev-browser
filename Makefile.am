@@ -42,7 +42,12 @@ rev_browser_SOURCES=\
 rev_browser_CPPFLAGS=$(libctk_la_CPPFLAGS)
 rev_browser_LDADD=$(libctk_la_LIBADD) libctk.la
 
+libtest_la_BUILT_SOURCES=\
+	test-marshallers.c \
+	test-marshallers.h \
+	$(NULL)
 libtest_la_SOURCES=\
+	$(libtest_la_BUILT_SOURCES) \
 	testcase.c \
 	testcase.h \
 	$(NULL)
@@ -51,4 +56,26 @@ libtest_la_LIBADD=$(libctk_la_LIBADD)
 
 test_gdk_draw_rectangle_CPPFLAGS=$(libctk_la_CPPFLAGS)
 test_gdk_draw_rectangle_LDADD=$(libctk_la_LIBADD) libtest.la libctk.la
+
+dist_marshallers=\
+	test-marshallers.list \
+	$(NULL)
+
+EXTRA_DIST=\
+	$(dist_marshallers) \
+	$(NULL)
+CLEANFILES=\
+	$(libtest_la_BUILT_SOURCES) \
+	$(NULL)
+
+test-marshallers.h: $(srcdir)/test-marshallers.list Makefile
+	@( $(GLIB_GENMARSHAL) --header --prefix=test_cclosure_marshal $< ) > xgen-$(notdir $@) \
+	&& (cmp -s xgen-$(notdir $@) $(notdir $@) || (echo "Creating $(notdir $@)..."; cp xgen-$(notdir $@) $(notdir $@)) ) \
+	&& rm -f xgen-$(notdir $@)
+
+test-marshallers.c: $(srcdir)/test-marshallers.list Makefile
+	@( echo "#include \"test-marshallers.h\""; \
+	$(GLIB_GENMARSHAL) --body --prefix=test_cclosure_marshal $< ) > xgen-$(notdir $@) \
+	&& (cmp -s xgen-$(notdir $@) $(notdir $@) || (echo "Creating $(notdir $@)..."; cp xgen-$(notdir $@) $(notdir $@)) ) \
+	&& rm -f xgen-$(notdir $@)
 
