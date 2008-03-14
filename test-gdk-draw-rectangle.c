@@ -55,8 +55,8 @@ main (int   argc,
 
 	gdk   = testcase_get_pixmap_gdk   (testcase);
 	cairo = testcase_get_pixmap_cairo (testcase);
-	gdkgc   = gdk_gc_new (gdk);
-	cairogc = gdk_gc_new (cairo);
+	gdkgc   = testcase_get_gc_gdk   (testcase);
+	cairogc = testcase_get_gc_cairo (testcase);
 
 	/* excercise */
 	gdk_draw_rectangle (gdk,
@@ -133,9 +133,6 @@ main (int   argc,
 	g_object_unref (cairopix);
 
 	/* cleanup */
-	g_object_unref (gdkgc);
-	g_object_unref (cairogc);
-
 	g_object_unref (testcase);
 
 	return passed ? 0 : 1;
