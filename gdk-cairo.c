@@ -30,8 +30,11 @@ void gdk_cairo_draw_line (cairo_t * cr,
 			  gint      x2,
 			  gint      y2)
 {
-	g_warning ("%s(): FIXME: implement",
-		   G_STRFUNC);
+	cairo_move_to (cr,
+		       x1, y1);
+	cairo_line_to (cr,
+		       x2, y2);
+	cairo_stroke  (cr);
 }
 
 void
