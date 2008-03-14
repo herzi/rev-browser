@@ -27,6 +27,27 @@
 
 #include "testcase.h"
 
+static void
+test_gdk_cb (Testcase   * testcase,
+	     GdkDrawable* drawable,
+	     GdkGC      * gc)
+{
+	gdk_draw_line (drawable,
+		       gc,
+		       10, 10,
+		       20, 20);
+}
+
+static void
+test_cairo_cb (Testcase* testcase,
+	       cairo_t * cr,
+	       GdkGC   * gc)
+{
+	gdk_cairo_draw_line (cr, gc,
+			     10, 10,
+			     20, 20);
+}
+
 int
 main (int   argc,
       char**argv)
@@ -40,6 +61,10 @@ main (int   argc,
 	testcase = testcase_new ();
 
 	/* exercise */
+	g_signal_connect (testcase, "exercise-gdk",
+			  G_CALLBACK (test_gdk_cb), NULL);
+	g_signal_connect (testcase, "exercise-cairo",
+			  G_CALLBACK (test_cairo_cb), NULL);
 	testcase_exercise (testcase);
 
 	/* verify */
