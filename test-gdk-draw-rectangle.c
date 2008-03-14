@@ -65,8 +65,6 @@ main (int   argc,
 	GdkPixmap* cairo;
 	GdkGC    * gdkgc;
 	GdkGC    * cairogc;
-	GdkPixbuf* gdkpix;
-	GdkPixbuf* cairopix;
 	cairo_t  * cr;
 
 	/* prepare */
@@ -87,9 +85,6 @@ main (int   argc,
 	testcase_exercise (testcase);
 
 	/* verify */
-	gdkpix   = testcase_get_pixbuf_gdk (testcase);
-	cairopix = testcase_get_pixbuf_cairo (testcase);
-
 	passed = testcase_get_passed (testcase);
 
 	/* cleanup */
