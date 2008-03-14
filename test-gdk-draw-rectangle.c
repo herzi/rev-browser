@@ -71,9 +71,9 @@ main (int   argc,
 	cairogc = testcase_get_gc_cairo (testcase);
 
 	/* excercise */
-	test_gdk_cb (testcase,
-		     testcase_get_pixmap_gdk (testcase),
-		     testcase_get_gc_gdk (testcase));
+	g_signal_connect (testcase, "exercise-gdk",
+			  G_CALLBACK (test_gdk_cb), NULL);
+	testcase_exercise (testcase);
 
 	cr = gdk_cairo_create (cairo);
 	gdk_cairo_draw_rectangle (cr,
