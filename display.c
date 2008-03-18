@@ -238,14 +238,14 @@ display_expose_event (GtkWidget     * widget,
 					     widget->allocation.x + i * (self->_private->element_size + 1),
 					     widget->allocation.y + VERTICAL_PADDING + 7);
 		}
-		cairo_destroy (cr);
 
 		pango_layout_set_text (layout, year, -1);
-		gdk_draw_layout (widget->window,
-				 widget->style->black_gc,
-				 widget->allocation.x + i * (self->_private->element_size + 1) + 5,
-				 widget->allocation.y + VERTICAL_PADDING + 5,
-				 layout);
+		gdk_cairo_draw_layout (cr,
+				       widget->style->black_gc,
+				       widget->allocation.x + i * (self->_private->element_size + 1) + 5,
+				       widget->allocation.y + VERTICAL_PADDING + 5,
+				       layout);
+		cairo_destroy (cr);
 
 		g_free (year);
 	}
