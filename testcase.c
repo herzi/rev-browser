@@ -181,8 +181,10 @@ testcase_exercise (Testcase* self)
 	for (index = 0; index < gdk_pixbuf_get_height (gdk_pixbuf) * gdk_pixbuf_get_rowstride (gdk_pixbuf); index++) {
 		if (gdkdata[index] != cairodata[index]) {
 			gchar* filepath;
-			g_warning ("Eeek! Differences at byte %d",
-				   index);
+			g_warning ("Eeek! Differences at byte %d: %c vs. %c",
+				   index,
+				   gdkdata[index],
+				   cairodata[index]);
 			PRIV(self)->passed = FALSE;
 
 			filepath = g_strdup_printf ("%d-%s-gdk.png",
