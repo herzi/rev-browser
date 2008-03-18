@@ -187,7 +187,7 @@ display_expose_event (GtkWidget     * widget,
 			gdk_cairo_draw_line (cr,
 					     widget->style->black_gc,
 					     widget->allocation.x + i * (self->_private->element_size + 1),
-					     widget->allocation.y + VERTICAL_PADDING,
+					     widget->allocation.y + VERTICAL_PADDING + 1,
 					     widget->allocation.x + i * (self->_private->element_size + 1),
 					     widget->allocation.y + VERTICAL_PADDING + 7);
 			cairo_destroy (cr);
