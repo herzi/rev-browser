@@ -226,9 +226,9 @@ display_expose_event (GtkWidget     * widget,
 	}
 	pango_layout_set_width (layout, PANGO_SCALE * self->_private->element_size);
 
+	cr = gdk_cairo_create (widget->window);
 	for (i = 0; i < self->_private->elements_visible; i++) {
 		gchar* year = display_get_date_string (self, i);
-		cr = gdk_cairo_create (widget->window);
 
 		if (G_LIKELY (i)) {
 			gdk_cairo_draw_line (cr,
@@ -245,10 +245,10 @@ display_expose_event (GtkWidget     * widget,
 				       widget->allocation.x + i * (self->_private->element_size + 1) + 5,
 				       widget->allocation.y + VERTICAL_PADDING + 5,
 				       layout);
-		cairo_destroy (cr);
 
 		g_free (year);
 	}
+	cairo_destroy (cr);
 	g_object_unref (layout);
 
 	gtk_paint_shadow (widget->style,
