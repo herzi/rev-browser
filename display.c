@@ -155,10 +155,12 @@ display_get_date_string (Display const* self,
 			 gsize          i)
 {
 	switch (self->_private->zoom) {
+		guint temp;
 	case ZOOM_MONTHS:
+		temp = (date_get_month (self->_private->date_start) +
+			self->_private->offset + i - 1) % 12 + 1; // month number (1-12)
 		return g_strdup_printf ("%d",
-					(date_get_month (self->_private->date_start) +
-					 self->_private->offset + i - 1) % 12 + 1);
+					temp);
 	case ZOOM_YEARS:
 	default:
 		return g_strdup_printf ("%d",
