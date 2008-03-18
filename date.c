@@ -113,6 +113,7 @@ date_new (guint day, guint month, guint year)
 		   G_STRFUNC, G_STRLOC);
 	return g_object_new (TYPE_DATE,
 			     "year", year,
+			     "month", month,
 			     NULL);
 }
 
