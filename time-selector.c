@@ -23,6 +23,7 @@
 
 #include "time-selector.h"
 
+#define FOCUS_OFFSET 2
 #define HORIZONTAL_BAR_HEIGHT 9
 #define VERTICAL_BAR_WIDTH 3
 
@@ -93,10 +94,10 @@ selector_expose_event (GtkWidget     * widget,
 				 &widget->allocation,
 				 widget,
 				 NULL,
-				 widget->allocation.x + 2,
-				 widget->allocation.y + 2,
-				 widget->allocation.width - 4,
-				 widget->allocation.height - 4);
+				 widget->allocation.x + FOCUS_OFFSET,
+				 widget->allocation.y + FOCUS_OFFSET,
+				 widget->allocation.width - 2 * FOCUS_OFFSET,
+				 widget->allocation.height - 2 * FOCUS_OFFSET);
 	}
 
 	return FALSE;
