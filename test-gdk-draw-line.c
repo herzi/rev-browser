@@ -36,6 +36,10 @@ test_gdk_cb (Testcase   * testcase,
 		       gc,
 		       10, 20,
 		       10, 30);
+	gdk_draw_line (drawable,
+		       gc,
+		       20, 10,
+		       30, 10);
 }
 
 static void
@@ -46,6 +50,9 @@ test_cairo_cb (Testcase* testcase,
 	gdk_cairo_draw_line (cr, gc,
 			     10, 20,
 			     10, 30);
+	gdk_cairo_draw_line (cr, gc,
+			     20, 10,
+			     30, 10);
 }
 
 int
