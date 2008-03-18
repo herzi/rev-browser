@@ -28,18 +28,23 @@
 
 G_BEGIN_DECLS
 
-void gdk_cairo_draw_line         (cairo_t * cr,
-				  GdkGC   * gc,
-				  gint      x1,
-				  gint      y1,
-				  gint      x2,
-				  gint      y2);
-void gdk_cairo_draw_rectangle    (cairo_t * cr,
-				  GdkGC   * gc,
-				  gboolean  filled,
-				  gint      x,
-				  gint      y,
-				  gint      width,
+void gdk_cairo_draw_layout       (cairo_t    * cr,
+				  GdkGC      * gc,
+				  gint         x,
+				  gint         y,
+				  PangoLayout* layout);
+void gdk_cairo_draw_line         (cairo_t    * cr,
+				  GdkGC      * gc,
+				  gint         x1,
+				  gint         y1,
+				  gint         x2,
+				  gint         y2);
+void gdk_cairo_draw_rectangle    (cairo_t    * cr,
+				  GdkGC      * gc,
+				  gboolean     filled,
+				  gint         x,
+				  gint         y,
+				  gint         width,
 				  gint      height);
 
 G_END_DECLS
