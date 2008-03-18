@@ -34,6 +34,7 @@ static void
 time_selector_init (TimeSelector* self)
 {
 	GTK_WIDGET_SET_FLAGS (self, GTK_NO_WINDOW);
+	GTK_WIDGET_SET_FLAGS (self, GTK_CAN_FOCUS);
 }
 
 static gboolean
@@ -84,6 +85,19 @@ selector_expose_event (GtkWidget     * widget,
 			  widget->allocation.y + HORIZONTAL_BAR_HEIGHT,
 			  widget->allocation.width - 2 * VERTICAL_BAR_WIDTH,
 			  widget->allocation.height - 2 * HORIZONTAL_BAR_HEIGHT);
+
+	if (GTK_WIDGET_HAS_FOCUS (widget)) {
+		gtk_paint_focus (widget->style,
+				 widget->window,
+				 GTK_STATE_NORMAL,
+				 &widget->allocation,
+				 widget,
+				 NULL,
+				 widget->allocation.x + 2,
+				 widget->allocation.y + 2,
+				 widget->allocation.width - 4,
+				 widget->allocation.height - 4);
+	}
 
 	return FALSE;
 }

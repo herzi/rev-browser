@@ -73,7 +73,6 @@ static void
 display_init (Display* self)
 {
 	GTK_WIDGET_SET_FLAGS (self, GTK_NO_WINDOW);
-	GTK_WIDGET_SET_FLAGS (self, GTK_CAN_FOCUS);
 
 	self->_private = G_TYPE_INSTANCE_GET_PRIVATE (self, display_get_type (), DisplayPrivate);
 
@@ -221,19 +220,6 @@ display_expose_event (GtkWidget     * widget,
 	gtk_container_propagate_expose (GTK_CONTAINER (self),
 					self->_private->selector,
 					event);
-
-	if (GTK_WIDGET_HAS_FOCUS (widget)) {
-		gtk_paint_focus (widget->style,
-				 widget->window,
-				 GTK_STATE_NORMAL,
-				 &widget->allocation,
-				 widget,
-				 NULL,
-				 get_selector_x (self) + 2,
-				 widget->allocation.y + 2,
-				 get_selector_width (self) - 4,
-				 widget->allocation.height - 4);
-	}
 
 	return FALSE;
 }
