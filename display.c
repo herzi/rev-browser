@@ -159,8 +159,16 @@ display_get_date_string (Display const* self,
 	case ZOOM_MONTHS:
 		temp = (date_get_month (self->_private->date_start) +
 			self->_private->offset + i - 1) % 12 + 1; // month number (1-12)
-		return g_strdup_printf ("%d",
-					temp);
+		if (G_UNLIKELY (temp == 1)) {
+			return g_strdup_printf ("%d\n%d",
+						temp,
+						date_get_year (self->_private->date_start) +
+						(date_get_month (self->_private->date_start) +
+						 self->_private->offset + i - 1) / 12);
+		} else {
+			return g_strdup_printf ("%d",
+						temp);
+		}
 	case ZOOM_YEARS:
 	default:
 		return g_strdup_printf ("%d",
