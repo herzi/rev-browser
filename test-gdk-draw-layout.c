@@ -28,36 +28,51 @@
 #include "testcase.h"
 
 static void
-test_gdk_cb (Testcase * self,
-	     GdkWindow* window,
-	     GdkGC    * gc)
+test_gdk_cb (Testcase   * self,
+	     GdkDrawable* drawable,
+	     GdkGC      * gc,
+	     PangoLayout* layout)
 {
+	gdk_draw_layout (drawable,
+			 gc,
+			 20, 20,
+			 layout);
 }
 
 static void
-test_cairo_cb (Testcase* self,
-	       cairo_t * cr,
-	       GdkGC   * gc)
+test_cairo_cb (Testcase   * self,
+	       cairo_t    * cr,
+	       GdkGC      * gc,
+	       PangoLayout* layout)
 {
+	gdk_cairo_draw_layout (cr,
+			       gc,
+			       20, 20,
+			       layout);
 }
 
 int
 main (int   argc,
       char**argv)
 {
-	Testcase* testcase;
-	gboolean  passed = TRUE;
+	PangoContext* context;
+	PangoLayout * layout;
+	Testcase    * testcase;
+	gboolean      passed = TRUE;
 
 	/* prepare */
 	gtk_init (&argc, &argv);
 
 	testcase = testcase_new ();
+	context  = gdk_pango_context_get ();
+	layout   = pango_layout_new (context);
+	pango_layout_set_text (layout, "Foo Bar Baz", -1);
 
 	/* exercise */
 	g_signal_connect (testcase, "exercise-gdk",
-			  G_CALLBACK (test_gdk_cb), NULL);
+			  G_CALLBACK (test_gdk_cb), layout);
 	g_signal_connect (testcase, "exercise-cairo",
-			  G_CALLBACK (test_cairo_cb), NULL);
+			  G_CALLBACK (test_cairo_cb), layout);
 	testcase_exercise (testcase);
 
 	/* verify */
@@ -65,6 +80,8 @@ main (int   argc,
 
 	/* cleanup */
 	g_object_unref (testcase);
+	g_object_unref (layout);
+	g_object_unref (context);
 
 	return passed ? 0 : 1;
 }
