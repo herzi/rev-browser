@@ -146,6 +146,15 @@ display_get_range_size (Display const* self)
 	return 1 + result;
 }
 
+static gchar*
+display_get_date_string (Display const* self,
+			 gsize          i)
+{
+	return g_strdup_printf ("%d",
+				date_get_year (self->_private->date_start) +
+				self->_private->offset + i);
+}
+
 static gint
 get_selector_x (Display const* self)
 {
@@ -196,7 +205,7 @@ display_expose_event (GtkWidget     * widget,
 	pango_layout_set_width (layout, PANGO_SCALE * self->_private->element_size);
 
 	for (i = 0; i < self->_private->elements_visible; i++) {
-		gchar* year = g_strdup_printf ("%d", date_get_year (self->_private->date_start) + self->_private->offset + i);
+		gchar* year = display_get_date_string (self, i);
 
 		if (G_LIKELY (i)) {
 			cr = gdk_cairo_create (widget->window);
