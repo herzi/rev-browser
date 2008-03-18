@@ -35,10 +35,10 @@ void gdk_cairo_draw_line (cairo_t * cr,
 	gdk_gc_get_values (gc, &values);
 
 	cairo_save (cr);
-	cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
+	cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
 	cairo_set_line_width (cr, 1.0);
 	cairo_move_to (cr,
-		       x1 + 0.5, y1 - 0.5);
+		       x1 + 0.5, y1 + 0.5);
 	cairo_line_to (cr,
 		       x2 + 0.5, y2 + 0.5);
 	cairo_stroke  (cr);
