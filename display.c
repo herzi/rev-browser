@@ -208,7 +208,6 @@ display_expose_event (GtkWidget     * widget,
 				  MIN (widget->allocation.width,
 				       1 + display_get_range_size (self) *(self->_private->element_size + 1)),
 				  widget->allocation.height - 2 * VERTICAL_PADDING);
-	cairo_destroy (cr);
 
 	PangoLayout* layout = pango_layout_new (gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget)));
 	pango_layout_set_font_description (layout,
@@ -226,7 +225,6 @@ display_expose_event (GtkWidget     * widget,
 	}
 	pango_layout_set_width (layout, PANGO_SCALE * self->_private->element_size);
 
-	cr = gdk_cairo_create (widget->window);
 	for (i = 0; i < self->_private->elements_visible; i++) {
 		gchar* year = display_get_date_string (self, i);
 
