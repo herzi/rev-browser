@@ -228,17 +228,17 @@ display_expose_event (GtkWidget     * widget,
 
 	for (i = 0; i < self->_private->elements_visible; i++) {
 		gchar* year = display_get_date_string (self, i);
+		cr = gdk_cairo_create (widget->window);
 
 		if (G_LIKELY (i)) {
-			cr = gdk_cairo_create (widget->window);
 			gdk_cairo_draw_line (cr,
 					     widget->style->black_gc,
 					     widget->allocation.x + i * (self->_private->element_size + 1),
 					     widget->allocation.y + VERTICAL_PADDING + 1,
 					     widget->allocation.x + i * (self->_private->element_size + 1),
 					     widget->allocation.y + VERTICAL_PADDING + 7);
-			cairo_destroy (cr);
 		}
+		cairo_destroy (cr);
 
 		pango_layout_set_text (layout, year, -1);
 		gdk_draw_layout (widget->window,
