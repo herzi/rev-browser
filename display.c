@@ -133,7 +133,11 @@ display_get_range_year_difference (Display const* self)
 static guint
 display_get_range_size (Display const* self)
 {
-	return 1 + display_get_range_year_difference (self);
+	guint result = 0;
+
+	result = display_get_range_year_difference (self);
+
+	return 1 + result;
 }
 
 static gint
