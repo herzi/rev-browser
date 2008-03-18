@@ -150,9 +150,14 @@ static gchar*
 display_get_date_string (Display const* self,
 			 gsize          i)
 {
-	return g_strdup_printf ("%d",
-				date_get_year (self->_private->date_start) +
-				self->_private->offset + i);
+	switch (self->_private->zoom) {
+	case ZOOM_MONTHS:
+	case ZOOM_YEARS:
+	default:
+		return g_strdup_printf ("%d",
+					date_get_year (self->_private->date_start) +
+					self->_private->offset + i);
+	}
 }
 
 static gint
