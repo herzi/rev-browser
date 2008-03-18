@@ -137,6 +137,10 @@ display_get_range_size (Display const* self)
 
 	switch (self->_private->zoom) {
 	case ZOOM_MONTHS:
+		result = date_get_month (self->_private->date_end) -
+			 date_get_month (self->_private->date_start) +
+			 12 * display_get_range_year_difference (self);
+		break;
 	case ZOOM_YEARS:
 	default:
 		result = display_get_range_year_difference (self);
@@ -152,6 +156,9 @@ display_get_date_string (Display const* self,
 {
 	switch (self->_private->zoom) {
 	case ZOOM_MONTHS:
+		return g_strdup_printf ("%d",
+					(date_get_month (self->_private->date_start) +
+					 self->_private->offset + i - 1) % 12 + 1);
 	case ZOOM_YEARS:
 	default:
 		return g_strdup_printf ("%d",
