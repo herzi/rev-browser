@@ -31,6 +31,7 @@ gdk_cairo_draw_layout (cairo_t    * cr,
 		       PangoLayout* layout)
 {
 	cairo_save (cr);
+	cairo_translate (cr, x, y);
 	pango_cairo_show_layout (cr, layout);
 	cairo_restore (cr);
 }
