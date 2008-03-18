@@ -135,7 +135,13 @@ display_get_range_size (Display const* self)
 {
 	guint result = 0;
 
-	result = display_get_range_year_difference (self);
+	switch (self->_private->zoom) {
+	case ZOOM_MONTHS:
+	case ZOOM_YEARS:
+	default:
+		result = display_get_range_year_difference (self);
+		break;
+	}
 
 	return 1 + result;
 }
