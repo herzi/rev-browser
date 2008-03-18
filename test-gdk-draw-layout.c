@@ -23,10 +23,49 @@
  * if advised of the possibility of such damage.
  */
 
+#include "gdk-cairo.h"
+
+#include "testcase.h"
+
+static void
+test_gdk_cb (Testcase * self,
+	     GdkWindow* window,
+	     GdkGC    * gc)
+{
+}
+
+static void
+test_cairo_cb (Testcase* self,
+	       cairo_t * cr,
+	       GdkGC   * gc)
+{
+}
+
 int
 main (int   argc,
       char**argv)
 {
-	return 0;
+	Testcase* testcase;
+	gboolean  passed = TRUE;
+
+	/* prepare */
+	gtk_init (&argc, &argv);
+
+	testcase = testcase_new ();
+
+	/* exercise */
+	g_signal_connect (testcase, "exercise-gdk",
+			  G_CALLBACK (test_gdk_cb), NULL);
+	g_signal_connect (testcase, "exercise-cairo",
+			  G_CALLBACK (test_cairo_cb), NULL);
+	testcase_exercise (testcase);
+
+	/* verify */
+	passed = testcase_get_passed (testcase);
+
+	/* cleanup */
+	g_object_unref (testcase);
+
+	return passed ? 0 : 1;
 }
 
