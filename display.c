@@ -124,10 +124,16 @@ display_finalize (GObject* object)
 	G_OBJECT_CLASS (display_parent_class)->finalize (object);
 }
 
+static inline guint
+display_get_range_year_difference (Display const* self)
+{
+	return date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start);
+}
+
 static guint
 display_get_range_size (Display const* self)
 {
-	return 1 + date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start);
+	return 1 + display_get_range_year_difference (self);
 }
 
 static gint
