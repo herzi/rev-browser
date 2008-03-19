@@ -124,19 +124,9 @@ display_get_range_size (Display const* self)
 {
 	guint result = 0;
 
-	switch (self->_private->zoom) {
-	case TIME_PERIOD_MONTH:
-		result = time_period_get_difference (self->_private->date_start,
-						     self->_private->date_end,
-						     TIME_PERIOD_MONTH);
-		break;
-	case TIME_PERIOD_YEAR:
-	default:
-		result = time_period_get_difference (self->_private->date_start,
-						     self->_private->date_end,
-						     TIME_PERIOD_YEAR);
-		break;
-	}
+	result = time_period_get_difference (self->_private->date_start,
+					     self->_private->date_end,
+					     self->_private->zoom);
 
 	return 1 + result;
 }
