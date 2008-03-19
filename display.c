@@ -124,14 +124,6 @@ display_finalize (GObject* object)
 	G_OBJECT_CLASS (display_parent_class)->finalize (object);
 }
 
-static inline guint
-display_get_range_year_difference (Display const* self)
-{
-	return time_period_get_difference (self->_private->date_start,
-					   self->_private->date_end,
-					   TIME_PERIOD_YEAR);
-}
-
 static guint
 display_get_range_size (Display const* self)
 {
@@ -141,11 +133,15 @@ display_get_range_size (Display const* self)
 	case ZOOM_MONTHS:
 		result = date_get_month (self->_private->date_end) -
 			 date_get_month (self->_private->date_start) +
-			 12 * display_get_range_year_difference (self);
+			 12 * time_period_get_difference (self->_private->date_start,
+							  self->_private->date_end,
+							  TIME_PERIOD_YEAR);
 		break;
 	case ZOOM_YEARS:
 	default:
-		result = display_get_range_year_difference (self);
+		result = time_period_get_difference (self->_private->date_start,
+						     self->_private->date_end,
+						     TIME_PERIOD_YEAR);
 		break;
 	}
 
