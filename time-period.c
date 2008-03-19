@@ -28,6 +28,11 @@ time_period_get_difference (Date      * start,
 			    Date      * end,
 			    TimePeriod  stepping)
 {
+	g_return_val_if_fail (IS_DATE (start), 0);
+	g_return_val_if_fail (IS_DATE (end), 0);
+	// FIXME: g_return_val_if_fail (start <= end, 0);
+	g_return_val_if_fail (stepping == TIME_PERIOD_YEAR, 0);
+
 	return date_get_year (end) - date_get_year (start);
 }
 
