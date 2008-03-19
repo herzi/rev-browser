@@ -90,7 +90,7 @@ test_vala_binding_CPPFLAGS=$(GTK_CFLAGS)
 test_vala_binding_LDADD=$(GTK_LIBS)
 
 test-vala-binding.c: test-vala-binding.vala
-	$(VALAC) --vapidir=./vapi/ --pkg gtk+-2.0 --pkg time-bar test-vala-binding.vala
+	$(VALAC) --vapidir=$(srcdir)/vapi/ --pkg gtk+-2.0 --pkg time-bar test-vala-binding.vala
 endif
 
 test-marshallers.h: $(srcdir)/test-marshallers.list Makefile
