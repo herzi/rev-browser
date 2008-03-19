@@ -26,8 +26,9 @@
 #include "display.h"
 
 struct _TimeBarPrivate {
-	GtkWidget* display;
-	GtkWidget* vbox;
+	GtkWidget   * display;
+	GtkWidget   * vbox;
+	GtkTreeModel* model;
 };
 
 #define PRIV(i) (TIME_BAR (i)->_private)
@@ -177,8 +178,24 @@ time_bar_init (TimeBar* self)
 }
 
 static void
+time_bar_finalize (GObject* object)
+{
+	TimeBar* self = TIME_BAR (object);
+
+	if (self->_private->model) {
+		g_object_unref (self->_private->model);
+	}
+
+	G_OBJECT_CLASS (time_bar_parent_class)->finalize (object);
+}
+
+static void
 time_bar_class_init (TimeBarClass* self_class)
 {
+	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
+
+	object_class->finalize = time_bar_finalize;
+
 	g_type_class_add_private (self_class, sizeof (TimeBarPrivate));
 }
 
@@ -196,7 +213,23 @@ time_bar_set_model (TimeBar     * self,
 {
 	g_return_if_fail (IS_TIME_BAR (self));
 	g_return_if_fail (!model || GTK_IS_TREE_MODEL (model));
+	g_return_if_fail (!model || (gtk_tree_model_get_flags (model) & GTK_TREE_MODEL_LIST_ONLY) != 0);
 
-	// FIXME: add implementation
+	if (self->_private->model == model) {
+		return;
+	}
+
+	if (self->_private->model) {
+		g_object_unref (self->_private->model);
+		self->_private->model = NULL;
+	}
+
+	if (model) {
+		self->_private->model = g_object_ref (model);
+	}
+
+	// FIXME: forward to the display
+
+	// FIXME: g_object_notify (G_OBJECT (self), "model");
 }
 
