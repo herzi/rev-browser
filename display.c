@@ -123,13 +123,8 @@ display_finalize (GObject* object)
 static guint
 display_get_range_size (Display const* self)
 {
-	guint result = 0;
-
-	result = time_period_get_difference (self->_private->date_start,
-					     self->_private->date_end,
-					     self->_private->zoom);
-
-	return 1 + result;
+	return gtk_tree_model_iter_n_children (self->_private->model,
+					       NULL);
 }
 
 static gchar*
@@ -471,6 +466,9 @@ display_set_model (Display      * self,
 	if (model) {
 		self->_private->model = g_object_ref (model);
 	}
+
+	/* update the widget */
+	notify_changes (self);
 
 	// FIXME: g_object_notify (G_OBJECT (self), "model");
 }
