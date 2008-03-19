@@ -131,11 +131,9 @@ display_get_range_size (Display const* self)
 
 	switch (self->_private->zoom) {
 	case ZOOM_MONTHS:
-		result = date_get_month (self->_private->date_end) -
-			 date_get_month (self->_private->date_start) +
-			 12 * time_period_get_difference (self->_private->date_start,
-							  self->_private->date_end,
-							  TIME_PERIOD_YEAR);
+		result = time_period_get_difference (self->_private->date_start,
+						     self->_private->date_end,
+						     TIME_PERIOD_MONTH);
 		break;
 	case ZOOM_YEARS:
 	default:
