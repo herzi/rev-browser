@@ -81,8 +81,10 @@ main (int   argc,
 			       COLUMN_COUNT, 59,
 			       -1);
 
-	time_bar_set_model (TIME_BAR (time_bar),
-			    GTK_TREE_MODEL (store));
+	time_bar_set_model        (TIME_BAR (time_bar),
+			           GTK_TREE_MODEL (store));
+	time_bar_set_label_column (TIME_BAR (time_bar),
+				   COLUMN_LABEL);
 	g_object_unref (store);
 
 	gtk_widget_show (window);

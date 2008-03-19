@@ -468,6 +468,19 @@ display_can_zoom_out (Display const* self)
 }
 
 void
+display_set_label_column (Display* self,
+			  gint     column)
+{
+	g_return_if_fail (IS_DISPLAY (self));
+	g_return_if_fail (column >= -1);
+
+	self->_private->column_label = column;
+	gtk_widget_queue_draw (GTK_WIDGET (self));
+
+	// FIXME: g_object_notify (G_OBJECT (self), "label-column");
+}
+
+void
 display_set_model (Display      * self,
 		   GtkTreeModel * model)
 {

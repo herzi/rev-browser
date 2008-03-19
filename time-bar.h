@@ -39,10 +39,12 @@ typedef struct _TimeBarClass   TimeBarClass;
 #define IS_TIME_BAR_CLASS(c)  (G_TYPE_CHECK_CLASS_CAST ((c), TYPE_TIME_BAR))
 #define TIME_BAR_GET_CLASS(i) (G_TYPE_INSTANCE_GET_CLASS ((i), TYPE_TIME_BAR, TimeBarClass))
 
-GType      time_bar_get_type    (void);
-GtkWidget* time_bar_new         (void);
-void       time_bar_set_model   (TimeBar     * self,
-				 GtkTreeModel* model);
+GType      time_bar_get_type         (void);
+GtkWidget* time_bar_new              (void);
+void       time_bar_set_label_column (TimeBar     * self,
+				      gint          column);
+void       time_bar_set_model        (TimeBar     * self,
+				      GtkTreeModel* model);
 
 struct _TimeBar {
 	GtkHBox         base_instance;
