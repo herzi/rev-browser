@@ -14,6 +14,13 @@ PKG_CHECK_MODULES(GLIB,[glib-2.0])
 PKG_CHECK_MODULES(GTK,[gtk+-2.0])
 
 AC_CHECK_PROGS(VALAC, valac)
+if test "x$VALAC" != "x"; then
+	AC_MSG_CHECKING([for vala version >= 0.1.6])
+	PKG_CHECK_EXISTS([vala-1.0 >= 0.1.6],
+			 [AC_MSG_RESULT([yes])],
+			 [VALAC=
+			  AC_MSG_RESULT([no])])
+fi
 AM_CONDITIONAL(HAVE_VALAC, [test "x$VALAC" != "x"])
 
 AC_OUTPUT(Makefile)
