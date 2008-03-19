@@ -11,6 +11,7 @@ check_PROGRAMS=\
 	test-gdk-draw-line \
 	test-gdk-draw-rectangle \
 	$(NULL)
+
 TESTS=$(check_PROGRAMS)
 
 rev_lister_SOURCES=\
@@ -73,6 +74,24 @@ EXTRA_DIST=\
 CLEANFILES=\
 	$(libtest_la_BUILT_SOURCES) \
 	$(NULL)
+
+if HAVE_VALAC
+check_PROGRAMS+=\
+	test-vala-binding \
+	$(NULL)
+
+test_vala_binding_SOURCES=\
+	display.c \
+	date.c \
+	time-bar.c \
+	test-vala-binding.c
+
+test_vala_binding_CPPFLAGS=$(GTK_CFLAGS)
+test_vala_binding_LDADD=$(GTK_LIBS)
+
+test-vala-binding.c: test-vala-binding.vala
+	$(VALAC) --vapidir=./vapi/ --pkg gtk+-2.0 --pkg time-bar test-vala-binding.vala
+endif
 
 test-marshallers.h: $(srcdir)/test-marshallers.list Makefile
 	@( $(GLIB_GENMARSHAL) --header --prefix=test_cclosure_marshal $< ) > xgen-$(notdir $@) \
