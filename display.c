@@ -35,7 +35,8 @@
 #define VERTICAL_PADDING 6
 
 struct _DisplayPrivate {
-	GtkWidget  * selector;
+	GtkWidget   * selector;
+	GtkTreeModel* model;
 
 	/* range settings */
 	Date       * date_start;
@@ -448,6 +449,30 @@ display_can_zoom_out (Display const* self)
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
 	return self->_private->zoom > TIME_PERIOD_YEAR;
+}
+
+void
+display_set_model (Display      * self,
+		   GtkTreeModel * model)
+{
+	g_return_if_fail (IS_DISPLAY (self));
+	g_return_if_fail (!model || GTK_IS_TREE_MODEL (model));
+	g_return_if_fail (!model || (gtk_tree_model_get_flags (model) & GTK_TREE_MODEL_LIST_ONLY) != 0);
+
+	if (self->_private->model == model) {
+		return;
+	}
+
+	if (self->_private->model) {
+		g_object_unref (self->_private->model);
+		self->_private->model = NULL;
+	}
+
+	if (model) {
+		self->_private->model = g_object_ref (model);
+	}
+
+	// FIXME: g_object_notify (G_OBJECT (self), "model");
 }
 
 void

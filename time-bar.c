@@ -228,7 +228,8 @@ time_bar_set_model (TimeBar     * self,
 		self->_private->model = g_object_ref (model);
 	}
 
-	// FIXME: forward to the display
+	display_set_model (DISPLAY (self->_private->display),
+			   self->_private->model);
 
 	// FIXME: g_object_notify (G_OBJECT (self), "model");
 }

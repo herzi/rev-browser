@@ -46,6 +46,8 @@ gboolean   display_can_step_left  (Display const* self);
 gboolean   display_can_step_right (Display const* self);
 gboolean   display_can_zoom_in    (Display const* self);
 gboolean   display_can_zoom_out   (Display const* self);
+void       display_set_model      (Display      * self,
+				   GtkTreeModel * model);
 void       display_step_left      (Display      * self);
 void       display_step_right     (Display      * self);
 void       display_zoom_in        (Display      * self);
