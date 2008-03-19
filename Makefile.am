@@ -37,10 +37,12 @@ rev_browser_SOURCES=\
 	display.h \
 	highlight-widget.c \
 	highlight-widget.h \
-	time-bar.h \
 	time-bar.c \
-	time-selector.h \
+	time-bar.h \
+	time-period.c \
+	time-period.h \
 	time-selector.c \
+	time-selector.h \
 	$(NULL)
 rev_browser_CPPFLAGS=$(libctk_la_CPPFLAGS)
 rev_browser_LDADD=$(libctk_la_LIBADD) libctk.la
