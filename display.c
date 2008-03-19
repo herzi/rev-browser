@@ -36,7 +36,10 @@
 
 struct _DisplayPrivate {
 	GtkWidget   * selector;
+
+	/* the data model and display settings */
 	GtkTreeModel* model;
+	gint          column_label;
 
 	/* range settings */
 	Date       * date_start;
@@ -76,6 +79,8 @@ display_init (Display* self)
 	gtk_widget_show (self->_private->selector);
 	gtk_container_add (GTK_CONTAINER (self),
 			   self->_private->selector);
+
+	self->_private->column_label = -1;
 
 	self->_private->element_size = 33;
 	self->_private->date_start = date_new (1, 1, 1982);
@@ -207,7 +212,15 @@ display_expose_event (GtkWidget     * widget,
 	pango_layout_set_width (layout, PANGO_SCALE * self->_private->element_size);
 
 	for (i = 0; i < self->_private->elements_visible; i++) {
-		gchar* year = display_get_date_string (self, i);
+		GtkTreeIter  iter;
+
+		if (!gtk_tree_model_iter_nth_child (self->_private->model,
+						    &iter,
+						    NULL,
+						    i + self->_private->offset))
+		{
+			break;
+		}
 
 		if (G_LIKELY (i)) {
 			gdk_cairo_draw_line (cr,
@@ -218,14 +231,22 @@ display_expose_event (GtkWidget     * widget,
 					     widget->allocation.y + VERTICAL_PADDING + 7);
 		}
 
-		pango_layout_set_text (layout, year, -1);
-		gdk_cairo_draw_layout (cr,
-				       widget->style->black_gc,
-				       widget->allocation.x + i * (self->_private->element_size + 1) + 5,
-				       widget->allocation.y + VERTICAL_PADDING + 5,
-				       layout);
+		if (self->_private->column_label >= 0) {
+			gchar* year = NULL;
+			gtk_tree_model_get (self->_private->model, &iter,
+					    self->_private->column_label,
+					    &year,
+					    -1);
 
-		g_free (year);
+			pango_layout_set_text (layout, year, -1);
+			gdk_cairo_draw_layout (cr,
+					       widget->style->black_gc,
+					       widget->allocation.x + i * (self->_private->element_size + 1) + 5,
+					       widget->allocation.y + VERTICAL_PADDING + 5,
+					       layout);
+
+			g_free (year);
+		}
 	}
 	cairo_destroy (cr);
 	g_object_unref (layout);
