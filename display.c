@@ -151,10 +151,14 @@ display_get_date_string (Display const* self,
 						temp);
 		}
 	case TIME_PERIOD_YEAR:
-	default:
 		return g_strdup_printf ("%d",
 					date_get_year (self->_private->date_start) +
 					self->_private->offset + i);
+	default:
+		g_warning ("%s(): unknown zoom value %d",
+			   G_STRFUNC,
+			   self->_private->zoom);
+		return g_strdup ("---");
 	}
 }
 
