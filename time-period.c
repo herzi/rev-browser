@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -22,4 +22,12 @@
  */
 
 #include "time-period.h"
+
+guint
+time_period_get_difference (Date      * start,
+			    Date      * end,
+			    TimePeriod  stepping)
+{
+	return date_get_year (end) - date_get_year (start);
+}
 

@@ -27,8 +27,8 @@
 #include "gdk-cairo.h"
 
 #include "calendar.h"
-#include "date.h"
 #include "highlight-widget.h"
+#include "time-period.h"
 #include "time-selector.h"
 
 #define DEFAULT_SIZE     40 /* the default size and minimum of an element */
@@ -127,7 +127,9 @@ display_finalize (GObject* object)
 static inline guint
 display_get_range_year_difference (Display const* self)
 {
-	return date_get_year (self->_private->date_end) - date_get_year (self->_private->date_start);
+	return time_period_get_difference (self->_private->date_start,
+					   self->_private->date_end,
+					   TIME_PERIOD_YEAR);
 }
 
 static guint

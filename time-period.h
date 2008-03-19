@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -24,5 +24,19 @@
 #ifndef TIME_PERIOD_H
 #define TIME_PERIOD_H
 
+#include "date.h"
+
+G_BEGIN_DECLS
+
+typedef enum {
+	TIME_PERIOD_YEAR,
+	TIME_PERIOD_MONTH
+} TimePeriod;
+
+guint time_period_get_difference (Date      * start,
+				  Date      * end,
+				  TimePeriod  stepping);
+
+G_END_DECLS
 
 #endif /* !TIME_PERIOD_H */
