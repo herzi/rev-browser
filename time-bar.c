@@ -190,3 +190,13 @@ time_bar_new (void)
 	return g_object_new (TYPE_TIME_BAR, NULL);
 }
 
+void
+time_bar_set_model (TimeBar     * self,
+		    GtkTreeModel* model)
+{
+	g_return_if_fail (IS_TIME_BAR (self));
+	g_return_if_fail (!model || GTK_IS_TREE_MODEL (model));
+
+	// FIXME: add implementation
+}
+
