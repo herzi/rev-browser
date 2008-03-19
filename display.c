@@ -34,11 +34,6 @@
 #define DEFAULT_SIZE     40 /* the default size and minimum of an element */
 #define VERTICAL_PADDING 6
 
-typedef enum {
-	ZOOM_YEARS,
-	ZOOM_MONTHS
-} DisplayZoom;
-
 struct _DisplayPrivate {
 	GtkWidget  * selector;
 
@@ -54,7 +49,7 @@ struct _DisplayPrivate {
 
 	/* display state */
 	gint         offset;
-	DisplayZoom  zoom;
+	TimePeriod   zoom;
 };
 
 enum {
@@ -84,7 +79,7 @@ display_init (Display* self)
 	self->_private->element_size = 33;
 	self->_private->date_start = date_new (1, 1, 1982);
 	self->_private->date_end   = date_new (31, 12, 1988);
-	self->_private->zoom = ZOOM_YEARS;
+	self->_private->zoom       = TIME_PERIOD_YEAR;
 }
 
 static void
@@ -130,12 +125,12 @@ display_get_range_size (Display const* self)
 	guint result = 0;
 
 	switch (self->_private->zoom) {
-	case ZOOM_MONTHS:
+	case TIME_PERIOD_MONTH:
 		result = time_period_get_difference (self->_private->date_start,
 						     self->_private->date_end,
 						     TIME_PERIOD_MONTH);
 		break;
-	case ZOOM_YEARS:
+	case TIME_PERIOD_YEAR:
 	default:
 		result = time_period_get_difference (self->_private->date_start,
 						     self->_private->date_end,
@@ -152,7 +147,7 @@ display_get_date_string (Display const* self,
 {
 	switch (self->_private->zoom) {
 		guint temp;
-	case ZOOM_MONTHS:
+	case TIME_PERIOD_MONTH:
 		temp = (date_get_month (self->_private->date_start) +
 			self->_private->offset + i - 1) % 12 + 1; // month number (1-12)
 		if (G_UNLIKELY (temp == 1)) {
@@ -165,7 +160,7 @@ display_get_date_string (Display const* self,
 			return g_strdup_printf ("%d",
 						temp);
 		}
-	case ZOOM_YEARS:
+	case TIME_PERIOD_YEAR:
 	default:
 		return g_strdup_printf ("%d",
 					date_get_year (self->_private->date_start) +
@@ -450,7 +445,7 @@ display_can_zoom_in (Display const* self)
 {
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
-	return self->_private->zoom < ZOOM_MONTHS;
+	return self->_private->zoom < TIME_PERIOD_MONTH;
 }
 
 gboolean
@@ -458,7 +453,7 @@ display_can_zoom_out (Display const* self)
 {
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
-	return self->_private->zoom > ZOOM_YEARS;
+	return self->_private->zoom > TIME_PERIOD_YEAR;
 }
 
 void
