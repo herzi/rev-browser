@@ -37,8 +37,9 @@ main (int   argc,
       char**argv)
 {
 	GtkListStore* store;
-	GtkWidget* window;
-	GtkWidget* time_bar;
+	GtkTreeIter   iter;
+	GtkWidget   * window;
+	GtkWidget   * time_bar;
 
 	gtk_init (&argc, &argv);
 
@@ -54,6 +55,32 @@ main (int   argc,
 	store = gtk_list_store_new (N_COLUMNS,
 				    G_TYPE_STRING,
 				    G_TYPE_INT);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set    (store, &iter,
+			       COLUMN_LABEL, "2007-07-23",
+			       COLUMN_COUNT, 8,
+			       -1);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set    (store, &iter,
+			       COLUMN_LABEL, "2007-07-29",
+			       COLUMN_COUNT, 1,
+			       -1);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set    (store, &iter,
+			       COLUMN_LABEL, "2007-08-19",
+			       COLUMN_COUNT, 1,
+			       -1);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set    (store, &iter,
+			       COLUMN_LABEL, "2007-11-29",
+			       COLUMN_COUNT, 4,
+			       -1);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set    (store, &iter,
+			       COLUMN_LABEL, "2008-03-06",
+			       COLUMN_COUNT, 59,
+			       -1);
+
 	time_bar_set_model (TIME_BAR (time_bar),
 			    GTK_TREE_MODEL (store));
 	g_object_unref (store);
