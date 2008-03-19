@@ -26,10 +26,17 @@
 #include "display.h"
 #include "time-bar.h"
 
+enum {
+	COLUMN_LABEL,
+	COLUMN_COUNT,
+	N_COLUMNS
+};
+
 int
 main (int   argc,
       char**argv)
 {
+	GtkListStore* store;
 	GtkWidget* window;
 	GtkWidget* time_bar;
 
@@ -43,6 +50,13 @@ main (int   argc,
 	gtk_widget_show (time_bar);
 	gtk_container_add (GTK_CONTAINER (window),
 			   time_bar);
+
+	store = gtk_list_store_new (N_COLUMNS,
+				    G_TYPE_STRING,
+				    G_TYPE_INT);
+	time_bar_set_model (TIME_BAR (time_bar),
+			    GTK_TREE_MODEL (store));
+	g_object_unref (store);
 
 	gtk_widget_show (window);
 
