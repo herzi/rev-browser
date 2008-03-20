@@ -252,16 +252,22 @@ display_expose_event (GtkWidget     * widget,
 
 		if (self->_private->column_value >= 0) {
 			gint value = 0;
+			gint height = 0;
 			gtk_tree_model_get (self->_private->model, &iter,
 					    self->_private->column_value,
 					    &value,
 					    -1);
 
-			g_print ("%d\n",
-				 value);
+			height = MIN (value, widget->allocation.height - 35);
+			gdk_cairo_draw_rectangle (cr,
+						  widget->style->base_gc[GTK_STATE_ACTIVE],
+						  TRUE,
+						  widget->allocation.x + i * (self->_private->element_size + 1) + 4,
+						  widget->allocation.y + widget->allocation.height - 10 - height,
+						  (self->_private->element_size + 1) - 8,
+						  height);
 		}
 	}
-	g_print ("\n");
 	cairo_destroy (cr);
 	g_object_unref (layout);
 
