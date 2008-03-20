@@ -191,11 +191,11 @@ display_expose_event (GtkWidget     * widget,
 	gdk_cairo_draw_rectangle (cr,
 				  widget->style->white_gc,
 				  TRUE,
-				  widget->allocation.x,
-				  widget->allocation.y + VERTICAL_PADDING,
+				  widget->allocation.x + 1,
+				  widget->allocation.y + VERTICAL_PADDING + 1,
 				  MIN (widget->allocation.width,
-				       1 + display_get_range_size (self) *(self->_private->element_size + 1)),
-				  widget->allocation.height - 2 * VERTICAL_PADDING);
+				       1 + display_get_range_size (self) *(self->_private->element_size + 1)) - 2,
+				  widget->allocation.height - 2 * VERTICAL_PADDING - 2);
 
 	PangoLayout* layout = pango_layout_new (gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget)));
 	pango_layout_set_font_description (layout,
@@ -262,9 +262,9 @@ display_expose_event (GtkWidget     * widget,
 			gdk_cairo_draw_rectangle (cr,
 						  widget->style->base_gc[GTK_STATE_ACTIVE],
 						  TRUE,
-						  widget->allocation.x + i * (self->_private->element_size + 1) + 4,
-						  widget->allocation.y + widget->allocation.height - 10 - height,
-						  (self->_private->element_size + 1) - 8,
+						  widget->allocation.x + i * (self->_private->element_size + 1) + 6,
+						  widget->allocation.y + widget->allocation.height - 12 - height,
+						  (self->_private->element_size + 1) - 12,
 						  height);
 		}
 	}
