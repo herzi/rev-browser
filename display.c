@@ -82,6 +82,7 @@ display_init (Display* self)
 			   self->_private->selector);
 
 	self->_private->column_label = -1;
+	self->_private->column_value = -1;
 
 	self->_private->element_size = 33;
 	self->_private->date_start = date_new (1, 1, 1982);
@@ -248,7 +249,19 @@ display_expose_event (GtkWidget     * widget,
 
 			g_free (year);
 		}
+
+		if (self->_private->column_value >= 0) {
+			gint value = 0;
+			gtk_tree_model_get (self->_private->model, &iter,
+					    self->_private->column_value,
+					    &value,
+					    -1);
+
+			g_print ("%d\n",
+				 value);
+		}
 	}
+	g_print ("\n");
 	cairo_destroy (cr);
 	g_object_unref (layout);
 
@@ -488,7 +501,7 @@ display_set_value_column (Display* self,
 	g_return_if_fail (IS_DISPLAY (self));
 	g_return_if_fail (column >= -1);
 
-	self->_private->column_value;
+	self->_private->column_value = column;
 	// FIXME: update size-request
 
 	// FIXME: g_object_notify (G_OBJECT (self), "value-column");
