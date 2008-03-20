@@ -43,6 +43,8 @@ GType      time_bar_get_type         (void);
 GtkWidget* time_bar_new              (void);
 void       time_bar_set_label_column (TimeBar     * self,
 				      gint          column);
+void       time_bar_set_value_column (TimeBar     * self,
+				      gint          column);
 void       time_bar_set_model        (TimeBar     * self,
 				      GtkTreeModel* model);
 

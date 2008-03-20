@@ -221,6 +221,19 @@ time_bar_set_label_column (TimeBar* self,
 }
 
 void
+time_bar_set_value_column (TimeBar* self,
+			   gint     column)
+{
+	g_return_if_fail (IS_TIME_BAR (self));
+	g_return_if_fail (column >= -1);
+
+	display_set_value_column (DISPLAY (self->_private->display),
+				  column);
+
+	// FIXME: g_object_notify (G_OBJECT (self), "column-value");
+}
+
+void
 time_bar_set_model (TimeBar     * self,
 		    GtkTreeModel* model)
 {

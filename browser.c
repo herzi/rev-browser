@@ -28,7 +28,7 @@
 
 enum {
 	COLUMN_LABEL,
-	COLUMN_COUNT,
+	COLUMN_COUNT, /* FIXME: rename to COLUMN_VALUE */
 	N_COLUMNS
 };
 
@@ -85,6 +85,8 @@ main (int   argc,
 			           GTK_TREE_MODEL (store));
 	time_bar_set_label_column (TIME_BAR (time_bar),
 				   COLUMN_LABEL);
+	time_bar_set_value_column (TIME_BAR (time_bar),
+				   COLUMN_COUNT);
 	g_object_unref (store);
 
 	gtk_widget_show (window);

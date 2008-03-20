@@ -48,6 +48,8 @@ gboolean   display_can_zoom_in      (Display const* self);
 gboolean   display_can_zoom_out     (Display const* self);
 void       display_set_label_column (Display      * self,
 				     gint           column);
+void       display_set_value_column (Display      * self,
+				     gint           column);
 void       display_set_model        (Display      * self,
 				     GtkTreeModel * model);
 void       display_step_left        (Display      * self);

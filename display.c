@@ -40,6 +40,7 @@ struct _DisplayPrivate {
 	/* the data model and display settings */
 	GtkTreeModel* model;
 	gint          column_label;
+	gint          column_value;
 
 	/* range settings */
 	Date       * date_start;
@@ -478,6 +479,19 @@ display_set_label_column (Display* self,
 	gtk_widget_queue_draw (GTK_WIDGET (self));
 
 	// FIXME: g_object_notify (G_OBJECT (self), "label-column");
+}
+
+void
+display_set_value_column (Display* self,
+			  gint     column)
+{
+	g_return_if_fail (IS_DISPLAY (self));
+	g_return_if_fail (column >= -1);
+
+	self->_private->column_value;
+	// FIXME: update size-request
+
+	// FIXME: g_object_notify (G_OBJECT (self), "value-column");
 }
 
 void
