@@ -189,7 +189,7 @@ display_expose_event (GtkWidget     * widget,
 	/* FIXME: get color/gc from theme */
 	cr = gdk_cairo_create (widget->window);
 	gdk_cairo_draw_rectangle (cr,
-				  widget->style->white_gc,
+				  widget->style->base_gc[GTK_STATE_NORMAL],
 				  TRUE,
 				  widget->allocation.x + 1,
 				  widget->allocation.y + VERTICAL_PADDING + 1,
@@ -242,7 +242,7 @@ display_expose_event (GtkWidget     * widget,
 
 			pango_layout_set_text (layout, year, -1);
 			gdk_cairo_draw_layout (cr,
-					       widget->style->black_gc,
+					       widget->style->text_gc[GTK_STATE_NORMAL],
 					       widget->allocation.x + i * (self->_private->element_size + 1) + 5,
 					       widget->allocation.y + VERTICAL_PADDING + 5,
 					       layout);
