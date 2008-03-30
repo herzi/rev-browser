@@ -26,7 +26,6 @@
 #include <gdk/gdkkeysyms.h>
 #include "gdk-cairo.h"
 
-#include "calendar.h"
 #include "highlight-widget.h"
 #include "time-period.h"
 #include "time-selector.h"
@@ -43,8 +42,6 @@ struct _DisplayPrivate {
 	gint          column_value;
 
 	/* range settings */
-	Date       * date_start;
-	Date       * date_end;
 	guint        selected_start;
 	guint        selected_end;
 
@@ -85,8 +82,6 @@ display_init (Display* self)
 	self->_private->column_value = -1;
 
 	self->_private->element_size = 33;
-	self->_private->date_start = date_new (1, 1, 1982);
-	self->_private->date_end   = date_new (31, 12, 1988);
 	self->_private->zoom       = TIME_PERIOD_YEAR;
 }
 
@@ -132,37 +127,6 @@ display_get_range_size (Display const* self)
 {
 	return gtk_tree_model_iter_n_children (self->_private->model,
 					       NULL);
-}
-
-static gchar*
-display_get_date_string (Display const* self,
-			 gsize          i)
-{
-	switch (self->_private->zoom) {
-		guint temp;
-	case TIME_PERIOD_MONTH:
-		temp = (date_get_month (self->_private->date_start) +
-			self->_private->offset + i - 1) % 12 + 1; // month number (1-12)
-		if (G_UNLIKELY (temp == 1)) {
-			return g_strdup_printf ("%d\n%d",
-						temp,
-						date_get_year (self->_private->date_start) +
-						(date_get_month (self->_private->date_start) +
-						 self->_private->offset + i - 1) / 12);
-		} else {
-			return g_strdup_printf ("%d",
-						temp);
-		}
-	case TIME_PERIOD_YEAR:
-		return g_strdup_printf ("%d",
-					date_get_year (self->_private->date_start) +
-					self->_private->offset + i);
-	default:
-		g_warning ("%s(): unknown zoom value %d",
-			   G_STRFUNC,
-			   self->_private->zoom);
-		return g_strdup ("---");
-	}
 }
 
 static gint
