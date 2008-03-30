@@ -87,6 +87,20 @@ display_init (Display* self)
 }
 
 static void
+display_dispose (GObject* object)
+{
+	display_set_model (DISPLAY (object), NULL);
+
+	G_OBJECT_CLASS (display_parent_class)->dispose (object);
+}
+
+static void
+display_finalize (GObject* object)
+{
+	G_OBJECT_CLASS (display_parent_class)->finalize (object);
+}
+
+static void
 display_get_property (GObject   * object,
 		      guint       prop_id,
 		      GValue    * value,
@@ -115,12 +129,6 @@ display_get_property (GObject   * object,
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
 	}
-}
-
-static void
-display_finalize (GObject* object)
-{
-	G_OBJECT_CLASS (display_parent_class)->finalize (object);
 }
 
 static guint
@@ -387,8 +395,9 @@ display_class_init (DisplayClass* self_class)
 	GObjectClass  * object_class = G_OBJECT_CLASS (self_class);
 	GtkWidgetClass* widget_class = GTK_WIDGET_CLASS (self_class);
 
-	object_class->get_property = display_get_property;
+	object_class->dispose      = display_dispose;
 	object_class->finalize     = display_finalize;
+	object_class->get_property = display_get_property;
 
 	widget_class->expose_event    = display_expose_event;
 	widget_class->key_press_event = display_key_press_event;
@@ -477,6 +486,17 @@ display_set_value_column (Display* self,
 	// FIXME: g_object_notify (G_OBJECT (self), "value-column");
 }
 
+static void
+display_cb_model_row_changed (GtkTreeModel* model,
+			      GtkTreePath * path,
+			      GtkTreeIter * iter,
+			      Display     * display)
+{
+	/* queue an update of the current maximum, so we can normalize the
+	 * stack heights */
+	g_print ("sliff\n");
+}
+
 void
 display_set_model (Display      * self,
 		   GtkTreeModel * model)
@@ -489,13 +509,18 @@ display_set_model (Display      * self,
 		return;
 	}
 
+
 	if (self->_private->model) {
+		g_signal_handlers_disconnect_by_func (self->_private->model,
+						      G_CALLBACK (display_cb_model_row_changed),
+						      self);
 		g_object_unref (self->_private->model);
 		self->_private->model = NULL;
 	}
-
 	if (model) {
 		self->_private->model = g_object_ref (model);
+		g_signal_connect (self->_private->model, "row-changed",
+				  G_CALLBACK (display_cb_model_row_changed), self);
 	}
 
 	/* update the widget */
