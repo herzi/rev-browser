@@ -126,6 +126,10 @@ display_finalize (GObject* object)
 static guint
 display_get_range_size (Display const* self)
 {
+	if (G_UNLIKELY (!self->_private->model)) {
+		return 0;
+	}
+
 	return gtk_tree_model_iter_n_children (self->_private->model,
 					       NULL);
 }
