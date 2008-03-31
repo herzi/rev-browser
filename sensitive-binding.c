@@ -79,21 +79,12 @@ bind_sensitive (GtkWidget  * widget,
 	g_return_if_fail (GTK_IS_WIDGET (widget));
 	g_return_if_fail (G_IS_OBJECT (subject));
 
-	dataname = g_strdup ("BindingConnection");
-	if (g_object_get_data (subject, dataname)) {
-		// FIXME: resolve this with a dynamic name
-		g_warning ("you can only bind one property right now");
-		g_free (dataname);
-		return;
-	}
-
 	property = g_object_class_find_property (G_OBJECT_GET_CLASS (subject), property_sensitivity);
 	if (!property) {
 		g_warning ("%s(%p) doesn't have a property called \"%s\"",
 			   G_OBJECT_TYPE_NAME (subject),
 			   subject,
 			   property_sensitivity);
-		g_free (dataname);
 		return;
 	}
 
@@ -102,6 +93,13 @@ bind_sensitive (GtkWidget  * widget,
 			   G_OBJECT_TYPE_NAME (subject),
 			   property_sensitivity,
 			   g_type_name (property->value_type));
+		return;
+	}
+
+	dataname = g_strdup ("BindingConnection");
+	if (g_object_get_data (subject, dataname)) {
+		// FIXME: resolve this with a dynamic name
+		g_warning ("you can only bind one property right now");
 		g_free (dataname);
 		return;
 	}
