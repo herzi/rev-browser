@@ -48,9 +48,23 @@ binding_init (Binding* self)
 {}
 
 static void
+widget_destroy (GtkObject* object,
+		Binding  * self)
+{
+	g_signal_handlers_disconnect_by_func (object, widget_destroy, self);
+
+	g_object_unref (self->widget);
+	self->widget = NULL;
+}
+
+static void
 binding_finalize (GObject* object)
 {
 	Binding* binding = BINDING (object);
+
+	if (binding->widget) {
+		widget_destroy (GTK_OBJECT (binding->widget), binding);
+	}
 
 	g_free (binding->bindingname);
 
@@ -133,7 +147,9 @@ bind_sensitive (GtkWidget  * widget,
 				g_object_unref);
 
 	/* connect to the widget */
-	binding->widget = widget;
+	binding->widget = g_object_ref_sink (widget);
+	g_signal_connect (binding->widget, "destroy",
+			  G_CALLBACK (widget_destroy), binding);
 
 	signal = g_strdup_printf ("notify::%s", property_sensitivity);
 	g_signal_connect (subject, signal,
