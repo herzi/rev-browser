@@ -32,6 +32,7 @@
 
 #define DEFAULT_SIZE     40 /* the default size and minimum of an element */
 #define VERTICAL_PADDING 6
+#define TEXT_OFFSET      5
 
 struct _DisplayPrivate {
 	GtkWidget   * selector;
@@ -175,7 +176,7 @@ display_expose_event (GtkWidget     * widget,
 		pango_layout_set_attributes (layout, attributes);
 		pango_attr_list_unref (attributes);
 	}
-	pango_layout_set_width (layout, PANGO_SCALE * self->_private->element_size);
+	pango_layout_set_width (layout, PANGO_SCALE * (self->_private->element_size - 2 * TEXT_OFFSET));
 
 	for (i = 0; i < self->_private->elements_visible; i++) {
 		GtkTreeIter  iter;
@@ -207,8 +208,8 @@ display_expose_event (GtkWidget     * widget,
 			pango_layout_set_text (layout, year, -1);
 			gdk_cairo_draw_layout (cr,
 					       widget->style->text_gc[GTK_STATE_NORMAL],
-					       widget->allocation.x + i * (self->_private->element_size + 1) + 5,
-					       widget->allocation.y + VERTICAL_PADDING + 5,
+					       widget->allocation.x + i * (self->_private->element_size + 1) + TEXT_OFFSET,
+					       widget->allocation.y + VERTICAL_PADDING + TEXT_OFFSET,
 					       layout);
 
 			g_free (year);
