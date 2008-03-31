@@ -33,6 +33,7 @@ typedef struct {
 
 	gulong        action;
 	gulong        destroy;
+	gulong        update;
 } Binding;
 
 typedef struct {
@@ -105,6 +106,9 @@ static void
 widget_destroy (GtkObject* object,
 		Binding  * self)
 {
+	g_signal_handler_disconnect (self->subject,
+				     self->update);
+
 	disconnect_widget (object, self);
 
 	g_object_ref (self);
@@ -169,8 +173,8 @@ bind_sensitive (GtkWidget  * widget,
 					     G_CALLBACK (widget_destroy), binding);
 
 	signal = g_strdup_printf ("notify::%s", property_sensitivity);
-	g_signal_connect (subject, signal,
-			  G_CALLBACK (update_state), binding);
+	binding->update = g_signal_connect (subject, signal,
+					    G_CALLBACK (update_state), binding);
 	g_free (signal);
 
 	/* finally connect the signal */
