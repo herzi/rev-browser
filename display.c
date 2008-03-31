@@ -52,6 +52,7 @@ struct _DisplayPrivate {
 
 	/* display state */
 	guint        update_idle; /* idle job to check the dimensions from the tree model */
+	gint         maximum;     /* maxmimum value in the model */
 	gint         offset;
 	TimePeriod   zoom;
 };
@@ -496,9 +497,31 @@ display_set_value_column (Display* self,
 static gboolean
 update_from_tree (gpointer data)
 {
+	GtkTreeIter  iter;
 	Display* self = data;
 
-	g_print ("sliff!\n");
+	gint maximum = 0;
+
+	if (self->_private->model &&
+	    self->_private->column_value != -1 &&
+	    gtk_tree_model_get_iter_first (self->_private->model,
+					   &iter))
+	{
+		do {
+			gint value = 0;
+
+			gtk_tree_model_get (self->_private->model, &iter,
+					    self->_private->column_value, &value,
+					    -1);
+
+			maximum = MAX (maximum, value);
+		} while (gtk_tree_model_iter_next (self->_private->model, &iter));
+	}
+
+	if (maximum != self->_private->maximum) {
+		self->_private->maximum = maximum;
+		gtk_widget_queue_draw (GTK_WIDGET (self));
+	}
 
 	self->_private->update_idle = 0;
 	return FALSE;
