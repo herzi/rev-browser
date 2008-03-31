@@ -30,6 +30,7 @@ typedef struct {
 	GtkWidget   * widget;
 	GObject     * subject;
 	gchar       * bindingname;
+	gulong        action;
 } Binding;
 
 typedef struct {
@@ -54,6 +55,9 @@ static void
 disconnect_widget (GtkObject* object,
 		   Binding  * self)
 {
+	g_signal_handler_disconnect (self->widget,
+				     self->action);
+
 	g_signal_handlers_disconnect_by_func (object, widget_destroy, self);
 
 	g_object_unref (self->widget);
@@ -171,7 +175,7 @@ bind_sensitive (GtkWidget  * widget,
 	g_free (signal);
 
 	/* finally connect the signal */
-	g_signal_connect_swapped (widget, action,
-				  callback, subject);
+	binding->action = g_signal_connect_swapped (widget, action,
+						    callback, subject);
 }
 
