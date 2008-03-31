@@ -51,6 +51,7 @@ struct _DisplayPrivate {
 	gint         element_size;
 
 	/* display state */
+	guint        update_idle; /* idle job to check the dimensions from the tree model */
 	gint         offset;
 	TimePeriod   zoom;
 };
@@ -97,6 +98,12 @@ display_dispose (GObject* object)
 static void
 display_finalize (GObject* object)
 {
+	Display* self = DISPLAY (object);
+
+	if (self->_private->update_idle) {
+		g_source_remove (self->_private->update_idle);
+	}
+
 	G_OBJECT_CLASS (display_parent_class)->finalize (object);
 }
 
@@ -486,15 +493,31 @@ display_set_value_column (Display* self,
 	// FIXME: g_object_notify (G_OBJECT (self), "value-column");
 }
 
+static gboolean
+update_from_tree (gpointer data)
+{
+	Display* self = data;
+
+	g_print ("sliff!\n");
+
+	self->_private->update_idle = 0;
+	return FALSE;
+}
+
 static void
 display_cb_model_row_changed (GtkTreeModel* model,
 			      GtkTreePath * path,
 			      GtkTreeIter * iter,
-			      Display     * display)
+			      Display     * self)
 {
 	/* queue an update of the current maximum, so we can normalize the
 	 * stack heights */
-	g_print ("sliff\n");
+	if (G_UNLIKELY (!self->_private->update_idle)) {
+		self->_private->update_idle = g_idle_add_full (G_PRIORITY_HIGH_IDLE,
+							       update_from_tree,
+							       self,
+							       NULL);
+	}
 }
 
 void
@@ -521,6 +544,10 @@ display_set_model (Display      * self,
 		self->_private->model = g_object_ref (model);
 		g_signal_connect (self->_private->model, "row-changed",
 				  G_CALLBACK (display_cb_model_row_changed), self);
+	}
+
+	if (!self->_private->update_idle) {
+		update_from_tree (self);
 	}
 
 	/* update the widget */
