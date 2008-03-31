@@ -28,6 +28,8 @@ typedef struct {
 
 	/*< priv >*/
 	GtkWidget   * widget;
+	GObject     * subject;
+	gchar       * bindingname;
 } Binding;
 
 typedef struct {
@@ -35,6 +37,7 @@ typedef struct {
 } BindingClass;
 
 #define TYPE_BINDING         (binding_get_type ())
+#define BINDING(i)           (G_TYPE_CHECK_INSTANCE_CAST ((i), TYPE_BINDING, Binding))
 
 /* GType Implementation */
 
@@ -45,8 +48,22 @@ binding_init (Binding* self)
 {}
 
 static void
+binding_finalize (GObject* object)
+{
+	Binding* binding = BINDING (object);
+
+	g_free (binding->bindingname);
+
+	G_OBJECT_CLASS (binding_parent_class)->finalize (object);
+}
+
+static void
 binding_class_init (BindingClass* self_class)
-{}
+{
+	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
+
+	object_class->finalize = binding_finalize;
+}
 
 /* Public API Implementation */
 
@@ -108,6 +125,8 @@ bind_sensitive (GtkWidget  * widget,
 	binding = g_object_new (TYPE_BINDING, NULL);
 
 	/* connect to the lifetime of the subject */
+	binding->subject = subject; /* FIXME: turn into real weak reference */
+	binding->bindingname = dataname;
 	g_object_set_data_full (subject,
 				dataname,
 				binding,
@@ -122,7 +141,5 @@ bind_sensitive (GtkWidget  * widget,
 	g_free (signal);
 	// connect the signal
 	// store the handler to be cleanly disposed
-
-	g_free (dataname);
 }
 
