@@ -71,7 +71,7 @@ bind_sensitive (GtkWidget  * widget,
 		GObject    * subject,
 		gchar const* property_sensitivity)
 {
-	gchar const* dataname = "BindingConnection";
+	gchar      * dataname = g_strdup ("BindingConnection");
 	gchar      * signal;
 	GParamSpec* property;
 	Binding* binding;
@@ -82,6 +82,7 @@ bind_sensitive (GtkWidget  * widget,
 	if (g_object_get_data (subject, dataname)) {
 		// FIXME: resolve this with a dynamic name
 		g_warning ("you can only bind one property right now");
+		g_free (dataname);
 		return;
 	}
 
@@ -91,6 +92,7 @@ bind_sensitive (GtkWidget  * widget,
 			   G_OBJECT_TYPE_NAME (subject),
 			   subject,
 			   property_sensitivity);
+		g_free (dataname);
 		return;
 	}
 
@@ -99,6 +101,7 @@ bind_sensitive (GtkWidget  * widget,
 			   G_OBJECT_TYPE_NAME (subject),
 			   property_sensitivity,
 			   g_type_name (property->value_type));
+		g_free (dataname);
 		return;
 	}
 
@@ -119,5 +122,7 @@ bind_sensitive (GtkWidget  * widget,
 	g_free (signal);
 	// connect the signal
 	// store the handler to be cleanly disposed
+
+	g_free (dataname);
 }
 
