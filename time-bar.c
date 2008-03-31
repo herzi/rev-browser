@@ -73,13 +73,9 @@ add_arrow_button (GtkBox      * box,
 	if (arrow == GTK_ARROW_RIGHT) {
 		bind_sensitive (button,  "clicked", G_CALLBACK (display_step_right),
 				display, "can-step-right");
-		g_signal_connect_swapped (button, "clicked",
-					  G_CALLBACK (display_step_right), display);
 	} else {
 		bind_sensitive (button,  "clicked", G_CALLBACK (display_step_left),
 				display, "can-step-left");
-		g_signal_connect_swapped (button, "clicked",
-					  G_CALLBACK (display_step_left), display);
 	}
 
 	return button;
@@ -133,16 +129,12 @@ time_bar_init (TimeBar* self)
 				  PRIV(self)->display);
 	bind_sensitive (button,  "clicked", G_CALLBACK (display_zoom_in),
 			display, "can-zoom-in");
-	g_signal_connect_swapped (button, "clicked",
-				  G_CALLBACK (display_zoom_in), display);
 
 	button = add_icon_button (GTK_BOX (PRIV(self)->vbox),
 				  GTK_STOCK_ZOOM_OUT,
 				  PRIV(self)->display);
 	bind_sensitive (button,  "clicked", G_CALLBACK (display_zoom_out),
 			display, "can-zoom-out");
-	g_signal_connect_swapped (button, "clicked",
-				  G_CALLBACK (display_zoom_out), display);
 }
 
 static void

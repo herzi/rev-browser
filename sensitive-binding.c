@@ -111,7 +111,7 @@ widget_destroy (GtkObject* object,
 
 void
 bind_sensitive (GtkWidget  * widget,
-		gchar const* trigger_signal,
+		gchar const* action,
 		GCallback    callback,
 		GObject    * subject,
 		gchar const* property_sensitivity)
@@ -169,7 +169,9 @@ bind_sensitive (GtkWidget  * widget,
 	g_signal_connect (subject, signal,
 			  G_CALLBACK (update_state), binding);
 	g_free (signal);
-	// connect the signal
-	// store the handler to be cleanly disposed
+
+	/* finally connect the signal */
+	g_signal_connect_swapped (widget, action,
+				  callback, subject);
 }
 
