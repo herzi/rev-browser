@@ -1,5 +1,8 @@
 lib_LTLIBRARIES=libctk.la
-noinst_LTLIBRARIES=libbinding.la
+noinst_LTLIBRARIES=\
+	libbinding.la \
+	librevision.la \
+	$(NULL)
 bin_PROGRAMS=\
 	rev-lister \
 	rev-browser \
@@ -16,11 +19,18 @@ check_PROGRAMS=\
 
 TESTS=$(check_PROGRAMS)
 
+librevision_la_SOURCES=\
+	revision-list.c \
+	revision-list.h \
+	$(NULL)
+librevision_la_CPPFLAGS=$(GLIB_CFLAGS)
+librevision_la_LIBADD=$(GLIB_LIBS)
+
 rev_lister_SOURCES=\
 	rev-lister.c
 	$(NULL)
-rev_lister_CPPFLAGS=$(GLIB_CFLAGS)
-rev_lister_LDADD=$(GLIB_LIBS)
+rev_lister_CPPFLAGS=$(librevision_la_CPPFLAGS)
+rev_lister_LDADD=$(librevision_la_LIBADD) librevision.la
 
 libbinding_la_SOURCES=\
 	sensitive-binding.c \
@@ -54,7 +64,7 @@ rev_browser_SOURCES=\
 	time-selector.h \
 	$(NULL)
 rev_browser_CPPFLAGS=$(libctk_la_CPPFLAGS)
-rev_browser_LDADD=$(libctk_la_LIBADD) libbinding.la libctk.la
+rev_browser_LDADD=$(libctk_la_LIBADD) libbinding.la libctk.la librevision.la
 
 libtest_la_BUILT_SOURCES=\
 	test-marshallers.c \
