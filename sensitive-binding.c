@@ -96,10 +96,11 @@ bind_sensitive (GtkWidget  * widget,
 		return;
 	}
 
-	dataname = g_strdup ("BindingConnection");
+	dataname = g_strdup_printf ("BindingConnection::%s",
+				    property_sensitivity);
 	if (g_object_get_data (subject, dataname)) {
 		// FIXME: resolve this with a dynamic name
-		g_warning ("you can only bind one property right now");
+		g_warning ("you can only bind one property each time, right now");
 		g_free (dataname);
 		return;
 	}
