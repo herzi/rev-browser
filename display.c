@@ -248,12 +248,7 @@ display_expose_event (GtkWidget     * widget,
 			  widget->allocation.width,
 			  widget->allocation.height - 2 * VERTICAL_PADDING);
 
-	/* display selected item */
-	gtk_container_propagate_expose (GTK_CONTAINER (self),
-					self->_private->selector,
-					event);
-
-	return FALSE;
+	return GTK_WIDGET_CLASS (display_parent_class)->expose_event (widget, event);
 }
 
 static void
