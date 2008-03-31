@@ -23,15 +23,18 @@
  * if advised of the possibility of such damage.
  */
 
+#include <glib/gtestutils.h>
+
 int
 main (int   argc,
       char**argv)
 {
+	g_test_init (&argc, &argv, NULL);
 	// FIXME: test if the sensitivity-proxying works
 	/* FIXME: test if the memory management works
 	 *        - what if the widget gets destroyed first?
 	 *        - what if the subject gets finalized first?
 	 */
-	return 0;
+	return g_test_run ();
 }
 

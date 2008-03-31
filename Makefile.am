@@ -68,6 +68,8 @@ test_gdk_draw_line_CPPFLAGS=$(libctk_la_CPPFLAGS)
 test_gdk_draw_line_LDADD=$(libctk_la_LIBADD) libtest.la libctk.la
 test_gdk_draw_rectangle_CPPFLAGS=$(libctk_la_CPPFLAGS)
 test_gdk_draw_rectangle_LDADD=$(libctk_la_LIBADD) libtest.la libctk.la
+test_sensitive_binding_CPPFLAGS=$(GLIB_CFLAGS)
+test_sensitive_binding_LDADD=$(GLIB_LIBS)
 
 dist_marshallers=\
 	test-marshallers.list \
