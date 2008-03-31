@@ -25,16 +25,42 @@
 
 #include <glib/gtestutils.h>
 
+#define implemented FALSE
+
+static void
+test_memory_widget_first (void)
+{
+	/* Objective:
+	 * - Create an object-widget pair and a binding for it
+	 * - destroy the widget
+	 * - make sure everything went by cleanly
+	 */
+	//g_assert (implemented);
+}
+
+static void
+test_memory_subject_first (void)
+{
+	/* Objective:
+	 * - Create an object-widget pair and a binding for it
+	 * - destroy the subject
+	 * - make sure everything went by cleanly
+	 */
+	//g_assert (implemented);
+}
+
 int
 main (int   argc,
       char**argv)
 {
 	g_test_init (&argc, &argv, NULL);
+
+	// FIXME: test if connecting to multiple properties works
 	// FIXME: test if the sensitivity-proxying works
-	/* FIXME: test if the memory management works
-	 *        - what if the widget gets destroyed first?
-	 *        - what if the subject gets finalized first?
-	 */
+
+	g_test_add_func ("/memory/widget-first", test_memory_widget_first);
+	g_test_add_func ("/memory/subject-first", test_memory_subject_first);
+
 	return g_test_run ();
 }
 
