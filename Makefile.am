@@ -37,6 +37,8 @@ rev_browser_SOURCES=\
 	display.h \
 	highlight-widget.c \
 	highlight-widget.h \
+	sensitive-binding.c \
+	sensitive-binding.h \
 	time-bar.c \
 	time-bar.h \
 	time-period.c \
