@@ -481,19 +481,6 @@ display_set_label_column (Display* self,
 	// FIXME: g_object_notify (G_OBJECT (self), "label-column");
 }
 
-void
-display_set_value_column (Display* self,
-			  gint     column)
-{
-	g_return_if_fail (IS_DISPLAY (self));
-	g_return_if_fail (column >= -1);
-
-	self->_private->column_value = column;
-	// FIXME: update size-request
-
-	// FIXME: g_object_notify (G_OBJECT (self), "value-column");
-}
-
 static gboolean
 update_from_tree (gpointer data)
 {
@@ -528,10 +515,7 @@ update_from_tree (gpointer data)
 }
 
 static void
-display_cb_model_row_changed (GtkTreeModel* model,
-			      GtkTreePath * path,
-			      GtkTreeIter * iter,
-			      Display     * self)
+queue_update_task (Display* self)
 {
 	/* queue an update of the current maximum, so we can normalize the
 	 * stack heights */
@@ -541,6 +525,29 @@ display_cb_model_row_changed (GtkTreeModel* model,
 							       self,
 							       NULL);
 	}
+}
+
+void
+display_set_value_column (Display* self,
+			  gint     column)
+{
+	g_return_if_fail (IS_DISPLAY (self));
+	g_return_if_fail (column >= -1);
+
+	self->_private->column_value = column;
+	/* update size-request */
+	queue_update_task (self);
+
+	// FIXME: g_object_notify (G_OBJECT (self), "value-column");
+}
+
+static void
+display_cb_model_row_changed (GtkTreeModel* model,
+			      GtkTreePath * path,
+			      GtkTreeIter * iter,
+			      Display     * self)
+{
+	queue_update_task (self);
 }
 
 void
@@ -569,9 +576,7 @@ display_set_model (Display      * self,
 				  G_CALLBACK (display_cb_model_row_changed), self);
 	}
 
-	if (!self->_private->update_idle) {
-		update_from_tree (self);
-	}
+	queue_update_task (self);
 
 	/* update the widget */
 	notify_changes (self);
