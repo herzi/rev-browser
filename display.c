@@ -243,7 +243,7 @@ display_expose_event (GtkWidget     * widget,
 					    &value,
 					    -1);
 
-			height = MIN (value, widget->allocation.height - 35);
+			height = (widget->allocation.height - 35) * (1.0 * value / self->_private->maximum);
 			gdk_cairo_draw_rectangle (cr,
 						  widget->style->base_gc[GTK_STATE_ACTIVE],
 						  TRUE,
