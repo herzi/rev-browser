@@ -71,7 +71,7 @@ bind_sensitive (GtkWidget  * widget,
 		GObject    * subject,
 		gchar const* property_sensitivity)
 {
-	gchar      * dataname = g_strdup ("BindingConnection");
+	gchar      * dataname;
 	gchar      * signal;
 	GParamSpec* property;
 	Binding* binding;
@@ -79,6 +79,7 @@ bind_sensitive (GtkWidget  * widget,
 	g_return_if_fail (GTK_IS_WIDGET (widget));
 	g_return_if_fail (G_IS_OBJECT (subject));
 
+	dataname = g_strdup ("BindingConnection");
 	if (g_object_get_data (subject, dataname)) {
 		// FIXME: resolve this with a dynamic name
 		g_warning ("you can only bind one property right now");
