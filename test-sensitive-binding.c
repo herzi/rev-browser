@@ -24,8 +24,7 @@
  */
 
 #include <glib/gtestutils.h>
-
-#define implemented FALSE
+#include "sensitive-binding.h"
 
 static void
 test_memory_widget_first (void)
@@ -35,7 +34,18 @@ test_memory_widget_first (void)
 	 * - destroy the widget
 	 * - make sure everything went by cleanly
 	 */
-	//g_assert (implemented);
+	GtkWidget* object = gtk_check_button_new ();
+	GtkWidget* widget = gtk_button_new ();
+	g_object_ref_sink (object);
+	g_object_ref_sink (widget);
+
+	bind_sensitive (widget, "clicked", G_CALLBACK (gtk_true),
+			G_OBJECT (object), "active");
+
+	g_signal_connect (widget, "destroy",
+			  G_CALLBACK (g_object_unref), NULL);
+	gtk_widget_destroy (widget);
+	g_object_unref   (object);
 }
 
 static void
@@ -46,7 +56,16 @@ test_memory_subject_first (void)
 	 * - destroy the subject
 	 * - make sure everything went by cleanly
 	 */
-	//g_assert (implemented);
+	GtkWidget* object = gtk_check_button_new ();
+	GtkWidget* widget = gtk_button_new ();
+	g_object_ref_sink (object);
+	g_object_ref_sink (widget);
+
+	bind_sensitive (widget, "clicked", G_CALLBACK (gtk_true),
+			G_OBJECT (object), "active");
+
+	g_object_unref   (object);
+	gtk_widget_destroy (widget);
 }
 
 int
@@ -54,6 +73,8 @@ main (int   argc,
       char**argv)
 {
 	g_test_init (&argc, &argv, NULL);
+
+	g_type_init ();
 
 	// FIXME: test if connecting to multiple properties works
 	// FIXME: test if the sensitivity-proxying works
