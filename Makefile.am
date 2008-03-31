@@ -1,4 +1,5 @@
 lib_LTLIBRARIES=libctk.la
+noinst_LTLIBRARIES=libbinding.la
 bin_PROGRAMS=\
 	rev-lister \
 	rev-browser \
@@ -21,6 +22,13 @@ rev_lister_SOURCES=\
 rev_lister_CPPFLAGS=$(GLIB_CFLAGS)
 rev_lister_LDADD=$(GLIB_LIBS)
 
+libbinding_la_SOURCES=\
+	sensitive-binding.c \
+	sensitive-binding.h \
+	$(NULL)
+libbinding_la_CPPFLAGS=$(GTK_CFLAGS)
+libbinding_la_LIBADD=$(GTK_LIBS)
+
 libctk_la_SOURCES=\
 	gdk-cairo.c \
 	gdk-cairo.h \
@@ -38,8 +46,6 @@ rev_browser_SOURCES=\
 	display.h \
 	highlight-widget.c \
 	highlight-widget.h \
-	sensitive-binding.c \
-	sensitive-binding.h \
 	time-bar.c \
 	time-bar.h \
 	time-period.c \
@@ -48,7 +54,7 @@ rev_browser_SOURCES=\
 	time-selector.h \
 	$(NULL)
 rev_browser_CPPFLAGS=$(libctk_la_CPPFLAGS)
-rev_browser_LDADD=$(libctk_la_LIBADD) libctk.la
+rev_browser_LDADD=$(libctk_la_LIBADD) libbinding.la libctk.la
 
 libtest_la_BUILT_SOURCES=\
 	test-marshallers.c \
@@ -68,8 +74,8 @@ test_gdk_draw_line_CPPFLAGS=$(libctk_la_CPPFLAGS)
 test_gdk_draw_line_LDADD=$(libctk_la_LIBADD) libtest.la libctk.la
 test_gdk_draw_rectangle_CPPFLAGS=$(libctk_la_CPPFLAGS)
 test_gdk_draw_rectangle_LDADD=$(libctk_la_LIBADD) libtest.la libctk.la
-test_sensitive_binding_CPPFLAGS=$(GLIB_CFLAGS)
-test_sensitive_binding_LDADD=$(GLIB_LIBS)
+test_sensitive_binding_CPPFLAGS=$(libbinding_la_CPPFLAGS)
+test_sensitive_binding_LDADD=$(libbinding_la_LIBADD) libbinding.la
 
 dist_marshallers=\
 	test-marshallers.list \
