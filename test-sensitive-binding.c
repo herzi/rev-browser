@@ -45,6 +45,7 @@ test_memory_widget_first (void)
 	g_signal_connect (widget, "destroy",
 			  G_CALLBACK (g_object_unref), NULL);
 	gtk_widget_destroy (widget);
+	g_signal_emit_by_name (object, "notify::active");
 	g_object_unref   (object);
 }
 
