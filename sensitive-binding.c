@@ -23,6 +23,30 @@
 
 #include "sensitive-binding.h"
 
+typedef struct {
+	GObject      base_instance;
+} Binding;
+
+typedef struct {
+	GObjectClass base_class;
+} BindingClass;
+
+#define TYPE_BINDING         (binding_get_type ())
+
+/* GType Implementation */
+
+G_DEFINE_TYPE (Binding, binding, G_TYPE_OBJECT);
+
+static void
+binding_init (Binding* self)
+{}
+
+static void
+binding_class_init (BindingClass* self_class)
+{}
+
+/* Public API Implementation */
+
 void
 bind_sensitive (GtkWidget  * widget,
 		gchar const* trigger_signal,
@@ -30,10 +54,18 @@ bind_sensitive (GtkWidget  * widget,
 		GObject    * subject,
 		gchar const* property_sensitivity)
 {
+	gchar const* dataname = "BindingConnection";
 	GParamSpec* property;
+	Binding* binding;
 
 	g_return_if_fail (GTK_IS_WIDGET (widget));
 	g_return_if_fail (G_IS_OBJECT (subject));
+
+	if (g_object_get_data (subject, dataname)) {
+		// FIXME: resolve this with a dynamic name
+		g_warning ("you can only bind one property right now");
+		return;
+	}
 
 	property = g_object_class_find_property (G_OBJECT_GET_CLASS (subject), property_sensitivity);
 	if (!property) {
@@ -52,8 +84,12 @@ bind_sensitive (GtkWidget  * widget,
 		return;
 	}
 
-	// create binding object
+	binding = g_object_new (TYPE_BINDING, NULL);
 	// connect to the lifetime of both widget and subject
+	g_object_set_data_full (subject,
+				dataname,
+				binding,
+				g_object_unref);
 	// connect the signal
 	// store the handler to be cleanly disposed
 }
