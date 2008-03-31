@@ -30,15 +30,14 @@ typedef struct {
 	GtkWidget   * widget;
 	GObject     * subject;
 	gchar       * bindingname;
+
 	gulong        action;
+	gulong        destroy;
 } Binding;
 
 typedef struct {
 	GObjectClass  base_class;
 } BindingClass;
-
-static void widget_destroy (GtkObject* object,
-			    Binding  * self);
 
 #define TYPE_BINDING         (binding_get_type ())
 #define BINDING(i)           (G_TYPE_CHECK_INSTANCE_CAST ((i), TYPE_BINDING, Binding))
@@ -57,8 +56,8 @@ disconnect_widget (GtkObject* object,
 {
 	g_signal_handler_disconnect (self->widget,
 				     self->action);
-
-	g_signal_handlers_disconnect_by_func (object, widget_destroy, self);
+	g_signal_handler_disconnect (self->widget,
+				     self->destroy);
 
 	g_object_unref (self->widget);
 	self->widget = NULL;
@@ -165,9 +164,9 @@ bind_sensitive (GtkWidget  * widget,
 				g_object_unref);
 
 	/* connect to the widget */
-	binding->widget = g_object_ref_sink (widget);
-	g_signal_connect (binding->widget, "destroy",
-			  G_CALLBACK (widget_destroy), binding);
+	binding->widget  = g_object_ref_sink (widget);
+	binding->destroy = g_signal_connect (binding->widget, "destroy",
+					     G_CALLBACK (widget_destroy), binding);
 
 	signal = g_strdup_printf ("notify::%s", property_sensitivity);
 	g_signal_connect (subject, signal,
