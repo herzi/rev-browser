@@ -37,30 +37,6 @@ struct _TimeBarPrivate {
 
 G_DEFINE_TYPE (TimeBar, time_bar, GTK_TYPE_HBOX);
 
-static void
-display_notify_can_step_left (GObject   * object,
-			      GParamSpec* pspec,
-			      GtkWidget * button)
-{
-	gtk_widget_set_sensitive (button, display_can_step_left (DISPLAY (object)));
-}
-
-static void
-display_notify_can_zoom_in (GObject   * object,
-			    GParamSpec* pspec,
-			    GtkWidget * button)
-{
-	gtk_widget_set_sensitive (button, display_can_zoom_in (DISPLAY (object)));
-}
-
-static void
-display_notify_can_zoom_out (GObject   * object,
-			     GParamSpec* pspec,
-			     GtkWidget * button)
-{
-	gtk_widget_set_sensitive (button, display_can_zoom_out (DISPLAY (object)));
-}
-
 static GtkWidget*
 add_button (GtkBox      * box,
 	    GtkWidget   * child,
@@ -100,8 +76,8 @@ add_arrow_button (GtkBox      * box,
 		g_signal_connect_swapped (button, "clicked",
 					  G_CALLBACK (display_step_right), display);
 	} else {
-		g_signal_connect (display, "notify::can-step-left",
-				  G_CALLBACK (display_notify_can_step_left), button);
+		bind_sensitive (button,  "clicked", G_CALLBACK (display_step_left),
+				display, "can-step-left");
 		g_signal_connect_swapped (button, "clicked",
 					  G_CALLBACK (display_step_left), display);
 	}
@@ -155,16 +131,16 @@ time_bar_init (TimeBar* self)
 	button = add_icon_button (GTK_BOX (PRIV(self)->vbox),
 				  GTK_STOCK_ZOOM_IN,
 				  PRIV(self)->display);
-	g_signal_connect (display, "notify::can-zoom-in",
-			  G_CALLBACK (display_notify_can_zoom_in), button);
+	bind_sensitive (button,  "clicked", G_CALLBACK (display_zoom_in),
+			display, "can-zoom-in");
 	g_signal_connect_swapped (button, "clicked",
 				  G_CALLBACK (display_zoom_in), display);
 
 	button = add_icon_button (GTK_BOX (PRIV(self)->vbox),
 				  GTK_STOCK_ZOOM_OUT,
 				  PRIV(self)->display);
-	g_signal_connect (display, "notify::can-zoom-out",
-			  G_CALLBACK (display_notify_can_zoom_out), button);
+	bind_sensitive (button,  "clicked", G_CALLBACK (display_zoom_out),
+			display, "can-zoom-out");
 	g_signal_connect_swapped (button, "clicked",
 				  G_CALLBACK (display_zoom_out), display);
 }
