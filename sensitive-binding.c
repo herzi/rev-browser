@@ -24,11 +24,14 @@
 #include "sensitive-binding.h"
 
 typedef struct {
-	GObject      base_instance;
+	GObject       base_instance;
+
+	/*< priv >*/
+	GtkWidget   * widget;
 } Binding;
 
 typedef struct {
-	GObjectClass base_class;
+	GObjectClass  base_class;
 } BindingClass;
 
 #define TYPE_BINDING         (binding_get_type ())
@@ -47,6 +50,20 @@ binding_class_init (BindingClass* self_class)
 
 /* Public API Implementation */
 
+static void
+update_state (GObject   * subject,
+	      GParamSpec* pspec,
+	      Binding   * binding)
+{
+	gboolean sensitive = G_PARAM_SPEC_BOOLEAN (pspec)->default_value;
+
+	g_object_get (subject,
+		      pspec->name, &sensitive,
+		      NULL);
+
+	gtk_widget_set_sensitive (binding->widget, sensitive);
+}
+
 void
 bind_sensitive (GtkWidget  * widget,
 		gchar const* trigger_signal,
@@ -55,6 +72,7 @@ bind_sensitive (GtkWidget  * widget,
 		gchar const* property_sensitivity)
 {
 	gchar const* dataname = "BindingConnection";
+	gchar      * signal;
 	GParamSpec* property;
 	Binding* binding;
 
@@ -85,11 +103,20 @@ bind_sensitive (GtkWidget  * widget,
 	}
 
 	binding = g_object_new (TYPE_BINDING, NULL);
-	// connect to the lifetime of both widget and subject
+
+	/* connect to the lifetime of the subject */
 	g_object_set_data_full (subject,
 				dataname,
 				binding,
 				g_object_unref);
+
+	/* connect to the widget */
+	binding->widget = widget;
+
+	signal = g_strdup_printf ("notify::%s", property_sensitivity);
+	g_signal_connect (subject, signal,
+			  G_CALLBACK (update_state), binding);
+	g_free (signal);
 	// connect the signal
 	// store the handler to be cleanly disposed
 }

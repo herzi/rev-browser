@@ -46,14 +46,6 @@ display_notify_can_step_left (GObject   * object,
 }
 
 static void
-display_notify_can_step_right (GObject   * object,
-			       GParamSpec* pspec,
-			       GtkWidget * button)
-{
-	gtk_widget_set_sensitive (button, display_can_step_right (DISPLAY (object)));
-}
-
-static void
 display_notify_can_zoom_in (GObject   * object,
 			    GParamSpec* pspec,
 			    GtkWidget * button)
@@ -103,8 +95,8 @@ add_arrow_button (GtkBox      * box,
 					display);
 
 	if (arrow == GTK_ARROW_RIGHT) {
-		g_signal_connect (display, "notify::can-step-right",
-				  G_CALLBACK (display_notify_can_step_right), button);
+		bind_sensitive (button,  "clicked", G_CALLBACK (display_step_right),
+				display, "can-step-right");
 		g_signal_connect_swapped (button, "clicked",
 					  G_CALLBACK (display_step_right), display);
 	} else {
