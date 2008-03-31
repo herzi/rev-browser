@@ -10,6 +10,7 @@ check_PROGRAMS=\
 	test-gdk-draw-layout \
 	test-gdk-draw-line \
 	test-gdk-draw-rectangle \
+	test-sensitive-binding \
 	$(NULL)
 
 TESTS=$(check_PROGRAMS)
