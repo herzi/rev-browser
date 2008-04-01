@@ -45,7 +45,8 @@ main (int   argc,
 	gchar **lines  = NULL;
 	gchar **iter;
 
-	if (!revision_list_get (&out)) {
+	out = revision_list_get (&out);
+	if (!out) {
 		return 1;
 	}
 
