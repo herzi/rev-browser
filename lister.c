@@ -67,6 +67,7 @@ main (int   argc,
 	}
 	g_strfreev (lines);
 	g_hash_table_foreach (revs, (GHFunc)print_revs, NULL);
+	g_hash_table_destroy (revs);
 
 	return 0;
 }
