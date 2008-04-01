@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -22,4 +22,10 @@
  */
 
 #include "repository.h"
+
+Repository*
+repository_new (void)
+{
+	return g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+}
 

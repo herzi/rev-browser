@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -24,5 +24,14 @@
 #ifndef REPOSITORY_H
 #define REPOSITORY_H
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
+typedef struct _GHashTable Repository;
+
+Repository* repository_new (void);
+
+G_END_DECLS
 
 #endif /* !REPOSITORY_H */
