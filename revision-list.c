@@ -46,25 +46,25 @@ revision_list_get (gchar **out)
 		g_warning ("Error executing 'git-rev-list': %s",
 			   error ? error->message : "no error message found");
 		g_clear_error (&error);
-		g_free (out);
+		g_free (*out);
 		return NULL;
 	};
 
 	if (!WIFEXITED (status)) {
 		g_warning ("git-rev-list didn't exit cleanly");
-		g_free (out);
+		g_free (*out);
 		return NULL;
 	}
 
 	if (WEXITSTATUS (status)) {
 		g_warning ("git-rev-list didn't return 0 but %d",
 			   WEXITSTATUS (status));
-		g_free (out);
+		g_free (*out);
 		return NULL;
 	}
 
 	g_return_val_if_fail (out, NULL); /* for the warning, to see if it's possible */
 
-	return out;
+	return *out;
 }
 
