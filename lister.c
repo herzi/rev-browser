@@ -42,17 +42,10 @@ main (int   argc,
       char**argv)
 {
 	GHashTable* revs;
-	gchar     * out    = NULL;
 	gchar     **lines  = NULL;
 	gchar     **iter;
 
-	out = revision_list_get ();
-	if (!out) {
-		return 1;
-	}
-
-	lines = g_strsplit (out, "\n", -1);
-	g_free (out);
+	lines = revision_list_get_lines ();
 	revs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 	for (iter = lines; iter && *iter; iter++) {
 		if (G_LIKELY (**iter)) {
