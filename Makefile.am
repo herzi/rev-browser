@@ -27,7 +27,7 @@ librevision_la_CPPFLAGS=$(GLIB_CFLAGS)
 librevision_la_LIBADD=$(GLIB_LIBS)
 
 rev_lister_SOURCES=\
-	rev-lister.c
+	lister.c \
 	$(NULL)
 rev_lister_CPPFLAGS=$(librevision_la_CPPFLAGS)
 rev_lister_LDADD=$(librevision_la_LIBADD) librevision.la
