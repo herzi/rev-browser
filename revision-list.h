@@ -28,7 +28,8 @@
 
 G_BEGIN_DECLS
 
-gchar* revision_list_get (void);
+gchar*  revision_list_get       (void);
+gchar** revision_list_get_lines (void);
 
 G_END_DECLS
 

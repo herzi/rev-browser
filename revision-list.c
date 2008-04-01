@@ -69,3 +69,20 @@ revision_list_get (void)
 	return out;
 }
 
+gchar**
+revision_list_get_lines (void)
+{
+	gchar* out   = NULL;
+	gchar**lines = NULL;
+
+	out = revision_list_get ();
+	if (!out) {
+		return 1;
+	}
+
+	lines = g_strsplit (out, "\n", -1);
+	g_free (out);
+
+	return lines;
+}
+
