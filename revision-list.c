@@ -23,6 +23,9 @@
 
 #include "revision-list.h"
 
+#include <sys/types.h>
+#include <sys/wait.h>
+
 gboolean
 revision_list_get (gchar **out)
 {
@@ -47,8 +50,15 @@ revision_list_get (gchar **out)
 		return FALSE;
 	};
 
-	if (status != 0) {
-		g_warning ("git-rev-list didn't return 0");
+	if (!WIFEXITED (status)) {
+		g_warning ("git-rev-list didn't exit cleanly");
+		g_free (out);
+		return FALSE;
+	}
+
+	if (WEXITSTATUS (status)) {
+		g_warning ("git-rev-list didn't return 0 but %d",
+			   WEXITSTATUS (status));
 		g_free (out);
 		return FALSE;
 	}
