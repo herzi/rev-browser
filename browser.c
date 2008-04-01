@@ -51,6 +51,7 @@ main (int   argc,
 {
 	Repository  * repository;
 	GtkListStore* store;
+	GtkTreeModel* model;
 	GtkTreeIter   iter;
 	GtkWidget   * window;
 	GtkWidget   * time_bar;
@@ -78,13 +79,19 @@ main (int   argc,
 
 	g_hash_table_destroy (repository);
 
+	model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
+					      COLUMN_LABEL,
+					      GTK_SORT_ASCENDING);
+	g_object_unref (store);
+
 	time_bar_set_model        (TIME_BAR (time_bar),
-			           GTK_TREE_MODEL (store));
+			           model);
 	time_bar_set_label_column (TIME_BAR (time_bar),
 				   COLUMN_LABEL);
 	time_bar_set_value_column (TIME_BAR (time_bar),
 				   COLUMN_COUNT);
-	g_object_unref (store);
+	g_object_unref (model);
 
 	gtk_widget_show (window);
 
