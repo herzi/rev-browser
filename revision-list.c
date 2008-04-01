@@ -24,11 +24,11 @@
 #include "revision-list.h"
 
 gboolean
-revision_list_get (gchar **out,
-		   gint  * status)
+revision_list_get (gchar **out)
 {
 	gboolean  result = TRUE;
-	GError  * error = NULL;
+	GError  * error  = NULL;
+	gint      status = 0;
 
 	g_return_val_if_fail (!out || !*out, FALSE);
 
@@ -36,7 +36,7 @@ revision_list_get (gchar **out,
 	result = g_spawn_command_line_sync ("git-rev-list --all --pretty=format:%ai",
 					    out,
 					    NULL,
-					    status,
+					    &status,
 					    &error);
 
 	if (!result || error) {
@@ -46,6 +46,12 @@ revision_list_get (gchar **out,
 		g_free (out);
 		return FALSE;
 	};
+
+	if (status != 0) {
+		g_warning ("git-rev-list didn't return 0");
+		g_free (out);
+		return FALSE;
+	}
 
 	return result;
 }

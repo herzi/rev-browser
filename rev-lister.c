@@ -21,7 +21,7 @@
  * USA
  */
 
-#include <glib.h>
+#include "revision-list.h"
 
 #define _XOPEN_SOURCE
 #include <time.h>
@@ -42,18 +42,11 @@ main (int   argc,
       char**argv)
 {
 	gchar * out    = NULL;
-	gint    status = 0;
 	gchar **lines  = NULL;
 	gchar **iter;
 
-	if (!revision_list_get (&out, &status)) {
+	if (!revision_list_get (&out)) {
 		return 1;
-	}
-
-	if (status != 0) {
-		g_warning ("git-rev-list didn't return 0");
-		g_free (out);
-		return 2;
 	}
 
 	GHashTable* revs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
