@@ -32,6 +32,19 @@ enum {
 	N_COLUMNS
 };
 
+static void
+append_to_tree (gconstpointer  label,
+		gconstpointer  value,
+		GtkListStore * store)
+{
+	GtkTreeIter  iter;
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set    (store, &iter,
+			       COLUMN_LABEL, label,
+			       COLUMN_COUNT, GPOINTER_TO_INT (value),
+			       -1);
+}
+
 int
 main (int   argc,
       char**argv)
@@ -58,31 +71,10 @@ main (int   argc,
 	store = gtk_list_store_new (N_COLUMNS,
 				    G_TYPE_STRING,
 				    G_TYPE_INT);
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set    (store, &iter,
-			       COLUMN_LABEL, "2007-07-23",
-			       COLUMN_COUNT, 8,
-			       -1);
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set    (store, &iter,
-			       COLUMN_LABEL, "2007-07-29",
-			       COLUMN_COUNT, 1,
-			       -1);
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set    (store, &iter,
-			       COLUMN_LABEL, "2007-08-19",
-			       COLUMN_COUNT, 1,
-			       -1);
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set    (store, &iter,
-			       COLUMN_LABEL, "2007-11-29",
-			       COLUMN_COUNT, 4,
-			       -1);
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set    (store, &iter,
-			       COLUMN_LABEL, "2008-03-06",
-			       COLUMN_COUNT, 59,
-			       -1);
+
+	g_hash_table_foreach (repository,
+			      (GHFunc)append_to_tree,
+			      store);
 
 	g_hash_table_destroy (repository);
 
