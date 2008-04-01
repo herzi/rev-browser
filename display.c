@@ -30,7 +30,7 @@
 #include "time-period.h"
 #include "time-selector.h"
 
-#define DEFAULT_SIZE     40 /* the default size and minimum of an element */
+#define DEFAULT_SIZE     70 /* the default size and minimum of an element */
 #define VERTICAL_PADDING 6
 #define TEXT_OFFSET      5
 
