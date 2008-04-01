@@ -41,18 +41,19 @@ int
 main (int   argc,
       char**argv)
 {
-	gchar * out    = NULL;
-	gchar **lines  = NULL;
-	gchar **iter;
+	GHashTable* revs;
+	gchar     * out    = NULL;
+	gchar     **lines  = NULL;
+	gchar     **iter;
 
 	out = revision_list_get ();
 	if (!out) {
 		return 1;
 	}
 
-	GHashTable* revs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 	lines = g_strsplit (out, "\n", -1);
 	g_free (out);
+	revs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 	for (iter = lines; iter && *iter; iter++) {
 		if (G_LIKELY (**iter)) {
 			if (!g_str_has_prefix (*iter, "commit ")) {
