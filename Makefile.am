@@ -20,6 +20,8 @@ check_PROGRAMS=\
 TESTS=$(check_PROGRAMS)
 
 librevision_la_SOURCES=\
+	repository.c \
+	repository.h \
 	revision-list.c \
 	revision-list.h \
 	$(NULL)
