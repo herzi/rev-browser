@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -22,4 +22,15 @@
  */
 
 #include "revision-list.h"
+
+gboolean
+revision_list_get (gchar **out,
+		   gint  * status,
+		   GError**error)
+{
+	g_return_val_if_fail (!out || !*out, FALSE);
+	g_return_val_if_fail (!error || !*error, FALSE);
+
+	return g_spawn_command_line_sync ("git-rev-list --all --pretty=format:%ai", out, NULL, status, error);
+}
 

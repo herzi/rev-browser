@@ -47,7 +47,7 @@ main (int   argc,
 	gchar **lines  = NULL;
 	gchar **iter;
 
-	g_spawn_command_line_sync ("git-rev-list --all --pretty=format:%ai", &out, NULL, &status, &error);
+	revision_list_get (&out, &status, &error);
 
 	if (error) {
 		g_warning ("Error executing 'git-rev-list': %s",

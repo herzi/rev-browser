@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -24,5 +24,14 @@
 #ifndef REVISION_LIST_H
 #define REVISION_LIST_H
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
+gboolean revision_list_get (gchar **out,
+			    gint  * status,
+			    GError**error);
+
+G_END_DECLS
 
 #endif /* !REVISION_LIST_H */
