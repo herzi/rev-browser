@@ -25,12 +25,28 @@
 
 gboolean
 revision_list_get (gchar **out,
-		   gint  * status,
-		   GError**error)
+		   gint  * status)
 {
-	g_return_val_if_fail (!out || !*out, FALSE);
-	g_return_val_if_fail (!error || !*error, FALSE);
+	gboolean  result = TRUE;
+	GError  * error = NULL;
 
-	return g_spawn_command_line_sync ("git-rev-list --all --pretty=format:%ai", out, NULL, status, error);
+	g_return_val_if_fail (!out || !*out, FALSE);
+
+	/* FIXME: parse the stdout for debugging, too */
+	result = g_spawn_command_line_sync ("git-rev-list --all --pretty=format:%ai",
+					    out,
+					    NULL,
+					    status,
+					    &error);
+
+	if (!result || error) {
+		g_warning ("Error executing 'git-rev-list': %s",
+			   error ? error->message : "no error message found");
+		g_clear_error (&error);
+		g_free (out);
+		return FALSE;
+	};
+
+	return result;
 }
 

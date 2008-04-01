@@ -41,21 +41,14 @@ int
 main (int   argc,
       char**argv)
 {
-	GError* error  = NULL;
 	gchar * out    = NULL;
 	gint    status = 0;
 	gchar **lines  = NULL;
 	gchar **iter;
 
-	revision_list_get (&out, &status, &error);
-
-	if (error) {
-		g_warning ("Error executing 'git-rev-list': %s",
-			   error->message);
-		g_error_free (error);
-		g_free (out);
+	if (!revision_list_get (&out, &status)) {
 		return 1;
-	};
+	}
 
 	if (status != 0) {
 		g_warning ("git-rev-list didn't return 0");

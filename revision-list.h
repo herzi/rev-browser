@@ -29,8 +29,7 @@
 G_BEGIN_DECLS
 
 gboolean revision_list_get (gchar **out,
-			    gint  * status,
-			    GError**error);
+			    gint  * status);
 
 G_END_DECLS
 
