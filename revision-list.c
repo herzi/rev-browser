@@ -26,7 +26,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-gchar*
+static gchar*
 revision_list_get (void)
 {
 	gboolean  result = TRUE;
