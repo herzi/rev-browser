@@ -55,6 +55,9 @@ struct _DisplayPrivate {
 	gint         maximum;     /* maxmimum value in the model */
 	gint         offset;
 	TimePeriod   zoom;
+
+	/* input only window */
+	GdkWindow  * event_window;
 };
 
 enum {
@@ -382,6 +385,12 @@ display_size_allocate (GtkWidget    * widget,
 
 	allocate_selector (self);
 
+	if (GTK_WIDGET_REALIZED (widget)) {
+		gdk_window_move_resize (self->_private->event_window,
+					allocation->x, allocation->y,
+					allocation->width, allocation->height);
+	}
+
 	notify_changes (self);
 }
 
@@ -398,6 +407,87 @@ display_size_request (GtkWidget     * widget,
 }
 
 static void
+display_realize (GtkWidget *widget)
+{
+	Display* self = DISPLAY (widget);
+	GdkWindowAttr attributes;
+	gint attributes_mask;
+
+	GTK_WIDGET_CLASS (display_parent_class)->realize (widget);
+
+	attributes.window_type = GDK_WINDOW_CHILD;
+	attributes.x = widget->allocation.x;
+	attributes.y = widget->allocation.y;
+	attributes.width = widget->allocation.width;
+	attributes.height = widget->allocation.height;
+	attributes.wclass = GDK_INPUT_ONLY;
+	attributes.event_mask = gtk_widget_get_events (widget);
+	attributes.event_mask |= GDK_SCROLL_MASK;
+	attributes_mask = GDK_WA_X | GDK_WA_Y;
+
+	self->_private->event_window = gdk_window_new (widget->window, &attributes, attributes_mask);
+	gdk_window_set_user_data (self->_private->event_window, widget);
+}
+
+static void
+display_unrealize (GtkWidget *widget)
+{
+	Display* self = DISPLAY (widget);
+
+	gdk_window_set_user_data (self->_private->event_window, NULL);
+	g_object_unref (self->_private->event_window);
+	self->_private->event_window = NULL;
+
+	GTK_WIDGET_CLASS (display_parent_class)->unrealize (widget);
+}
+
+static void
+display_map (GtkWidget *widget)
+{
+	Display* self = DISPLAY (widget);
+
+	gdk_window_show (self->_private->event_window);
+	GTK_WIDGET_CLASS (display_parent_class)->map (widget);
+}
+
+static void
+display_unmap (GtkWidget *widget)
+{
+	Display* self = DISPLAY (widget);
+
+	gdk_window_hide (self->_private->event_window);
+	GTK_WIDGET_CLASS (display_parent_class)->map (widget);
+}
+
+static gboolean
+display_scroll_event (GtkWidget      *widget,
+		      GdkEventScroll *event)
+{
+	Display* self = DISPLAY (widget);
+
+	switch (event->direction) {
+	case GDK_SCROLL_DOWN:
+	case GDK_SCROLL_RIGHT:
+		if (display_can_step_right (self)) {
+			display_step_right (self);
+		}
+
+		break;
+	case GDK_SCROLL_UP:
+	case GDK_SCROLL_LEFT:
+		if (display_can_step_left (self)) {
+			display_step_left (self);
+		}
+
+		break;
+	default:
+		g_warning ("Unknown scroll");
+	}
+
+	return TRUE;
+}
+
+static void
 display_class_init (DisplayClass* self_class)
 {
 	GObjectClass  * object_class = G_OBJECT_CLASS (self_class);
@@ -411,6 +501,11 @@ display_class_init (DisplayClass* self_class)
 	widget_class->key_press_event = display_key_press_event;
 	widget_class->size_allocate   = display_size_allocate;
 	widget_class->size_request    = display_size_request;
+	widget_class->realize         = display_realize;
+	widget_class->unrealize       = display_unrealize;
+	widget_class->map             = display_map;
+	widget_class->unmap           = display_unmap;
+	widget_class->scroll_event    = display_scroll_event;
 
 	g_object_class_install_property (object_class, PROP_CAN_STEP_LEFT,
 					 g_param_spec_boolean ("can-step-left", NULL, NULL,
