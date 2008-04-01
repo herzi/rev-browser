@@ -28,7 +28,7 @@
 
 G_BEGIN_DECLS
 
-gboolean revision_list_get (gchar **out);
+gchar* revision_list_get (gchar **out);
 
 G_END_DECLS
 

@@ -26,14 +26,14 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-gboolean
+gchar*
 revision_list_get (gchar **out)
 {
 	gboolean  result = TRUE;
 	GError  * error  = NULL;
 	gint      status = 0;
 
-	g_return_val_if_fail (!out || !*out, FALSE);
+	g_return_val_if_fail (!out || !*out, NULL);
 
 	/* FIXME: parse the stdout for debugging, too */
 	result = g_spawn_command_line_sync ("git-rev-list --all --pretty=format:%ai",
@@ -47,22 +47,24 @@ revision_list_get (gchar **out)
 			   error ? error->message : "no error message found");
 		g_clear_error (&error);
 		g_free (out);
-		return FALSE;
+		return NULL;
 	};
 
 	if (!WIFEXITED (status)) {
 		g_warning ("git-rev-list didn't exit cleanly");
 		g_free (out);
-		return FALSE;
+		return NULL;
 	}
 
 	if (WEXITSTATUS (status)) {
 		g_warning ("git-rev-list didn't return 0 but %d",
 			   WEXITSTATUS (status));
 		g_free (out);
-		return FALSE;
+		return NULL;
 	}
 
-	return result;
+	g_return_val_if_fail (out, NULL); /* for the warning, to see if it's possible */
+
+	return out;
 }
 
