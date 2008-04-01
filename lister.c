@@ -22,7 +22,6 @@
  */
 
 #include "repository.h"
-#include "revision-list.h"
 
 #define _XOPEN_SOURCE
 #include <time.h>
@@ -43,25 +42,7 @@ main (int   argc,
       char**argv)
 {
 	Repository* repository;
-	gchar     **lines  = NULL;
-	gchar     **iter;
-
-	lines = revision_list_get_lines ();
 	repository = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-	for (iter = lines; iter && *iter; iter++) {
-		if (G_LIKELY (**iter)) {
-			if (!g_str_has_prefix (*iter, "commit ")) {
-				gchar** words = g_strsplit (*iter, " ", 2);
-				gsize count = GPOINTER_TO_SIZE (g_hash_table_lookup (repository, words[0]));
-				count++;
-				g_hash_table_insert (repository,
-						     g_strdup (words[0]),
-						     GSIZE_TO_POINTER (count));
-				g_strfreev (words);
-			}
-		}
-	}
-	g_strfreev (lines);
 	g_hash_table_foreach (repository, (GHFunc)print_revs, NULL);
 	g_hash_table_destroy (repository);
 

@@ -23,9 +23,31 @@
 
 #include "repository.h"
 
+#include "revision-list.h"
+
 Repository*
 repository_new (void)
 {
-	return g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+	GHashTable* self;
+	gchar     **lines  = NULL;
+	gchar     **iter;
+
+	lines = revision_list_get_lines ();
+	self = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+	for (iter = lines; iter && *iter; iter++) {
+		if (G_LIKELY (**iter)) {
+			if (!g_str_has_prefix (*iter, "commit ")) {
+				gchar** words = g_strsplit (*iter, " ", 2);
+				gsize count = GPOINTER_TO_SIZE (g_hash_table_lookup (self, words[0]));
+				count++;
+				g_hash_table_insert (self,
+						     g_strdup (words[0]),
+						     GSIZE_TO_POINTER (count));
+				g_strfreev (words);
+			}
+		}
+	}
+	g_strfreev (lines);
+	return self;
 }
 
