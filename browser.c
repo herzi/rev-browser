@@ -23,7 +23,7 @@
 
 #include <gtk/gtk.h>
 
-#include "display.h"
+#include "repository.h"
 #include "time-bar.h"
 
 enum {
@@ -36,6 +36,7 @@ int
 main (int   argc,
       char**argv)
 {
+	Repository  * repository;
 	GtkListStore* store;
 	GtkTreeIter   iter;
 	GtkWidget   * window;
@@ -51,6 +52,8 @@ main (int   argc,
 	gtk_widget_show (time_bar);
 	gtk_container_add (GTK_CONTAINER (window),
 			   time_bar);
+
+	repository = repository_new ();
 
 	store = gtk_list_store_new (N_COLUMNS,
 				    G_TYPE_STRING,
@@ -80,6 +83,8 @@ main (int   argc,
 			       COLUMN_LABEL, "2008-03-06",
 			       COLUMN_COUNT, 59,
 			       -1);
+
+	g_hash_table_destroy (repository);
 
 	time_bar_set_model        (TIME_BAR (time_bar),
 			           GTK_TREE_MODEL (store));
