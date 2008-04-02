@@ -19,6 +19,11 @@ check_PROGRAMS=\
 
 TESTS=$(check_PROGRAMS)
 
+## libgfc start
+gfc_src_dir=gfc
+include gfc/Makefile.inc
+## libgfc end
+
 librevision_la_SOURCES=\
 	repository.c \
 	repository.h \
