@@ -26,6 +26,21 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+static gboolean
+my_sync_spawn (gchar **out,
+	       gchar **err,
+	       gint  * status,
+	       GError**error)
+{
+	/* FIXME: parse the stdout for debugging, too */
+	return g_spawn_command_line_sync ("git-rev-list --all --pretty=format:%ai",
+					  out,
+					  err,
+					  status,
+					  error);
+
+}
+
 static gchar*
 revision_list_get (void)
 {
@@ -37,11 +52,10 @@ revision_list_get (void)
 
 	g_return_val_if_fail (!out || !*out, NULL);
 
-	result = g_spawn_command_line_sync ("git-rev-list --all --pretty=format:%ai",
-					    &out,
-					    &err,
-					    &status,
-					    &error);
+	result = my_sync_spawn (&out,
+				&err,
+				&status,
+				&error);
 
 	if (!result || error) {
 		g_warning ("Error executing 'git-rev-list': %s",
