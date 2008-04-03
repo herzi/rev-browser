@@ -43,7 +43,6 @@ Repository* repository_new     (void);
 void        repository_foreach (Repository* self,
 				GHFunc      func,
 				gpointer    user_data);
-void        repository_unref   (Repository* self);
 
 struct _Repository {
 	GObject            base_instance;

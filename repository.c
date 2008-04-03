@@ -98,9 +98,3 @@ repository_foreach (Repository* self,
 			      user_data);
 }
 
-void
-repository_unref (Repository* self)
-{
-	g_object_unref (self);
-}
-
