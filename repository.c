@@ -26,7 +26,7 @@
 #include "revision-list.h"
 
 struct _RepositoryPrivate {
-	GHashTable* num_commits_per_day;
+	GSequence* commits_per_day;
 };
 
 #define PRIV(i) REPOSITORY(i)->_private
@@ -53,18 +53,13 @@ commits_per_day_free (CommitsPerDay* self)
 	g_slice_free (CommitsPerDay, self);
 }
 
-static guint
-commits_per_day_hash (gconstpointer key)
+static gint
+commits_per_day_compare (gconstpointer v1,
+			 gconstpointer v2)
 {
-	return g_str_hash (((CommitsPerDay*)key)->day);
-}
-
-static gboolean
-commits_per_day_equal (gconstpointer v1,
-		       gconstpointer v2)
-{
-	return g_str_equal (((CommitsPerDay*)v1)->day,
-			    ((CommitsPerDay*)v2)->day);
+	gchar const* one = v1 ? ((CommitsPerDay*)v1)->day : "";
+	gchar const* two = v2 ? ((CommitsPerDay*)v2)->day : "";
+	return strcmp (one, two);
 }
 
 /* GType Implementation */
@@ -75,16 +70,13 @@ static void
 repository_init (Repository* self)
 {
 	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self, TYPE_REPOSITORY, RepositoryPrivate);
-	PRIV(self)->num_commits_per_day = g_hash_table_new_full (commits_per_day_hash,
-								 commits_per_day_equal,
-								 (GDestroyNotify)commits_per_day_free,
-								 NULL);
+	PRIV(self)->commits_per_day = g_sequence_new ((GDestroyNotify)commits_per_day_free);
 }
 
 static void
 repository_finalize (GObject* object)
 {
-	g_hash_table_unref (PRIV(object)->num_commits_per_day);
+	g_sequence_free (PRIV(object)->commits_per_day);
 
 	G_OBJECT_CLASS (repository_parent_class)->finalize (object);
 }
@@ -101,6 +93,47 @@ repository_class_init (RepositoryClass* self_class)
 
 /* Public API implementation */
 
+static void
+dump (gpointer data,
+      gpointer user_data G_GNUC_UNUSED)
+{
+	CommitsPerDay* cpd = data;
+	g_print ("  %s => %d\n",
+		 cpd->day,
+		 cpd->num_commits);
+}
+
+static gpointer
+my_g_sequence_find_data (GSequence       * sequence,
+			 gpointer          data,
+			 GCompareDataFunc  cmp_func,
+			 gpointer          cmp_data)
+{
+	GSequenceIter* front  = g_sequence_get_begin_iter (sequence);
+	GSequenceIter* back   = g_sequence_get_end_iter (sequence);
+
+	while (front != back) {
+		GSequenceIter* middle = g_sequence_range_get_midpoint (front, back);
+
+		gint cmp = cmp_func (g_sequence_get (middle),
+				     data,
+				     cmp_data);
+
+		if (cmp < 0) {
+			if (middle == front)
+				return NULL; /* not found - has to be prepended */
+
+			front = middle;
+		} else if (cmp > 0) {
+			back = middle;
+		} else {
+			return g_sequence_get (middle);
+		}
+	}
+
+	return NULL;
+}
+
 Repository*
 repository_new (void)
 {
@@ -115,16 +148,19 @@ repository_new (void)
 			if (!g_str_has_prefix (*iter, "commit ")) {
 				gchar** words = g_strsplit (*iter, " ", 2);
 				CommitsPerDay* cpd = commits_per_day_new (words[0]);
-				CommitsPerDay* match = g_hash_table_lookup (PRIV(self)->num_commits_per_day,
-									    cpd);
+				CommitsPerDay* match = my_g_sequence_find_data (PRIV(self)->commits_per_day,
+										cpd,
+										(GCompareDataFunc)commits_per_day_compare,
+										NULL);
 
 				if (match) {
 					match->num_commits += cpd->num_commits;
 					commits_per_day_free (cpd);
 				} else {
-					g_hash_table_insert (PRIV(self)->num_commits_per_day,
-							     cpd,
-							     cpd);
+					g_sequence_insert_sorted (PRIV(self)->commits_per_day,
+								  cpd,
+								  (GCompareDataFunc)commits_per_day_compare,
+								  NULL);
 				}
 
 				g_strfreev (words);
@@ -141,11 +177,11 @@ struct GHFuncAndUserData {
 };
 
 static void
-translate_from_cpd_to_expected (gconstpointer key,
-				gconstpointer value,
-				struct GHFuncAndUserData* data)
+translate_from_cpd_to_expected (gpointer key,
+				gpointer user_data)
 {
 	CommitsPerDay const* cpd = key;
+	struct GHFuncAndUserData* data = user_data;
 	data->func (cpd->day, GINT_TO_POINTER (cpd->num_commits), data->user_data);
 }
 
@@ -155,8 +191,8 @@ repository_foreach (Repository* self,
 		    gpointer    user_data)
 {
 	struct GHFuncAndUserData data = {func, user_data};
-	g_hash_table_foreach (PRIV(self)->num_commits_per_day,
-			      (GHFunc)translate_from_cpd_to_expected,
-			      &data);
+	g_sequence_foreach (PRIV(self)->commits_per_day,
+			    translate_from_cpd_to_expected,
+			    &data);
 }
 
