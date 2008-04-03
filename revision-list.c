@@ -46,11 +46,10 @@ revision_list_get_lines (void)
 	gchar   * err    = NULL;
 	gint      status = 0;
 
-	gchar const* command = "git-rev-list --all --pretty=format:%ai";
 	GMainLoop* loop = g_main_loop_new (NULL, FALSE);
 	GPtrArray* array = g_ptr_array_new ();
 	GfcJob* job = gfc_job_new (NULL,
-				   command);
+				   "git-rev-list --all --pretty=format:%ai");
 	g_signal_connect         (gfc_job_get_out_reader (job), "read-line",
 				  G_CALLBACK (read_line_cb), array);
 	g_signal_connect_swapped (job, "done",
