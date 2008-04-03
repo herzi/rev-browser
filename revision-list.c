@@ -44,11 +44,13 @@ my_sync_spawn (gchar **out,
 					  status,
 					  error);
 #else
+	GMainLoop* loop = g_main_loop_new (NULL, FALSE);
 	GfcJob* job = gfc_job_new (NULL,
 				   command);
 	gfc_job_kill (job);
 	g_object_unref (job);
 
+	g_main_loop_unref (loop);
 	*out = g_strdup ("");
 	return TRUE;
 #endif
