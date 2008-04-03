@@ -26,6 +26,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#include <gfc-job.h>
+
 static gboolean
 my_sync_spawn (gchar **out,
 	       gchar **err,
@@ -47,7 +49,8 @@ my_sync_spawn (gchar **out,
 	gfc_job_kill (job);
 	g_object_unref (job);
 
-	return FALSE;
+	*out = g_strdup ("");
+	return TRUE;
 #endif
 }
 
@@ -59,8 +62,6 @@ revision_list_get (void)
 	gchar   * out    = NULL;
 	gchar   * err    = NULL;
 	gint      status = 0;
-
-	g_return_val_if_fail (!out || !*out, NULL);
 
 	result = my_sync_spawn (&out,
 				&err,
@@ -104,7 +105,7 @@ revision_list_get (void)
 		return NULL;
 	}
 
-	g_return_val_if_fail (out && *out, NULL); /* for the warning, to see if it's possible */
+	g_return_val_if_fail (out, NULL); /* for the warning, to see if it's possible */
 
 	return out;
 }
