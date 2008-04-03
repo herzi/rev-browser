@@ -77,7 +77,7 @@ main (int   argc,
 			      (GHFunc)append_to_tree,
 			      store);
 
-	g_hash_table_destroy (repository);
+	repository_unref (repository);
 
 	model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),

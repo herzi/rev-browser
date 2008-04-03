@@ -30,7 +30,8 @@ G_BEGIN_DECLS
 
 typedef struct _GHashTable Repository;
 
-Repository* repository_new (void);
+Repository* repository_new   (void);
+void        repository_unref (Repository* self);
 
 G_END_DECLS
 

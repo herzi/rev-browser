@@ -47,7 +47,7 @@ main (int   argc,
 
 	repository = repository_new ();
 	g_hash_table_foreach (repository, (GHFunc)print_revs, NULL);
-	g_hash_table_destroy (repository);
+	repository_unref (repository);
 
 	return 0;
 }

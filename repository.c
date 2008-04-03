@@ -51,3 +51,9 @@ repository_new (void)
 	return self;
 }
 
+void
+repository_unref (Repository* self)
+{
+	g_hash_table_unref (self);
+}
+
