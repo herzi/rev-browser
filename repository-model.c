@@ -45,10 +45,20 @@ repository_get_flags (GtkTreeModel* model)
 	return GTK_TREE_MODEL_LIST_ONLY;
 }
 
+static gint
+repository_iter_n_children (GtkTreeModel* model,
+			    GtkTreeIter * iter)
+{
+	g_return_val_if_fail (!iter, 0);
+
+	return 0;
+}
+
 void
 implement_gtk_tree_model (GtkTreeModelIface* iface)
 {
-	iface->get_flags = repository_get_flags;
+	iface->get_flags       = repository_get_flags;
+	iface->iter_n_children = repository_iter_n_children;
 }
 
 /* Public API Implementation */
