@@ -75,14 +75,14 @@ revision_list_get_lines (void)
 		g_warning ("Error executing 'git-rev-list': %s",
 			   error ? error->message : "no error message found");
 		g_clear_error (&error);
-		g_free (out);
+		g_strfreev (out);
 		g_free (err);
 		return NULL;
 	};
 
 	if (!WIFEXITED (status)) {
 		g_warning ("git-rev-list didn't exit cleanly");
-		g_free (out);
+		g_strfreev (out);
 		g_free (err);
 		return NULL;
 	}
@@ -90,7 +90,7 @@ revision_list_get_lines (void)
 	if (WEXITSTATUS (status)) {
 		g_warning ("git-rev-list didn't return 0 but %d",
 			   WEXITSTATUS (status));
-		g_free (out);
+		g_strfreev (out);
 		g_free (err);
 		return NULL;
 	}
@@ -103,7 +103,7 @@ revision_list_get_lines (void)
 	if (err) {
 		g_warning ("git-rev-lister wrote an error:\n%s",
 			   err);
-		g_free (out);
+		g_strfreev (out);
 		g_free (err);
 		return NULL;
 	}
