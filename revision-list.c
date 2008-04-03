@@ -28,6 +28,16 @@
 
 #include <gfc-job.h>
 
+static void
+read_line_cb (GfcReader  * reader,
+	      gchar const* line,
+	      GString    * string)
+{
+	g_string_append_printf (string,
+				"%s\n",
+				line);
+}
+
 static gboolean
 my_sync_spawn (gchar **out,
 	       gchar **err,
@@ -45,15 +55,19 @@ my_sync_spawn (gchar **out,
 					  error);
 #else
 	GMainLoop* loop = g_main_loop_new (NULL, FALSE);
+	GString  * string  = g_string_new ("");
 	GfcJob* job = gfc_job_new (NULL,
 				   command);
+	g_signal_connect         (gfc_job_get_out_reader (job), "read-line",
+				  G_CALLBACK (read_line_cb), string);
 	g_signal_connect_swapped (job, "done",
 				  G_CALLBACK (g_main_loop_quit), loop);
 	g_main_loop_run (loop);
 	g_object_unref (job);
 
 	g_main_loop_unref (loop);
-	*out = g_strdup ("");
+	*out = string->str;
+	g_string_free (string, FALSE);
 	return TRUE;
 #endif
 }
