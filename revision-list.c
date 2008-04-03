@@ -43,22 +43,6 @@ my_sync_spawn (gchar***out,
 	       gint  * status,
 	       GError**error)
 {
-	gchar const* command = "git-rev-list --all --pretty=format:%ai";
-	GMainLoop* loop = g_main_loop_new (NULL, FALSE);
-	GPtrArray* array = g_ptr_array_new ();
-	GfcJob* job = gfc_job_new (NULL,
-				   command);
-	g_signal_connect         (gfc_job_get_out_reader (job), "read-line",
-				  G_CALLBACK (read_line_cb), array);
-	g_signal_connect_swapped (job, "done",
-				  G_CALLBACK (g_main_loop_quit), loop);
-	g_main_loop_run (loop);
-	g_object_unref (job);
-
-	g_main_loop_unref (loop);
-	*out = (gchar**)array->pdata;
-	g_ptr_array_free (array, FALSE);
-	return TRUE;
 }
 
 gchar**
@@ -70,10 +54,22 @@ revision_list_get_lines (void)
 	gchar   * err    = NULL;
 	gint      status = 0;
 
-	result = my_sync_spawn (&out,
-				&err,
-				&status,
-				&error);
+	gchar const* command = "git-rev-list --all --pretty=format:%ai";
+	GMainLoop* loop = g_main_loop_new (NULL, FALSE);
+	GPtrArray* array = g_ptr_array_new ();
+	GfcJob* job = gfc_job_new (NULL,
+				   command);
+	g_signal_connect         (gfc_job_get_out_reader (job), "read-line",
+				  G_CALLBACK (read_line_cb), array);
+	g_signal_connect_swapped (job, "done",
+				  G_CALLBACK (g_main_loop_quit), loop);
+	g_main_loop_run (loop);
+	g_main_loop_unref (loop);
+	result = gfc_job_get_return_code (job) == 0;
+	g_object_unref (job);
+
+	out = (gchar**)array->pdata;
+	g_ptr_array_free (array, FALSE);
 
 	if (!result || error) {
 		g_warning ("Error executing 'git-rev-list': %s",
