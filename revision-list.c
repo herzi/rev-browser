@@ -45,15 +45,6 @@ my_sync_spawn (gchar **out,
 	       GError**error)
 {
 	gchar const* command = "git-rev-list --all --pretty=format:%ai";
-#undef NEW
-#ifndef NEW
-	/* FIXME: parse the stdout for debugging, too */
-	return g_spawn_command_line_sync (command,
-					  out,
-					  err,
-					  status,
-					  error);
-#else
 	GMainLoop* loop = g_main_loop_new (NULL, FALSE);
 	GString  * string  = g_string_new ("");
 	GfcJob* job = gfc_job_new (NULL,
@@ -69,7 +60,6 @@ my_sync_spawn (gchar **out,
 	*out = string->str;
 	g_string_free (string, FALSE);
 	return TRUE;
-#endif
 }
 
 static gchar*
