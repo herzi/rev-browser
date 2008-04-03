@@ -31,43 +31,42 @@
 static void
 read_line_cb (GfcReader  * reader,
 	      gchar const* line,
-	      GString    * string)
+	      GPtrArray  * array)
 {
-	g_string_append_printf (string,
-				"%s\n",
-				line);
+	g_ptr_array_add (array,
+			 g_strdup (line));
 }
 
 static gboolean
-my_sync_spawn (gchar **out,
+my_sync_spawn (gchar***out,
 	       gchar **err,
 	       gint  * status,
 	       GError**error)
 {
 	gchar const* command = "git-rev-list --all --pretty=format:%ai";
 	GMainLoop* loop = g_main_loop_new (NULL, FALSE);
-	GString  * string  = g_string_new ("");
+	GPtrArray* array = g_ptr_array_new ();
 	GfcJob* job = gfc_job_new (NULL,
 				   command);
 	g_signal_connect         (gfc_job_get_out_reader (job), "read-line",
-				  G_CALLBACK (read_line_cb), string);
+				  G_CALLBACK (read_line_cb), array);
 	g_signal_connect_swapped (job, "done",
 				  G_CALLBACK (g_main_loop_quit), loop);
 	g_main_loop_run (loop);
 	g_object_unref (job);
 
 	g_main_loop_unref (loop);
-	*out = string->str;
-	g_string_free (string, FALSE);
+	*out = (gchar**)array->pdata;
+	g_ptr_array_free (array, FALSE);
 	return TRUE;
 }
 
-static gchar*
+static gchar**
 revision_list_get (void)
 {
 	gboolean  result = TRUE;
 	GError  * error  = NULL;
-	gchar   * out    = NULL;
+	gchar   **out    = NULL;
 	gchar   * err    = NULL;
 	gint      status = 0;
 
@@ -121,17 +120,6 @@ revision_list_get (void)
 gchar**
 revision_list_get_lines (void)
 {
-	gchar* out   = NULL;
-	gchar**lines = NULL;
-
-	out = revision_list_get ();
-	if (!out) {
-		return NULL;
-	}
-
-	lines = g_strsplit (out, "\n", -1);
-	g_free (out);
-
-	return lines;
+	return revision_list_get ();
 }
 
