@@ -27,6 +27,11 @@ struct _RepositoryModelPrivate {
 	Repository* repository;
 };
 
+enum {
+	PROP_0,
+	PROP_REPOSITORY
+};
+
 #define PRIV(i) REPOSITORY_MODEL(i)->_private
 
 /* GType Implementation */
@@ -44,6 +49,13 @@ repository_model_init (RepositoryModel* self)
 static void
 repository_model_class_init (RepositoryModelClass* self_class)
 {
+	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
+
+	g_object_class_install_property (object_class, PROP_REPOSITORY,
+					 g_param_spec_object ("repository", NULL, NULL,
+							      TYPE_REPOSITORY,
+							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
 	g_type_class_add_private (self_class, sizeof (RepositoryModelPrivate));
 }
 
