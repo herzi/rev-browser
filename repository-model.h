@@ -41,7 +41,7 @@ typedef struct _RepositoryModelClass   RepositoryModelClass;
 #define REPOSITORY_MODEL_GET_CLASS(c) (G_TYPE_INSTANCE_GET_CLASS ((i), TYPE_REPOSITORY_MODEL, RepositoryModelClass))
 
 GType         repository_model_get_type (void);
-GtkTreeModel* repository_model_new      (void);
+GtkTreeModel* repository_model_new      (Repository* repository);
 
 struct _RepositoryModel {
 	GObject                 base_instance;

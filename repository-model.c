@@ -136,9 +136,12 @@ implement_gtk_tree_model (GtkTreeModelIface* iface)
 /* Public API Implementation */
 
 GtkTreeModel*
-repository_model_new (void)
+repository_model_new (Repository* repository)
 {
+	g_return_val_if_fail (IS_REPOSITORY (repository), NULL);
+
 	return g_object_new (TYPE_REPOSITORY_MODEL,
+			     "repository", repository,
 			     NULL);
 }
 
