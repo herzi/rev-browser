@@ -47,7 +47,9 @@ my_sync_spawn (gchar **out,
 	GMainLoop* loop = g_main_loop_new (NULL, FALSE);
 	GfcJob* job = gfc_job_new (NULL,
 				   command);
-	gfc_job_kill (job);
+	g_signal_connect_swapped (job, "done",
+				  G_CALLBACK (g_main_loop_quit), loop);
+	g_main_loop_run (loop);
 	g_object_unref (job);
 
 	g_main_loop_unref (loop);
