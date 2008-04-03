@@ -24,10 +24,11 @@
 #ifndef REVISION_LIST_H
 #define REVISION_LIST_H
 
-#include <glib.h>
+#include <gfc-job.h>
 
 G_BEGIN_DECLS
 
+GfcJob* revision_list_get_job   (void);
 gchar** revision_list_get_lines (void);
 
 G_END_DECLS

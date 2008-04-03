@@ -37,6 +37,12 @@ read_line_cb (GfcReader  * reader,
 			 g_strdup (line));
 }
 
+GfcJob*
+revision_list_get_job (void)
+{
+	return gfc_job_new (NULL, "git-rev-list --all --pretty=format:%ai");
+}
+
 gchar**
 revision_list_get_lines (void)
 {
@@ -48,8 +54,7 @@ revision_list_get_lines (void)
 
 	GMainLoop* loop = g_main_loop_new (NULL, FALSE);
 	GPtrArray* array = g_ptr_array_new ();
-	GfcJob* job = gfc_job_new (NULL,
-				   "git-rev-list --all --pretty=format:%ai");
+	GfcJob* job = revision_list_get_job ();
 	g_signal_connect         (gfc_job_get_out_reader (job), "read-line",
 				  G_CALLBACK (read_line_cb), array);
 	g_signal_connect_swapped (job, "done",
