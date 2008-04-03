@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -24,5 +24,33 @@
 #ifndef REPOSITORY_MODEL_H
 #define REPOSITORY_MODEL_H
 
+#include <gtk/gtk.h>
+
+G_BEGIN_DECLS
+
+typedef struct _RepositoryModel        RepositoryModel;
+typedef struct _RepositoryModelPrivate RepositoryModelPrivate;
+typedef struct _RepositoryModelClass   RepositoryModelClass;
+
+#define TYPE_REPOSITORY_MODEL         (repository_model_get_type ())
+#define REPOSITORY_MODEL(i)           (G_TYPE_CHECK_INSTANCE_CAST ((i), TYPE_REPOSITORY_MODEL, RepositoryModel))
+#define REPOSITORY_MODEL_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), TYPE_REPOSITORY_MODEL, RepositoryModelClass))
+#define IS_REPOSITORY_MODEL(i)        (G_TYPE_CHECK_INSTANCE_TYPE ((i), TYPE_REPOSITORY_MODEL))
+#define IS_REPOSITORY_MODEL_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_REPOSITORY_MODEL))
+#define REPOSITORY_MODEL_GET_CLASS(c) (G_TYPE_INSTANCE_GET_CLASS ((i), TYPE_REPOSITORY_MODEL, RepositoryModelClass))
+
+GType         repository_model_get_type (void);
+GtkTreeModel* repository_model_new      (void);
+
+struct _RepositoryModel {
+	GObject                 base_instance;
+	RepositoryModelPrivate* _private;
+};
+
+struct _RepositoryModelClass {
+	GObjectClass            base_class;
+};
+
+G_END_DECLS
 
 #endif /* !REPOSITORY_MODEL_H */

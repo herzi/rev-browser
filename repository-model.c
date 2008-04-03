@@ -1,4 +1,4 @@
-/* This file is part of ...
+/* This file is part of rev-browser
  *
  * AUTHORS
  *     Sven Herzberg  <sven@imendio.com>
@@ -22,4 +22,25 @@
  */
 
 #include "repository-model.h"
+
+/* GType Implementation */
+
+G_DEFINE_TYPE (RepositoryModel, repository_model, G_TYPE_OBJECT);
+
+static void
+repository_model_init (RepositoryModel* self)
+{}
+
+static void
+repository_model_class_init (RepositoryModelClass* self_class)
+{}
+
+/* Public API Implementation */
+
+GtkTreeModel*
+repository_model_new (void)
+{
+	return g_object_new (TYPE_REPOSITORY_MODEL,
+			     NULL);
+}
 
