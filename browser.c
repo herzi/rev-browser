@@ -73,9 +73,9 @@ main (int   argc,
 				    G_TYPE_STRING,
 				    G_TYPE_INT);
 
-	g_hash_table_foreach (repository,
-			      (GHFunc)append_to_tree,
-			      store);
+	repository_foreach (repository,
+			    (GHFunc)append_to_tree,
+			    store);
 
 	repository_unref (repository);
 

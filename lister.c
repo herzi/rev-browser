@@ -46,7 +46,7 @@ main (int   argc,
 	g_type_init ();
 
 	repository = repository_new ();
-	g_hash_table_foreach (repository, (GHFunc)print_revs, NULL);
+	repository_foreach (repository, (GHFunc)print_revs, NULL);
 	repository_unref (repository);
 
 	return 0;

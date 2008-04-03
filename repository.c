@@ -52,6 +52,16 @@ repository_new (void)
 }
 
 void
+repository_foreach (Repository* self,
+		    GHFunc    * func,
+		    gpointer    user_data)
+{
+	g_hash_table_foreach (self,
+			      func,
+			      user_data);
+}
+
+void
 repository_unref (Repository* self)
 {
 	g_hash_table_unref (self);
