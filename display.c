@@ -204,7 +204,8 @@ display_expose_event (GtkWidget     * widget,
 	for (i = 0; i < self->_private->elements_visible; i++) {
 		GtkTreeIter  iter;
 
-		if (!gtk_tree_model_iter_nth_child (self->_private->model,
+		if (!self->_private->model ||
+		    !gtk_tree_model_iter_nth_child (self->_private->model,
 						    &iter,
 						    NULL,
 						    i + self->_private->offset))
