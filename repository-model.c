@@ -47,6 +47,14 @@ repository_model_init (RepositoryModel* self)
 }
 
 static void
+repository_model_finalize (GObject* object)
+{
+	g_object_unref (PRIV(object)->repository);
+
+	G_OBJECT_CLASS (repository_model_parent_class)->finalize (object);
+}
+
+static void
 repository_get_property (GObject   * object,
 			 guint       prop_id,
 			 GValue    * value,
@@ -89,6 +97,7 @@ repository_model_class_init (RepositoryModelClass* self_class)
 {
 	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
 
+	object_class->finalize     = repository_model_finalize;
 	object_class->get_property = repository_get_property;
 	object_class->set_property = repository_set_property;
 
