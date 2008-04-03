@@ -30,8 +30,8 @@ librevision_la_SOURCES=\
 	revision-list.c \
 	revision-list.h \
 	$(NULL)
-librevision_la_CPPFLAGS=$(GLIB_CFLAGS)
-librevision_la_LIBADD=$(GLIB_LIBS)
+librevision_la_CPPFLAGS=$(GFC_CFLAGS) -I$(top_srcdir)/$(gfc_src_dir)
+librevision_la_LIBADD=$(GFC_LIBS) libgfc.la
 
 rev_lister_SOURCES=\
 	lister.c \
@@ -71,7 +71,7 @@ rev_browser_SOURCES=\
 	time-selector.h \
 	$(NULL)
 rev_browser_CPPFLAGS=$(libctk_la_CPPFLAGS)
-rev_browser_LDADD=$(libctk_la_LIBADD) libbinding.la libctk.la librevision.la
+rev_browser_LDADD=$(libctk_la_LIBADD) libgfc.la libbinding.la libctk.la librevision.la
 
 libtest_la_BUILT_SOURCES=\
 	test-marshallers.c \
