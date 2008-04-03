@@ -134,19 +134,13 @@ my_g_sequence_find_data (GSequence       * sequence,
 	return NULL;
 }
 
-Repository*
-repository_new (void)
+static void
+repository_parse_line (Repository * self,
+		       gchar const* line)
 {
-	Repository* self;
-	gchar     **lines  = NULL;
-	gchar     **iter;
-
-	lines = revision_list_get_lines ();
-	self = g_object_new (TYPE_REPOSITORY, NULL);
-	for (iter = lines; iter && *iter; iter++) {
-		if (G_LIKELY (**iter)) {
-			if (!g_str_has_prefix (*iter, "commit ")) {
-				gchar** words = g_strsplit (*iter, " ", 2);
+		if (G_LIKELY (*line)) {
+			if (!g_str_has_prefix (line, "commit ")) {
+				gchar** words = g_strsplit (line, " ", 2);
 				CommitsPerDay* cpd = commits_per_day_new (words[0]);
 				CommitsPerDay* match = my_g_sequence_find_data (PRIV(self)->commits_per_day,
 										cpd,
@@ -166,6 +160,19 @@ repository_new (void)
 				g_strfreev (words);
 			}
 		}
+}
+
+Repository*
+repository_new (void)
+{
+	Repository* self;
+	gchar     **lines  = NULL;
+	gchar     **iter;
+
+	lines = revision_list_get_lines ();
+	self = g_object_new (TYPE_REPOSITORY, NULL);
+	for (iter = lines; iter && *iter; iter++) {
+		repository_parse_line (self, *iter);
 	}
 	g_strfreev (lines);
 	return self;
