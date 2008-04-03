@@ -68,6 +68,8 @@ rev_browser_SOURCES=\
 	display.h \
 	highlight-widget.c \
 	highlight-widget.h \
+	repository-model.c \
+	repository-model.h \
 	time-bar.c \
 	time-bar.h \
 	time-period.c \
@@ -107,9 +109,12 @@ dist_marshallers=\
 EXTRA_DIST=\
 	$(dist_marshallers) \
 	$(NULL)
-CLEANFILES=\
+BUILT_SOURCES=\
 	$(libtest_la_BUILT_SOURCES) \
 	$(librevision_la_BUILT_SOURCES) \
+	$(NULL)
+CLEANFILES=\
+	$(BUILT_SOURCES) \
 	$(NULL)
 
 if HAVE_VALAC
