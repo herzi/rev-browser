@@ -204,15 +204,6 @@ display_expose_event (GtkWidget     * widget,
 	for (i = 0; i < self->_private->elements_visible; i++) {
 		GtkTreeIter  iter;
 
-		if (!self->_private->model ||
-		    !gtk_tree_model_iter_nth_child (self->_private->model,
-						    &iter,
-						    NULL,
-						    i + self->_private->offset))
-		{
-			break;
-		}
-
 		if (G_LIKELY (i)) {
 			gdk_cairo_draw_line (cr,
 					     widget->style->black_gc,
@@ -220,6 +211,15 @@ display_expose_event (GtkWidget     * widget,
 					     widget->allocation.y + VERTICAL_PADDING + 1,
 					     widget->allocation.x + i * (self->_private->element_size + 1),
 					     widget->allocation.y + VERTICAL_PADDING + 7);
+		}
+
+		if (!self->_private->model ||
+		    !gtk_tree_model_iter_nth_child (self->_private->model,
+						    &iter,
+						    NULL,
+						    i + self->_private->offset))
+		{
+			continue;
 		}
 
 		if (self->_private->column_label >= 0) {
