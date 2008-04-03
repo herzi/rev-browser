@@ -61,8 +61,8 @@ my_sync_spawn (gchar***out,
 	return TRUE;
 }
 
-static gchar**
-revision_list_get (void)
+gchar**
+revision_list_get_lines (void)
 {
 	gboolean  result = TRUE;
 	GError  * error  = NULL;
@@ -115,11 +115,5 @@ revision_list_get (void)
 	g_return_val_if_fail (out, NULL); /* for the warning, to see if it's possible */
 
 	return out;
-}
-
-gchar**
-revision_list_get_lines (void)
-{
-	return revision_list_get ();
 }
 
