@@ -33,12 +33,22 @@ my_sync_spawn (gchar **out,
 	       GError**error)
 {
 	gchar const* command = "git-rev-list --all --pretty=format:%ai";
+#undef NEW
+#ifndef NEW
 	/* FIXME: parse the stdout for debugging, too */
 	return g_spawn_command_line_sync (command,
 					  out,
 					  err,
 					  status,
 					  error);
+#else
+	GfcJob* job = gfc_job_new (NULL,
+				   command);
+	gfc_job_kill (job);
+	g_object_unref (job);
+
+	return FALSE;
+#endif
 }
 
 static gchar*
