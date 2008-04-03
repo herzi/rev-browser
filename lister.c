@@ -42,7 +42,7 @@ main (int   argc,
       char**argv)
 {
 	Repository* repository;
-	repository = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+	repository = repository_new ();
 	g_hash_table_foreach (repository, (GHFunc)print_revs, NULL);
 	g_hash_table_destroy (repository);
 
