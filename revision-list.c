@@ -37,14 +37,6 @@ read_line_cb (GfcReader  * reader,
 			 g_strdup (line));
 }
 
-static gboolean
-my_sync_spawn (gchar***out,
-	       gchar **err,
-	       gint  * status,
-	       GError**error)
-{
-}
-
 gchar**
 revision_list_get_lines (void)
 {
@@ -68,6 +60,7 @@ revision_list_get_lines (void)
 	result = gfc_job_get_return_code (job) == 0;
 	g_object_unref (job);
 
+	g_ptr_array_add (array, NULL); /* terminate properly */
 	out = (gchar**)array->pdata;
 	g_ptr_array_free (array, FALSE);
 
