@@ -25,8 +25,9 @@
 
 /* GType Implementation */
 
+void implement_gtk_tree_model (GtkTreeModelIface* iface);
 G_DEFINE_TYPE_WITH_CODE (RepositoryModel, repository_model, G_TYPE_OBJECT,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, NULL));
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, implement_gtk_tree_model));
 
 static void
 repository_model_init (RepositoryModel* self)
@@ -35,6 +36,20 @@ repository_model_init (RepositoryModel* self)
 static void
 repository_model_class_init (RepositoryModelClass* self_class)
 {}
+
+/* GtkTreeModel Implementation */
+
+static GtkTreeModelFlags
+repository_get_flags (GtkTreeModel* model)
+{
+	return GTK_TREE_MODEL_LIST_ONLY;
+}
+
+void
+implement_gtk_tree_model (GtkTreeModelIface* iface)
+{
+	iface->get_flags = repository_get_flags;
+}
 
 /* Public API Implementation */
 
