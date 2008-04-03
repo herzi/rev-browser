@@ -312,6 +312,10 @@ display_key_press_event (GtkWidget  * widget,
 
 		switch (event->keyval) {
 		case GDK_Left:
+			if (!display_can_step_left (self)) {
+				break;
+			}
+
 			if ((event->state & GDK_SHIFT_MASK) == 0) {
 				if (self->_private->selected_start > 0) {
 					self->_private->selected_start--;
@@ -338,6 +342,10 @@ display_key_press_event (GtkWidget  * widget,
 			}
 			break;
 		case GDK_Right:
+			if (!display_can_step_right (self)) {
+				break;
+			}
+
 			if ((event->state & GDK_SHIFT_MASK) == 0) {
 				if (self->_private->selected_end < MIN (self->_private->elements_visible, display_get_range_size (self)) - 1) {
 					self->_private->selected_end++;
