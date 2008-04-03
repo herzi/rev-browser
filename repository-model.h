@@ -25,6 +25,7 @@
 #define REPOSITORY_MODEL_H
 
 #include <gtk/gtk.h>
+#include "repository.h"
 
 G_BEGIN_DECLS
 

@@ -23,6 +23,12 @@
 
 #include "repository-model.h"
 
+struct _RepositoryModelPrivate {
+	Repository* repository;
+};
+
+#define PRIV(i) REPOSITORY_MODEL(i)->_private
+
 /* GType Implementation */
 
 void implement_gtk_tree_model (GtkTreeModelIface* iface);
@@ -31,11 +37,15 @@ G_DEFINE_TYPE_WITH_CODE (RepositoryModel, repository_model, G_TYPE_OBJECT,
 
 static void
 repository_model_init (RepositoryModel* self)
-{}
+{
+	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self, TYPE_REPOSITORY_MODEL, RepositoryModelPrivate);
+}
 
 static void
 repository_model_class_init (RepositoryModelClass* self_class)
-{}
+{
+	g_type_class_add_private (self_class, sizeof (RepositoryModelPrivate));
+}
 
 /* GtkTreeModel Implementation */
 
