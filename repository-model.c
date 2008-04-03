@@ -47,9 +47,31 @@ repository_model_init (RepositoryModel* self)
 }
 
 static void
+repository_set_property (GObject     * object,
+			 guint         prop_id,
+			 GValue const* value,
+			 GParamSpec  * pspec)
+{
+	RepositoryModel* self = REPOSITORY_MODEL (object);
+
+	switch (prop_id) {
+	case PROP_REPOSITORY:
+		g_return_if_fail (!self->_private->repository);
+		self->_private->repository = g_value_dup_object (value);
+		g_object_notify (object, "repository");
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
 repository_model_class_init (RepositoryModelClass* self_class)
 {
 	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
+
+	object_class->set_property = repository_set_property;
 
 	g_object_class_install_property (object_class, PROP_REPOSITORY,
 					 g_param_spec_object ("repository", NULL, NULL,
