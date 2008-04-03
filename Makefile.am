@@ -24,11 +24,16 @@ gfc_src_dir=gfc
 include gfc/Makefile.inc
 ## libgfc end
 
+librevision_la_BUILT_SOURCES=\
+	marshallers.c \
+	marshallers.h \
+	$(NULL)
 librevision_la_SOURCES=\
 	repository.c \
 	repository.h \
 	revision-list.c \
 	revision-list.h \
+	$(librevision_la_BUILT_SOURCES) \
 	$(NULL)
 librevision_la_CPPFLAGS=$(GFC_CFLAGS) -I$(top_srcdir)/$(gfc_src_dir)
 librevision_la_LIBADD=$(GFC_LIBS) libgfc.la
@@ -95,6 +100,7 @@ test_sensitive_binding_CPPFLAGS=$(libbinding_la_CPPFLAGS)
 test_sensitive_binding_LDADD=$(libbinding_la_LIBADD) libbinding.la
 
 dist_marshallers=\
+	marshallers.list \
 	test-marshallers.list \
 	$(NULL)
 
@@ -103,6 +109,7 @@ EXTRA_DIST=\
 	$(NULL)
 CLEANFILES=\
 	$(libtest_la_BUILT_SOURCES) \
+	$(librevision_la_BUILT_SOURCES) \
 	$(NULL)
 
 if HAVE_VALAC
@@ -122,6 +129,17 @@ test_vala_binding_LDADD=$(GTK_LIBS)
 test-vala-binding.c: test-vala-binding.vala
 	$(VALAC) --vapidir=$(srcdir)/vapi/ --pkg gtk+-2.0 --pkg time-bar test-vala-binding.vala
 endif
+
+marshallers.h: $(srcdir)/marshallers.list Makefile
+	@( $(GLIB_GENMARSHAL) --header --prefix=repo_cclosure_marshal $< ) > xgen-$(notdir $@) \
+	&& (cmp -s xgen-$(notdir $@) $(notdir $@) || (echo "Creating $(notdir $@)..."; cp xgen-$(notdir $@) $(notdir $@)) ) \
+	&& rm -f xgen-$(notdir $@)
+
+marshallers.c: $(srcdir)/marshallers.list Makefile
+	@( echo "#include \"marshallers.h\""; \
+	$(GLIB_GENMARSHAL) --body --prefix=repo_cclosure_marshal $< ) > xgen-$(notdir $@) \
+	&& (cmp -s xgen-$(notdir $@) $(notdir $@) || (echo "Creating $(notdir $@)..."; cp xgen-$(notdir $@) $(notdir $@)) ) \
+	&& rm -f xgen-$(notdir $@)
 
 test-marshallers.h: $(srcdir)/test-marshallers.list Makefile
 	@( $(GLIB_GENMARSHAL) --header --prefix=test_cclosure_marshal $< ) > xgen-$(notdir $@) \
