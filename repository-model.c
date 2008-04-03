@@ -47,6 +47,16 @@ repository_model_init (RepositoryModel* self)
 }
 
 static void
+repository_model_constructed (GObject* object)
+{
+	g_assert (PRIV(object)->repository);
+
+	if (G_OBJECT_CLASS (repository_model_parent_class)->constructed) {
+		G_OBJECT_CLASS (repository_model_parent_class)->constructed (object);
+	}
+}
+
+static void
 repository_model_finalize (GObject* object)
 {
 	g_object_unref (PRIV(object)->repository);
@@ -97,6 +107,7 @@ repository_model_class_init (RepositoryModelClass* self_class)
 {
 	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
 
+	object_class->constructed  = repository_model_constructed;
 	object_class->finalize     = repository_model_finalize;
 	object_class->get_property = repository_get_property;
 	object_class->set_property = repository_set_property;
