@@ -23,11 +23,19 @@
 
 #include "repository.h"
 
+#include "marshallers.h"
 #include "revision-list.h"
 
 struct _RepositoryPrivate {
 	GSequence* commits_per_day;
 };
+
+enum {
+	NEW_DATE,
+	N_SIGNALS
+};
+
+static guint repository_signals[N_SIGNALS] = {0};
 
 #define PRIV(i) REPOSITORY(i)->_private
 
@@ -87,6 +95,14 @@ repository_class_init (RepositoryClass* self_class)
 	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
 
 	object_class->finalize = repository_finalize;
+
+	repository_signals[NEW_DATE] = g_signal_new ("new-date", TYPE_REPOSITORY,
+						     0, 0,
+						     NULL, NULL,
+						     repo_cclosure_marshal_VOID__INT_STRING,
+						     G_TYPE_NONE, 2,
+						     G_TYPE_INT,
+						     G_TYPE_STRING);
 
 	g_type_class_add_private (self_class, sizeof (RepositoryPrivate));
 }
@@ -151,10 +167,16 @@ repository_parse_line (Repository * self,
 					match->num_commits += cpd->num_commits;
 					commits_per_day_free (cpd);
 				} else {
-					g_sequence_insert_sorted (PRIV(self)->commits_per_day,
-								  cpd,
-								  (GCompareDataFunc)commits_per_day_compare,
-								  NULL);
+					GSequenceIter* iter;
+					iter = g_sequence_insert_sorted (PRIV(self)->commits_per_day,
+									 cpd,
+									 (GCompareDataFunc)commits_per_day_compare,
+									 NULL);
+					g_signal_emit (self,
+						       repository_signals[NEW_DATE],
+						       0,
+						       g_sequence_iter_get_position (iter),
+						       cpd->day);
 				}
 
 				g_strfreev (words);
