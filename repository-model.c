@@ -32,6 +32,12 @@ enum {
 	PROP_REPOSITORY
 };
 
+/* GtkTreeIter format:
+ * user_data: position
+ * user_data2: (unused)
+ * user_data3: (unused)
+ */
+
 #define PRIV(i) REPOSITORY_MODEL(i)->_private
 
 /* GType Implementation */
@@ -149,12 +155,28 @@ repository_iter_n_children (GtkTreeModel* model,
 	return repository_get_n_dates (PRIV(model)->repository);
 }
 
+static gboolean
+repository_model_iter_nth_child (GtkTreeModel* model,
+				 GtkTreeIter * iter,
+				 GtkTreeIter * parent,
+				 gint          index)
+{
+	g_return_val_if_fail (!parent, FALSE);
+	g_return_val_if_fail (index >= 0, FALSE);
+	g_return_val_if_fail (index < repository_get_n_dates (PRIV(model)->repository), FALSE);
+
+	iter->user_data = GINT_TO_POINTER (index);
+
+	return TRUE;
+}
+
 void
 implement_gtk_tree_model (GtkTreeModelIface* iface)
 {
 	iface->get_flags       = repository_get_flags;
 	iface->get_iter        = repository_model_get_iter;
 	iface->iter_n_children = repository_iter_n_children;
+	iface->iter_nth_child  = repository_model_iter_nth_child;
 }
 
 /* Public API Implementation */
