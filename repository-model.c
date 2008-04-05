@@ -128,6 +128,18 @@ repository_get_flags (GtkTreeModel* model)
 	return GTK_TREE_MODEL_LIST_ONLY;
 }
 
+static gboolean
+repository_model_get_iter (GtkTreeModel* model,
+			   GtkTreeIter * iter,
+			   GtkTreePath * path)
+{
+	g_return_val_if_fail (path, FALSE);
+	g_return_val_if_fail (gtk_tree_path_get_depth (path) == 1, FALSE);
+
+	return gtk_tree_model_iter_nth_child (model, iter, NULL,
+					      gtk_tree_path_get_indices(path)[0]);
+}
+
 static gint
 repository_iter_n_children (GtkTreeModel* model,
 			    GtkTreeIter * iter)
@@ -141,6 +153,7 @@ void
 implement_gtk_tree_model (GtkTreeModelIface* iface)
 {
 	iface->get_flags       = repository_get_flags;
+	iface->get_iter        = repository_model_get_iter;
 	iface->iter_n_children = repository_iter_n_children;
 }
 
