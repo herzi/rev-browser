@@ -134,7 +134,7 @@ repository_iter_n_children (GtkTreeModel* model,
 {
 	g_return_val_if_fail (!iter, 0);
 
-	return 0;
+	return repository_get_n_dates (PRIV(model)->repository);
 }
 
 void
