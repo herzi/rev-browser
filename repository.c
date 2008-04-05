@@ -225,3 +225,11 @@ repository_foreach (Repository* self,
 			    &data);
 }
 
+gint
+repository_get_n_dates (Repository const* self)
+{
+	g_return_val_if_fail (IS_REPOSITORY (self), 0);
+
+	return g_sequence_get_length (self->_private->commits_per_day);
+}
+
