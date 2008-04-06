@@ -169,7 +169,18 @@ repository_model_get_value (GtkTreeModel* model,
 	g_value_init (value,
 		      repository_model_columns[column]);
 
-	// FIXME: set the value properly
+	switch (column) {
+	case REPOSITORY_MODEL_COLUMN_DAY:
+		g_value_set_string (value,
+				    repository_get_date (PRIV(model)->repository,
+							 GPOINTER_TO_INT (iter->user_data)));
+		break;
+	default:
+		g_warning ("%s(): invlid column number %d",
+			   G_STRFUNC,
+			   column);
+		break;
+	}
 }
 
 static gint
