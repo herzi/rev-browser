@@ -125,6 +125,9 @@ repository_model_class_init (RepositoryModelClass* self_class)
 							      TYPE_REPOSITORY,
 							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
+	repository_model_columns[REPOSITORY_MODEL_COLUMN_DAY] = G_TYPE_STRING;
+	repository_model_columns[REPOSITORY_MODEL_COLUMN_COMMITS] = G_TYPE_INT;
+
 	g_type_class_add_private (self_class, sizeof (RepositoryModelPrivate));
 }
 
