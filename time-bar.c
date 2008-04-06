@@ -152,11 +152,30 @@ time_bar_finalize (GObject* object)
 }
 
 static void
+time_bar_set_property (GObject     * object,
+		       guint         prop_id,
+		       GValue const* value,
+		       GParamSpec  * pspec)
+{
+	TimeBar* self = TIME_BAR (object);
+
+	switch (prop_id) {
+	case PROP_MODEL:
+		time_bar_set_model (self, g_value_get_object (value));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
 time_bar_class_init (TimeBarClass* self_class)
 {
 	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
 
-	object_class->finalize = time_bar_finalize;
+	object_class->finalize     = time_bar_finalize;
+	object_class->set_property = time_bar_set_property;
 
 	g_object_class_install_property (object_class, PROP_MODEL,
 					 g_param_spec_object ("model", NULL, NULL,
