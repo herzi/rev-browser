@@ -224,7 +224,7 @@ repository_model_get_value (GtkTreeModel* model,
 			    GValue      * value)
 {
 	g_return_if_fail (column >= 0);
-	g_return_if_fail (column < gtk_tree_model_iter_n_children (model, NULL));
+	g_return_if_fail (column < REPOSITORY_MODEL_N_COLUMNS);
 
 	g_value_init (value,
 		      repository_model_columns[column]);
@@ -274,7 +274,10 @@ repository_model_iter_nth_child (GtkTreeModel* model,
 {
 	g_return_val_if_fail (!parent, FALSE);
 	g_return_val_if_fail (index >= 0, FALSE);
-	g_return_val_if_fail (index < repository_get_n_dates (PRIV(model)->repository), FALSE);
+
+	if (index >= repository_get_n_dates (PRIV(model)->repository)) {
+		return FALSE;
+	}
 
 	iter->user_data = GINT_TO_POINTER (index);
 
