@@ -225,6 +225,25 @@ repository_foreach (Repository* self,
 			    &data);
 }
 
+gchar const*
+repository_get_date (Repository const* self,
+		     guint             index)
+{
+	CommitsPerDay* result;
+	GSequenceIter* iter;
+
+	g_return_val_if_fail (IS_REPOSITORY (self), NULL);
+	g_return_val_if_fail (index < repository_get_n_dates (self), NULL);
+
+	iter = g_sequence_get_iter_at_pos (PRIV(self)->commits_per_day,
+					   index);
+	g_return_val_if_fail (iter, NULL);
+	result = g_sequence_get (iter);
+	g_return_val_if_fail (result, NULL);
+
+	return result->day;
+}
+
 gint
 repository_get_n_dates (Repository const* self)
 {
