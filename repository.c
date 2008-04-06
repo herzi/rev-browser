@@ -240,11 +240,21 @@ repository_get_commits_per_day (Repository const* self,
 	return g_sequence_get (iter);
 }
 
+gint
+repository_get_commits (Repository const* self,
+			guint             index)
+{
+	CommitsPerDay* result = repository_get_commits_per_day (self, index);
+	g_return_val_if_fail (result, 0);
+
+	return result->num_commits;
+}
+
 gchar const*
 repository_get_date (Repository const* self,
 		     guint             index)
 {
-	result = repository_get_commits_per_day (self, index);
+	CommitsPerDay* result = repository_get_commits_per_day (self, index);
 	g_return_val_if_fail (result, NULL);
 
 	return result->day;

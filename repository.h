@@ -43,6 +43,8 @@ Repository*  repository_new         (void);
 void         repository_foreach     (Repository* self,
 				     GHFunc      func,
 				     gpointer    user_data);
+gint         repository_get_commits (Repository const* self,
+				     guint             index);
 gchar const* repository_get_date    (Repository const* self,
 				     guint             index);
 gint         repository_get_n_dates (Repository const* self);
