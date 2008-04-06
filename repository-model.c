@@ -65,32 +65,6 @@ repository_model_constructed (GObject* object)
 }
 
 static void
-repository_model_finalize (GObject* object)
-{
-	g_object_unref (PRIV(object)->repository);
-
-	G_OBJECT_CLASS (repository_model_parent_class)->finalize (object);
-}
-
-static void
-repository_get_property (GObject   * object,
-			 guint       prop_id,
-			 GValue    * value,
-			 GParamSpec* pspec)
-{
-	RepositoryModel* self = REPOSITORY_MODEL (object);
-
-	switch (prop_id) {
-	case PROP_REPOSITORY:
-		g_value_set_object (value, self->_private->repository);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
-}
-
-static void
 repository_model_emit_row_inserted (Repository     * repository,
 				    gint             index,
 				    gchar const    * date,
@@ -113,6 +87,35 @@ repository_model_emit_row_inserted (Repository     * repository,
 	}
 
 	gtk_tree_path_free (path);
+}
+
+static void
+repository_model_finalize (GObject* object)
+{
+	g_signal_handlers_disconnect_by_func (PRIV(object)->repository,
+					      repository_model_emit_row_inserted,
+					      object);
+	g_object_unref (PRIV(object)->repository);
+
+	G_OBJECT_CLASS (repository_model_parent_class)->finalize (object);
+}
+
+static void
+repository_get_property (GObject   * object,
+			 guint       prop_id,
+			 GValue    * value,
+			 GParamSpec* pspec)
+{
+	RepositoryModel* self = REPOSITORY_MODEL (object);
+
+	switch (prop_id) {
+	case PROP_REPOSITORY:
+		g_value_set_object (value, self->_private->repository);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
 }
 
 static void
