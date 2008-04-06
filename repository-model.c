@@ -175,6 +175,11 @@ repository_model_get_value (GtkTreeModel* model,
 				    repository_get_date (PRIV(model)->repository,
 							 GPOINTER_TO_INT (iter->user_data)));
 		break;
+	case REPOSITORY_MODEL_COLUMN_COMMITS:
+		g_value_set_int (value,
+				 repository_get_commits (PRIV(model)->repository,
+							 GPOINTER_TO_INT (iter->user_data)));
+		break;
 	default:
 		g_warning ("%s(): invlid column number %d",
 			   G_STRFUNC,
