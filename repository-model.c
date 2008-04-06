@@ -40,6 +40,8 @@ enum {
 
 #define PRIV(i) REPOSITORY_MODEL(i)->_private
 
+static GType repository_model_columns[REPOSITORY_MODEL_N_COLUMNS] = {0};
+
 /* GType Implementation */
 
 void implement_gtk_tree_model (GtkTreeModelIface* iface);
@@ -152,6 +154,21 @@ repository_model_get_n_columns (GtkTreeModel* model)
 	return REPOSITORY_MODEL_N_COLUMNS;
 }
 
+static void
+repository_model_get_value (GtkTreeModel* model,
+			    GtkTreeIter * iter,
+			    gint          column,
+			    GValue      * value)
+{
+	g_return_if_fail (column >= 0);
+	g_return_if_fail (column < gtk_tree_model_iter_n_children (model, NULL));
+
+	g_value_init (value,
+		      repository_model_columns[column]);
+
+	// FIXME: set the value properly
+}
+
 static gint
 repository_iter_n_children (GtkTreeModel* model,
 			    GtkTreeIter * iter)
@@ -182,6 +199,7 @@ implement_gtk_tree_model (GtkTreeModelIface* iface)
 	iface->get_flags       = repository_get_flags;
 	iface->get_iter        = repository_model_get_iter;
 	iface->get_n_columns   = repository_model_get_n_columns;
+	iface->get_value       = repository_model_get_value;
 	iface->iter_n_children = repository_iter_n_children;
 	iface->iter_nth_child  = repository_model_iter_nth_child;
 }
