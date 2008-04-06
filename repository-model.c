@@ -91,17 +91,44 @@ repository_get_property (GObject   * object,
 }
 
 static void
-repository_set_property (GObject     * object,
-			 guint         prop_id,
-			 GValue const* value,
-			 GParamSpec  * pspec)
+repository_model_emit_row_inserted (Repository     * repository,
+				    gint             index,
+				    gchar const    * date,
+				    RepositoryModel* self)
+{
+	GtkTreePath* path = gtk_tree_path_new ();
+	GtkTreeIter  iter;
+	gtk_tree_path_append_index (path, index);
+
+	if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (self),
+				      &iter,
+				      path))
+	{
+		g_warning ("%s(): this is strange - now the model is probably broken",
+			   G_STRFUNC);
+	} else {
+		gtk_tree_model_row_inserted (GTK_TREE_MODEL (self),
+					     path,
+					     &iter);
+	}
+
+	gtk_tree_path_free (path);
+}
+
+static void
+repository_model_set_property (GObject     * object,
+			       guint         prop_id,
+			       GValue const* value,
+			       GParamSpec  * pspec)
 {
 	RepositoryModel* self = REPOSITORY_MODEL (object);
 
 	switch (prop_id) {
 	case PROP_REPOSITORY:
 		g_return_if_fail (!self->_private->repository);
-		self->_private->repository = g_value_dup_object (value);
+		PRIV(self)->repository = g_value_dup_object (value);
+		g_signal_connect (PRIV(self)->repository, "new-date",
+				  G_CALLBACK (repository_model_emit_row_inserted), self);
 		g_object_notify (object, "repository");
 		break;
 	default:
@@ -118,7 +145,7 @@ repository_model_class_init (RepositoryModelClass* self_class)
 	object_class->constructed  = repository_model_constructed;
 	object_class->finalize     = repository_model_finalize;
 	object_class->get_property = repository_get_property;
-	object_class->set_property = repository_set_property;
+	object_class->set_property = repository_model_set_property;
 
 	g_object_class_install_property (object_class, PROP_REPOSITORY,
 					 g_param_spec_object ("repository", NULL, NULL,
