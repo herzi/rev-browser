@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 
 #include "repository.h"
+#include "repository-model.h"
 #include "time-bar.h"
 
 enum {
@@ -32,25 +33,12 @@ enum {
 	N_COLUMNS
 };
 
-static void
-append_to_tree (gconstpointer  label,
-		gconstpointer  value,
-		GtkListStore * store)
-{
-	GtkTreeIter  iter;
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set    (store, &iter,
-			       COLUMN_LABEL, label,
-			       COLUMN_COUNT, GPOINTER_TO_INT (value),
-			       -1);
-}
-
 int
 main (int   argc,
       char**argv)
 {
 	Repository  * repository;
-	GtkListStore* store;
+	GtkTreeModel* model;
 	GtkTreeIter   iter;
 	GtkWidget   * window;
 	GtkWidget   * time_bar;
@@ -67,28 +55,21 @@ main (int   argc,
 			   time_bar);
 
 	repository = repository_new ();
-
-	store = gtk_list_store_new (N_COLUMNS,
-				    G_TYPE_STRING,
-				    G_TYPE_INT);
-
-	repository_foreach (repository,
-			    (GHFunc)append_to_tree,
-			    store);
-
+	model = repository_model_new (repository);
 	g_object_unref (repository);
 
 	time_bar_set_model        (TIME_BAR (time_bar),
-			           GTK_TREE_MODEL (store));
+				   model);
 	time_bar_set_label_column (TIME_BAR (time_bar),
 				   COLUMN_LABEL);
 	time_bar_set_value_column (TIME_BAR (time_bar),
 				   COLUMN_COUNT);
-	g_object_unref (store);
 
 	gtk_widget_show (window);
 
 	gtk_main ();
+
+	g_object_unref (model);
 
 	return 0;
 }
