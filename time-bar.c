@@ -96,7 +96,6 @@ static void
 time_bar_init (TimeBar* self)
 {
 	GtkWidget* button;
-	GtkWidget* display;
 
 	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self,
 						  TYPE_TIME_BAR,
@@ -104,8 +103,6 @@ time_bar_init (TimeBar* self)
 
 	PRIV(self)->display = display_new ();
 	gtk_widget_show (PRIV(self)->display);
-
-	display = PRIV(self)->display; /* FIXME: remove after refacotring */
 
 	button = add_arrow_button (GTK_BOX (self),
 				   GTK_ARROW_LEFT,
@@ -128,13 +125,13 @@ time_bar_init (TimeBar* self)
 				  GTK_STOCK_ZOOM_IN,
 				  PRIV(self)->display);
 	bind_sensitive (button,  "clicked", G_CALLBACK (display_zoom_in),
-			display, "can-zoom-in");
+			PRIV(self)->display, "can-zoom-in");
 
 	button = add_icon_button (GTK_BOX (PRIV(self)->vbox),
 				  GTK_STOCK_ZOOM_OUT,
 				  PRIV(self)->display);
 	bind_sensitive (button,  "clicked", G_CALLBACK (display_zoom_out),
-			display, "can-zoom-out");
+			PRIV(self)->display, "can-zoom-out");
 }
 
 static void

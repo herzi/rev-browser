@@ -34,6 +34,11 @@
 #define VERTICAL_PADDING 6
 #define TEXT_OFFSET      5
 
+/* TODO:
+ * - implement the selection in a more dynamic way (so the selection stays the
+ *   same even if the repository changes)
+ */
+
 struct _DisplayPrivate {
 	GtkWidget   * selector;
 
