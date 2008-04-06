@@ -654,6 +654,15 @@ display_cb_model_row_changed (GtkTreeModel* model,
 	queue_update_task (self);
 }
 
+static void
+display_cb_model_row_inserted (GtkTreeModel* model,
+			       GtkTreePath * path,
+			       GtkTreeIter * iter,
+			       Display     * self)
+{
+	queue_update_task (self);
+}
+
 void
 display_set_model (Display      * self,
 		   GtkTreeModel * model)
@@ -678,6 +687,8 @@ display_set_model (Display      * self,
 		self->_private->model = g_object_ref (model);
 		g_signal_connect (self->_private->model, "row-changed",
 				  G_CALLBACK (display_cb_model_row_changed), self);
+		g_signal_connect (self->_private->model, "row-inserted",
+				  G_CALLBACK (display_cb_model_row_inserted), self);
 	}
 
 	queue_update_task (self);
