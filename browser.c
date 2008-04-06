@@ -27,12 +27,6 @@
 #include "repository-model.h"
 #include "time-bar.h"
 
-enum {
-	COLUMN_LABEL,
-	COLUMN_COUNT, /* FIXME: rename to COLUMN_VALUE */
-	N_COLUMNS
-};
-
 int
 main (int   argc,
       char**argv)
@@ -61,9 +55,9 @@ main (int   argc,
 	time_bar_set_model        (TIME_BAR (time_bar),
 				   model);
 	time_bar_set_label_column (TIME_BAR (time_bar),
-				   COLUMN_LABEL);
+				   REPOSITORY_MODEL_COLUMN_DAY);
 	time_bar_set_value_column (TIME_BAR (time_bar),
-				   COLUMN_COUNT);
+				   REPOSITORY_MODEL_COLUMN_COMMITS);
 
 	gtk_widget_show (window);
 
