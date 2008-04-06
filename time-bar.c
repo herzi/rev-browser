@@ -31,6 +31,11 @@ struct _TimeBarPrivate {
 	GtkTreeModel* model;
 };
 
+enum {
+	PROP_0,
+	PROP_MODEL
+};
+
 #define PRIV(i) (TIME_BAR (i)->_private)
 
 /* GType Implementation */
@@ -153,6 +158,11 @@ time_bar_class_init (TimeBarClass* self_class)
 
 	object_class->finalize = time_bar_finalize;
 
+	g_object_class_install_property (object_class, PROP_MODEL,
+					 g_param_spec_object ("model", NULL, NULL,
+							      GTK_TYPE_TREE_MODEL,
+							      G_PARAM_READWRITE));
+
 	g_type_class_add_private (self_class, sizeof (TimeBarPrivate));
 }
 
@@ -214,6 +224,6 @@ time_bar_set_model (TimeBar     * self,
 	display_set_model (DISPLAY (self->_private->display),
 			   self->_private->model);
 
-	// FIXME: g_object_notify (G_OBJECT (self), "model");
+	g_object_notify (G_OBJECT (self), "model");
 }
 
