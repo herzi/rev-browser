@@ -258,6 +258,15 @@ repository_iter_n_children (GtkTreeModel* model,
 }
 
 static gboolean
+repository_model_iter_next (GtkTreeModel* model,
+			    GtkTreeIter * iter)
+{
+	iter->user_data = GINT_TO_POINTER (GPOINTER_TO_INT (iter->user_data) + 1);
+
+	return GPOINTER_TO_INT (iter->user_data) < repository_get_n_dates (PRIV(model)->repository);
+}
+
+static gboolean
 repository_model_iter_nth_child (GtkTreeModel* model,
 				 GtkTreeIter * iter,
 				 GtkTreeIter * parent,
@@ -280,6 +289,7 @@ implement_gtk_tree_model (GtkTreeModelIface* iface)
 	iface->get_n_columns   = repository_model_get_n_columns;
 	iface->get_value       = repository_model_get_value;
 	iface->iter_n_children = repository_iter_n_children;
+	iface->iter_next       = repository_model_iter_next;
 	iface->iter_nth_child  = repository_model_iter_nth_child;
 }
 
