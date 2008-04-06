@@ -65,6 +65,31 @@ repository_model_constructed (GObject* object)
 }
 
 static void
+repository_model_emit_row_changed (Repository     * repository,
+				   gint             index,
+				   gchar const    * date,
+				   RepositoryModel* self)
+{
+	GtkTreePath* path = gtk_tree_path_new ();
+	GtkTreeIter  iter;
+	gtk_tree_path_append_index (path, index);
+
+	if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (self),
+				      &iter,
+				      path))
+	{
+		g_warning ("%s(): this is strange - now the model is probably broken",
+			   G_STRFUNC);
+	} else {
+		gtk_tree_model_row_changed (GTK_TREE_MODEL (self),
+					    path,
+					    &iter);
+	}
+
+	gtk_tree_path_free (path);
+}
+
+static void
 repository_model_emit_row_inserted (Repository     * repository,
 				    gint             index,
 				    gchar const    * date,
@@ -92,6 +117,9 @@ repository_model_emit_row_inserted (Repository     * repository,
 static void
 repository_model_finalize (GObject* object)
 {
+	g_signal_handlers_disconnect_by_func (PRIV(object)->repository,
+					      repository_model_emit_row_changed,
+					      object);
 	g_signal_handlers_disconnect_by_func (PRIV(object)->repository,
 					      repository_model_emit_row_inserted,
 					      object);
@@ -130,6 +158,8 @@ repository_model_set_property (GObject     * object,
 	case PROP_REPOSITORY:
 		g_return_if_fail (!self->_private->repository);
 		PRIV(self)->repository = g_value_dup_object (value);
+		g_signal_connect (PRIV(self)->repository, "date-changed",
+				  G_CALLBACK (repository_model_emit_row_changed), self);
 		g_signal_connect (PRIV(self)->repository, "new-date",
 				  G_CALLBACK (repository_model_emit_row_inserted), self);
 		g_object_notify (object, "repository");
