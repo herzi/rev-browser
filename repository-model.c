@@ -129,10 +129,10 @@ repository_model_finalize (GObject* object)
 }
 
 static void
-repository_get_property (GObject   * object,
-			 guint       prop_id,
-			 GValue    * value,
-			 GParamSpec* pspec)
+repository_model_get_property (GObject   * object,
+			       guint       prop_id,
+			       GValue    * value,
+			       GParamSpec* pspec)
 {
 	RepositoryModel* self = REPOSITORY_MODEL (object);
 
@@ -177,7 +177,7 @@ repository_model_class_init (RepositoryModelClass* self_class)
 
 	object_class->constructed  = repository_model_constructed;
 	object_class->finalize     = repository_model_finalize;
-	object_class->get_property = repository_get_property;
+	object_class->get_property = repository_model_get_property;
 	object_class->set_property = repository_model_set_property;
 
 	g_object_class_install_property (object_class, PROP_REPOSITORY,
@@ -194,7 +194,7 @@ repository_model_class_init (RepositoryModelClass* self_class)
 /* GtkTreeModel Implementation */
 
 static GtkTreeModelFlags
-repository_get_flags (GtkTreeModel* model)
+repository_model_get_flags (GtkTreeModel* model)
 {
 	return GTK_TREE_MODEL_LIST_ONLY;
 }
@@ -249,8 +249,8 @@ repository_model_get_value (GtkTreeModel* model,
 }
 
 static gint
-repository_iter_n_children (GtkTreeModel* model,
-			    GtkTreeIter * iter)
+repository_model_iter_n_children (GtkTreeModel* model,
+				  GtkTreeIter * iter)
 {
 	g_return_val_if_fail (!iter, 0);
 
@@ -287,11 +287,11 @@ repository_model_iter_nth_child (GtkTreeModel* model,
 void
 implement_gtk_tree_model (GtkTreeModelIface* iface)
 {
-	iface->get_flags       = repository_get_flags;
+	iface->get_flags       = repository_model_get_flags;
 	iface->get_iter        = repository_model_get_iter;
 	iface->get_n_columns   = repository_model_get_n_columns;
 	iface->get_value       = repository_model_get_value;
-	iface->iter_n_children = repository_iter_n_children;
+	iface->iter_n_children = repository_model_iter_n_children;
 	iface->iter_next       = repository_model_iter_next;
 	iface->iter_nth_child  = repository_model_iter_nth_child;
 }
