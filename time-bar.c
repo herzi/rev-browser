@@ -152,6 +152,25 @@ time_bar_finalize (GObject* object)
 }
 
 static void
+time_bar_get_property (GObject   * object,
+		       guint       prop_id,
+		       GValue    * value,
+		       GParamSpec* pspec)
+{
+	TimeBar* self = TIME_BAR (object);
+
+	switch (prop_id) {
+	case PROP_MODEL:
+		g_value_set_object (value,
+				    time_bar_get_model (self));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
 time_bar_set_property (GObject     * object,
 		       guint         prop_id,
 		       GValue const* value,
@@ -175,6 +194,7 @@ time_bar_class_init (TimeBarClass* self_class)
 	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
 
 	object_class->finalize     = time_bar_finalize;
+	object_class->get_property = time_bar_get_property;
 	object_class->set_property = time_bar_set_property;
 
 	g_object_class_install_property (object_class, PROP_MODEL,
@@ -186,6 +206,14 @@ time_bar_class_init (TimeBarClass* self_class)
 }
 
 /* Public API */
+
+GtkTreeModel*
+time_bar_get_model (TimeBar const* self)
+{
+	g_return_val_if_fail (IS_TIME_BAR (self), NULL);
+
+	return PRIV(self)->model;
+}
 
 GtkWidget*
 time_bar_new (void)
