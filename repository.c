@@ -28,6 +28,7 @@
 
 struct _RepositoryPrivate {
 	GSequence* commits_per_day;
+	GfcJob   * reader_job;
 };
 
 enum {
@@ -35,6 +36,9 @@ enum {
 	NEW_DATE,
 	N_SIGNALS
 };
+
+static void repository_parse_line (Repository * self,
+				   gchar const* line);
 
 static guint repository_signals[N_SIGNALS] = {0};
 
@@ -76,10 +80,22 @@ commits_per_day_compare (gconstpointer v1,
 G_DEFINE_TYPE (Repository, repository, G_TYPE_OBJECT);
 
 static void
+repository_done (Repository* self)
+{
+	g_object_unref (PRIV(self)->reader_job);
+	PRIV(self)->reader_job = NULL;
+}
+
+static void
 repository_init (Repository* self)
 {
 	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self, TYPE_REPOSITORY, RepositoryPrivate);
 	PRIV(self)->commits_per_day = g_sequence_new ((GDestroyNotify)commits_per_day_free);
+	PRIV(self)->reader_job = revision_list_get_job ();
+	g_signal_connect_swapped (PRIV(self)->reader_job, "done",
+			          G_CALLBACK (repository_done), self);
+	g_signal_connect_swapped (gfc_job_get_out_reader (PRIV(self)->reader_job), "read-line",
+				  G_CALLBACK (repository_parse_line), self);
 }
 
 static void
@@ -202,9 +218,7 @@ repository_parse_line (Repository * self,
 Repository*
 repository_new (void)
 {
-	Repository* self = g_object_new (TYPE_REPOSITORY, NULL);
-	repository_wait (self);
-	return self;
+	return g_object_new (TYPE_REPOSITORY, NULL);
 }
 
 struct GHFuncAndUserData {
@@ -278,15 +292,16 @@ repository_get_n_dates (Repository const* self)
 void
 repository_wait (Repository const* self)
 {
-	gchar     **lines  = NULL;
-	gchar     **iter;
-
 	g_return_if_fail (IS_REPOSITORY (self));
 
-	lines = revision_list_get_lines ();
-	for (iter = lines; iter && *iter; iter++) {
-		repository_parse_line (self, *iter);
+	if (!PRIV(self)->reader_job) {
+		return;
 	}
-	g_strfreev (lines);
+
+	GMainLoop* loop = g_main_loop_new (NULL, FALSE);
+	g_signal_connect_swapped (PRIV(self)->reader_job, "done",
+				  G_CALLBACK (g_main_loop_quit), loop);
+	g_main_loop_run (loop);
+	g_main_loop_unref (loop);
 }
 
