@@ -48,6 +48,7 @@ gint         repository_get_commits (Repository const* self,
 gchar const* repository_get_date    (Repository const* self,
 				     guint             index);
 gint         repository_get_n_dates (Repository const* self);
+void         repository_wait        (Repository const* self);
 
 struct _Repository {
 	GObject            base_instance;

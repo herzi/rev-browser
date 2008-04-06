@@ -202,16 +202,8 @@ repository_parse_line (Repository * self,
 Repository*
 repository_new (void)
 {
-	Repository* self;
-	gchar     **lines  = NULL;
-	gchar     **iter;
-
-	lines = revision_list_get_lines ();
-	self = g_object_new (TYPE_REPOSITORY, NULL);
-	for (iter = lines; iter && *iter; iter++) {
-		repository_parse_line (self, *iter);
-	}
-	g_strfreev (lines);
+	Repository* self = g_object_new (TYPE_REPOSITORY, NULL);
+	repository_wait (self);
 	return self;
 }
 
@@ -281,5 +273,20 @@ repository_get_n_dates (Repository const* self)
 	g_return_val_if_fail (IS_REPOSITORY (self), 0);
 
 	return g_sequence_get_length (self->_private->commits_per_day);
+}
+
+void
+repository_wait (Repository const* self)
+{
+	gchar     **lines  = NULL;
+	gchar     **iter;
+
+	g_return_if_fail (IS_REPOSITORY (self));
+
+	lines = revision_list_get_lines ();
+	for (iter = lines; iter && *iter; iter++) {
+		repository_parse_line (self, *iter);
+	}
+	g_strfreev (lines);
 }
 
