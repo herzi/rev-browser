@@ -147,6 +147,12 @@ repository_model_get_iter (GtkTreeModel* model,
 }
 
 static gint
+repository_model_get_n_columns (GtkTreeModel* model)
+{
+	return REPOSITORY_MODEL_N_COLUMNS;
+}
+
+static gint
 repository_iter_n_children (GtkTreeModel* model,
 			    GtkTreeIter * iter)
 {
@@ -175,6 +181,7 @@ implement_gtk_tree_model (GtkTreeModelIface* iface)
 {
 	iface->get_flags       = repository_get_flags;
 	iface->get_iter        = repository_model_get_iter;
+	iface->get_n_columns   = repository_model_get_n_columns;
 	iface->iter_n_children = repository_iter_n_children;
 	iface->iter_nth_child  = repository_model_iter_nth_child;
 }

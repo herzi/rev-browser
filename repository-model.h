@@ -43,6 +43,12 @@ typedef struct _RepositoryModelClass   RepositoryModelClass;
 GType         repository_model_get_type (void);
 GtkTreeModel* repository_model_new      (Repository* repository);
 
+enum {
+	REPOSITORY_MODEL_COLUMN_DAY,
+	REPOSITORY_MODEL_COLUMN_COMMITS,
+	REPOSITORY_MODEL_N_COLUMNS
+};
+
 struct _RepositoryModel {
 	GObject                 base_instance;
 	RepositoryModelPrivate* _private;
