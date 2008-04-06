@@ -31,6 +31,7 @@ struct _RepositoryPrivate {
 };
 
 enum {
+	DATE_CHANGED,
 	NEW_DATE,
 	N_SIGNALS
 };
@@ -96,6 +97,15 @@ repository_class_init (RepositoryClass* self_class)
 
 	object_class->finalize = repository_finalize;
 
+	// FIXME: either add the commits, too or drop the day
+	repository_signals[DATE_CHANGED] =
+				       g_signal_new ("date-changed", TYPE_REPOSITORY,
+						     0, 0,
+						     NULL, NULL,
+						     repo_cclosure_marshal_VOID__INT_STRING,
+						     G_TYPE_NONE, 2,
+						     G_TYPE_INT,
+						     G_TYPE_STRING);
 	repository_signals[NEW_DATE] = g_signal_new ("new-date", TYPE_REPOSITORY,
 						     0, 0,
 						     NULL, NULL,
@@ -119,7 +129,7 @@ dump (gpointer data,
 		 cpd->num_commits);
 }
 
-static gpointer
+static GSequenceIter*
 my_g_sequence_find_data (GSequence       * sequence,
 			 gpointer          data,
 			 GCompareDataFunc  cmp_func,
@@ -143,7 +153,7 @@ my_g_sequence_find_data (GSequence       * sequence,
 		} else if (cmp > 0) {
 			back = middle;
 		} else {
-			return g_sequence_get (middle);
+			return middle;
 		}
 	}
 
@@ -158,16 +168,21 @@ repository_parse_line (Repository * self,
 			if (!g_str_has_prefix (line, "commit ")) {
 				gchar** words = g_strsplit (line, " ", 2);
 				CommitsPerDay* cpd = commits_per_day_new (words[0]);
-				CommitsPerDay* match = my_g_sequence_find_data (PRIV(self)->commits_per_day,
+				GSequenceIter* iter  = my_g_sequence_find_data (PRIV(self)->commits_per_day,
 										cpd,
 										(GCompareDataFunc)commits_per_day_compare,
 										NULL);
+				CommitsPerDay* match = iter ? g_sequence_get (iter) : NULL;
 
 				if (match) {
 					match->num_commits += cpd->num_commits;
+					g_signal_emit (self,
+						       repository_signals[DATE_CHANGED],
+						       0,
+						       g_sequence_iter_get_position (iter),
+						       match->day);
 					commits_per_day_free (cpd);
 				} else {
-					GSequenceIter* iter;
 					iter = g_sequence_insert_sorted (PRIV(self)->commits_per_day,
 									 cpd,
 									 (GCompareDataFunc)commits_per_day_compare,
