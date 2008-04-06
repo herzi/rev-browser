@@ -46,6 +46,7 @@ main (int   argc,
 	g_type_init ();
 
 	repository = repository_new ();
+	repository_wait (repository);
 	repository_foreach (repository, (GHFunc)print_revs, NULL);
 	g_object_unref (repository);
 
