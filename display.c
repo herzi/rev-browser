@@ -35,6 +35,7 @@
 #define TEXT_OFFSET      5
 
 /* TODO:
+ * - implement the book-keeping of the visible area with GtkTreeRowReference
  * - implement the selection in a more dynamic way (so the selection stays the
  *   same even if the repository changes)
  */
@@ -657,6 +658,9 @@ display_cb_model_row_changed (GtkTreeModel* model,
 			      Display     * self)
 {
 	queue_update_task (self);
+
+	/* FIXME: check if visible; trigger potential redraw */
+	gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
 static void
@@ -666,6 +670,9 @@ display_cb_model_row_inserted (GtkTreeModel* model,
 			       Display     * self)
 {
 	queue_update_task (self);
+
+	/* FIXME: check if visible; trigger potential redraw */
+	gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
 void
