@@ -608,9 +608,9 @@ update_from_tree (gpointer data)
 					   &iter))
 	{
 		do {
-			gint value = 0;
-
 			if (G_LIKELY (self->_private->column_value != -1)) {
+				gint value = 0;
+
 				gtk_tree_model_get (self->_private->model, &iter,
 						    self->_private->column_value, &value,
 						    -1);
