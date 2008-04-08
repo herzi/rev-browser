@@ -57,8 +57,9 @@ struct _DisplayPrivate {
 	gint         element_size;
 
 	/* display state */
-	guint        update_idle;   /* idle job to check the dimensions from the tree model */
-	gint         maximum_value; /* maxmimum value in the model */
+	guint        update_idle;     /* idle job to check the dimensions from the tree model */
+	gint         maximum_value;   /* maxmimum value in the model */
+	gint         label_max_width;
 	gint         offset;
 	TimePeriod   zoom;
 
@@ -85,6 +86,7 @@ display_init (Display* self)
 
 	self->_private = G_TYPE_INSTANCE_GET_PRIVATE (self, display_get_type (), DisplayPrivate);
 
+	self->_private->label_max_width = DEFAULT_SIZE;
 	self->_private->selector = time_selector_new ();
 	gtk_widget_show (self->_private->selector);
 	gtk_container_add (GTK_CONTAINER (self),
@@ -414,7 +416,7 @@ display_size_request (GtkWidget     * widget,
 		      GtkRequisition* req)
 {
 	Display* self = DISPLAY (widget);
-	req->width = 3 * (DEFAULT_SIZE + 1) + 1;
+	req->width = 3 * (self->_private->label_max_width + 1) + 1;
 	req->height = 12 /* default white box size */
 		      + 12 /* 6 pixels above and below the white box */
 		      + 6  /* 3 pixels above and below the inner shadow */
