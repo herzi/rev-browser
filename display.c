@@ -600,7 +600,8 @@ update_from_tree (gpointer data)
 	gint maximum = 0;
 
 	if (self->_private->model &&
-	    self->_private->column_value != -1 &&
+	    (self->_private->column_value != -1 ||
+	     self->_private->column_label != -1) &&
 	    gtk_tree_model_get_iter_first (self->_private->model,
 					   &iter))
 	{
