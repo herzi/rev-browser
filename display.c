@@ -57,8 +57,8 @@ struct _DisplayPrivate {
 	gint         element_size;
 
 	/* display state */
-	guint        update_idle; /* idle job to check the dimensions from the tree model */
-	gint         maximum;     /* maxmimum value in the model */
+	guint        update_idle;   /* idle job to check the dimensions from the tree model */
+	gint         maximum_value; /* maxmimum value in the model */
 	gint         offset;
 	TimePeriod   zoom;
 
@@ -253,7 +253,7 @@ display_expose_event (GtkWidget     * widget,
 					    &value,
 					    -1);
 
-			height = (widget->allocation.height - 35) * (1.0 * value / self->_private->maximum);
+			height = (widget->allocation.height - 35) * (1.0 * value / self->_private->maximum_value);
 			gdk_cairo_draw_rectangle (cr,
 						  widget->style->base_gc[GTK_STATE_ACTIVE],
 						  TRUE,
@@ -615,8 +615,8 @@ update_from_tree (gpointer data)
 		} while (gtk_tree_model_iter_next (self->_private->model, &iter));
 	}
 
-	if (maximum != self->_private->maximum) {
-		self->_private->maximum = maximum;
+	if (maximum != self->_private->maximum_value) {
+		self->_private->maximum_value = maximum;
 		gtk_widget_queue_draw (GTK_WIDGET (self));
 	}
 
