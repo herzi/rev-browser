@@ -626,6 +626,11 @@ update_from_tree (gpointer data)
 						    self->_private->column_label, &value,
 						    -1);
 
+				if (G_LIKELY (value)) {
+					PangoLayout* layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), value);
+					g_object_unref (layout);
+				}
+
 				g_free (value);
 			}
 		} while (gtk_tree_model_iter_next (self->_private->model, &iter));
