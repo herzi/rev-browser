@@ -600,6 +600,7 @@ update_from_tree (gpointer data)
 	Display* self = data;
 
 	gint maximum = 0;
+	gint maximum_width = DEFAULT_SIZE;
 
 	if (self->_private->model &&
 	    (self->_private->column_value != -1 ||
@@ -618,6 +619,11 @@ update_from_tree (gpointer data)
 				maximum = MAX (maximum, value);
 			}
 		} while (gtk_tree_model_iter_next (self->_private->model, &iter));
+	}
+
+	if (maximum_width != self->_private->label_max_width) {
+		self->_private->label_max_width = maximum_width;
+		gtk_widget_queue_resize (GTK_WIDGET (self));
 	}
 
 	if (maximum != self->_private->maximum_value) {
