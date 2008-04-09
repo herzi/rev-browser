@@ -618,6 +618,16 @@ update_from_tree (gpointer data)
 
 				maximum = MAX (maximum, value);
 			}
+
+			if (G_LIKELY (self->_private->column_label)) {
+				gchar* value = NULL;
+
+				gtk_tree_model_get (self->_private->model, &iter,
+						    self->_private->column_label, &value,
+						    -1);
+
+				g_free (value);
+			}
 		} while (gtk_tree_model_iter_next (self->_private->model, &iter));
 	}
 
