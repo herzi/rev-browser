@@ -30,7 +30,7 @@
 #include "time-period.h"
 #include "time-selector.h"
 
-#define DEFAULT_SIZE     70 /* the default size and minimum of an element */
+#define DEFAULT_SIZE     30 /* the default size and minimum of an element */
 #define VERTICAL_PADDING 6
 #define TEXT_OFFSET      5
 
@@ -391,7 +391,7 @@ display_size_allocate (GtkWidget    * widget,
 {
 	Display* self = DISPLAY (widget);
 
-	self->_private->elements_visible = (allocation->width - 1) / (DEFAULT_SIZE + 1);
+	self->_private->elements_visible = (allocation->width - 1) / (self->_private->label_max_width + 1);
 	self->_private->element_size = (allocation->width - 1) / self->_private->elements_visible - 1;
 
 	if (self->_private->offset != 0) {
@@ -619,7 +619,7 @@ update_from_tree (gpointer data)
 				maximum = MAX (maximum, value);
 			}
 
-			if (G_LIKELY (self->_private->column_label)) {
+			if (G_LIKELY (self->_private->column_label != -1)) {
 				gchar* value = NULL;
 
 				gtk_tree_model_get (self->_private->model, &iter,
@@ -628,7 +628,15 @@ update_from_tree (gpointer data)
 
 				if (G_LIKELY (value)) {
 					PangoLayout* layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), value);
+					gint width = 0;
+
+					pango_layout_get_pixel_size (layout,
+								     &width,
+								     NULL);
+
 					g_object_unref (layout);
+
+					maximum_width = MAX (maximum_width, width);
 				}
 
 				g_free (value);
@@ -656,10 +664,11 @@ queue_update_task (Display* self)
 	/* queue an update of the current maximum, so we can normalize the
 	 * stack heights */
 	if (G_UNLIKELY (!self->_private->update_idle)) {
-		self->_private->update_idle = g_idle_add_full (G_PRIORITY_HIGH_IDLE,
-							       update_from_tree,
-							       self,
-							       NULL);
+		self->_private->update_idle = g_timeout_add_full (G_PRIORITY_HIGH_IDLE,
+								  30,
+								  update_from_tree,
+								  self,
+								  NULL);
 	}
 }
 
