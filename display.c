@@ -34,6 +34,9 @@
 #define VERTICAL_PADDING 6
 #define TEXT_OFFSET      5
 
+static gboolean display_can_select_left  (Display const* self);
+static gboolean display_can_select_right (Display const* self);
+
 /* TODO:
  * - implement the book-keeping of the visible area with GtkTreeRowReference
  * - implement the selection in a more dynamic way (so the selection stays the
@@ -286,8 +289,8 @@ display_expose_event (GtkWidget     * widget,
 static void
 notify_changes (Display* self)
 {
-	g_object_notify (G_OBJECT (self), "can-step-left");
-	g_object_notify (G_OBJECT (self), "can-step-right");
+	g_object_notify (G_OBJECT (self), "can-scroll-left");
+	g_object_notify (G_OBJECT (self), "can-scroll-right");
 	g_object_notify (G_OBJECT (self), "can-zoom-in");
 	g_object_notify (G_OBJECT (self), "can-zoom-out");
 }
@@ -320,12 +323,12 @@ display_key_press_event (GtkWidget  * widget,
 
 		switch (event->keyval) {
 		case GDK_Left:
-			if (!display_can_scroll_left (self)) {
+			if (!display_can_select_left (self)) {
 				break;
 			}
 
 			if ((event->state & GDK_SHIFT_MASK) == 0) {
-				if (self->_private->selected_start > 0) {
+				if (display_can_select_left (self)) {
 					self->_private->selected_start--;
 					self->_private->selected_end = self->_private->selected_start;
 					allocate_selector (self);
@@ -350,7 +353,7 @@ display_key_press_event (GtkWidget  * widget,
 			}
 			break;
 		case GDK_Right:
-			if (!display_can_scroll_right (self)) {
+			if (!display_can_select_right (self)) {
 				break;
 			}
 
@@ -562,6 +565,24 @@ display_can_scroll_right (Display const* self)
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
 	return (self->_private->offset + self->_private->elements_visible) < display_get_range_size (self);
+}
+
+static gboolean
+display_can_select_left (Display const* self)
+{
+	// Internal function, no check needed
+	//g_return_val_if_fail (IS_DISPLAY (self), FALSE);
+
+	return self->_private->selected_start > 0;
+}
+
+static gboolean
+display_can_select_right (Display const* self)
+{
+	// Internal function, no check needed
+	//g_return_val_if_fail (IS_DISPLAY (self), FALSE);
+
+	return self->_private->selected_end < MIN (self->_private->elements_visible, display_get_range_size (self)) - 1;
 }
 
 gboolean
