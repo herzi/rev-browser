@@ -76,11 +76,11 @@ add_arrow_button (GtkBox      * box,
 					display);
 
 	if (arrow == GTK_ARROW_RIGHT) {
-		bind_sensitive (button,  "clicked", G_CALLBACK (display_step_right),
-				display, "can-step-right");
+		bind_sensitive (button,  "clicked", G_CALLBACK (display_scroll_right),
+				display, "can-scroll-right");
 	} else {
-		bind_sensitive (button,  "clicked", G_CALLBACK (display_step_left),
-				display, "can-step-left");
+		bind_sensitive (button,  "clicked", G_CALLBACK (display_scroll_left),
+				display, "can-scroll-left");
 	}
 
 	return button;

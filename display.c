@@ -130,11 +130,11 @@ display_get_property (GObject   * object,
 	switch (prop_id) {
 	case PROP_CAN_STEP_LEFT:
 		g_value_set_boolean (value,
-				     display_can_step_left (self));
+				     display_can_scroll_left (self));
 		break;
 	case PROP_CAN_STEP_RIGHT:
 		g_value_set_boolean (value,
-				     display_can_step_right (self));
+				     display_can_scroll_right (self));
 		break;
 	case PROP_CAN_ZOOM_IN:
 		g_value_set_boolean (value,
@@ -320,7 +320,7 @@ display_key_press_event (GtkWidget  * widget,
 
 		switch (event->keyval) {
 		case GDK_Left:
-			if (!display_can_step_left (self)) {
+			if (!display_can_scroll_left (self)) {
 				break;
 			}
 
@@ -350,7 +350,7 @@ display_key_press_event (GtkWidget  * widget,
 			}
 			break;
 		case GDK_Right:
-			if (!display_can_step_right (self)) {
+			if (!display_can_scroll_right (self)) {
 				break;
 			}
 
@@ -485,15 +485,15 @@ display_scroll_event (GtkWidget      *widget,
 	switch (event->direction) {
 	case GDK_SCROLL_DOWN:
 	case GDK_SCROLL_RIGHT:
-		if (display_can_step_right (self)) {
-			display_step_right (self);
+		if (display_can_scroll_right (self)) {
+			display_scroll_right (self);
 		}
 
 		break;
 	case GDK_SCROLL_UP:
 	case GDK_SCROLL_LEFT:
-		if (display_can_step_left (self)) {
-			display_step_left (self);
+		if (display_can_scroll_left (self)) {
+			display_scroll_left (self);
 		}
 
 		break;
@@ -525,10 +525,10 @@ display_class_init (DisplayClass* self_class)
 	widget_class->scroll_event    = display_scroll_event;
 
 	g_object_class_install_property (object_class, PROP_CAN_STEP_LEFT,
-					 g_param_spec_boolean ("can-step-left", NULL, NULL,
+					 g_param_spec_boolean ("can-scroll-left", NULL, NULL,
 							       FALSE, G_PARAM_READABLE));
 	g_object_class_install_property (object_class, PROP_CAN_STEP_RIGHT,
-					 g_param_spec_boolean ("can-step-right", NULL, NULL,
+					 g_param_spec_boolean ("can-scroll-right", NULL, NULL,
 							       FALSE, G_PARAM_READABLE));
 	g_object_class_install_property (object_class, PROP_CAN_ZOOM_IN,
 					 g_param_spec_boolean ("can-zoom-in", NULL, NULL,
@@ -549,7 +549,7 @@ display_new (void)
 }
 
 gboolean
-display_can_step_left (Display const* self)
+display_can_scroll_left (Display const* self)
 {
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
@@ -557,7 +557,7 @@ display_can_step_left (Display const* self)
 }
 
 gboolean
-display_can_step_right (Display const* self)
+display_can_scroll_right (Display const* self)
 {
 	g_return_val_if_fail (IS_DISPLAY (self), FALSE);
 
@@ -747,10 +747,10 @@ display_set_model (Display      * self,
 }
 
 void
-display_step_left (Display* self)
+display_scroll_left (Display* self)
 {
 	g_return_if_fail (IS_DISPLAY (self));
-	g_return_if_fail (display_can_step_left (self));
+	g_return_if_fail (display_can_scroll_left (self));
 
 	self->_private->offset--;
 	allocate_selector (self);
@@ -760,10 +760,10 @@ display_step_left (Display* self)
 }
 
 void
-display_step_right (Display* self)
+display_scroll_right (Display* self)
 {
 	g_return_if_fail (IS_DISPLAY (self));
-	g_return_if_fail (display_can_step_right (self));
+	g_return_if_fail (display_can_scroll_right (self));
 
 	self->_private->offset++;
 	allocate_selector (self);
