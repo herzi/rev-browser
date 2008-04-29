@@ -40,6 +40,9 @@ read_line_cb (GfcReader  * reader,
 GfcJob*
 revision_list_get_job (gchar const* location)
 {
+	/* FIXME: ideally, we don't pass the location as the working folder,
+	 * but specify the GIT_DIR as an environment variable to be overridden
+	 * for the spawned process */
 	return gfc_job_new (location,
 			    "git-rev-list --all --pretty=format:%ai");
 }
