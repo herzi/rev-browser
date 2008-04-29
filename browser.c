@@ -36,6 +36,7 @@ main (int   argc,
 	GtkTreeIter   iter;
 	GtkWidget   * window;
 	GtkWidget   * box;
+	GtkWidget   * button;
 	GtkWidget   * time_bar;
 
 	gtk_init (&argc, &argv);
@@ -48,6 +49,11 @@ main (int   argc,
 	gtk_widget_show (box);
 	gtk_container_add (GTK_CONTAINER (window),
 			   box);
+
+	button = gtk_button_new_from_stock (GTK_STOCK_OPEN);
+	gtk_widget_show (button);
+	gtk_container_add (GTK_CONTAINER (box),
+			   button);
 
 	time_bar = time_bar_new ();
 	gtk_widget_show (time_bar);
