@@ -455,7 +455,7 @@ display_unrealize (GtkWidget *widget)
 	Display* self = DISPLAY (widget);
 
 	gdk_window_set_user_data (self->_private->event_window, NULL);
-	g_object_unref (self->_private->event_window);
+	gdk_window_destroy (self->_private->event_window);
 	self->_private->event_window = NULL;
 
 	GTK_WIDGET_CLASS (display_parent_class)->unrealize (widget);
