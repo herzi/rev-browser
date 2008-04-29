@@ -35,6 +35,7 @@ main (int   argc,
 	GtkTreeModel* model;
 	GtkTreeIter   iter;
 	GtkWidget   * window;
+	GtkWidget   * box;
 	GtkWidget   * time_bar;
 
 	gtk_init (&argc, &argv);
@@ -43,9 +44,14 @@ main (int   argc,
 	g_signal_connect (window, "destroy",
 			  G_CALLBACK (gtk_main_quit), NULL);
 
+	box = gtk_vbox_new (FALSE, 0);
+	gtk_widget_show (box);
+	gtk_container_add (GTK_CONTAINER (window),
+			   box);
+
 	time_bar = time_bar_new ();
 	gtk_widget_show (time_bar);
-	gtk_container_add (GTK_CONTAINER (window),
+	gtk_container_add (GTK_CONTAINER (box),
 			   time_bar);
 
 	repository = repository_new ();
