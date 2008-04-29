@@ -107,11 +107,43 @@ repository_finalize (GObject* object)
 }
 
 static void
+repository_get_property (GObject   * object,
+			 guint       prop_id,
+			 GValue    * value,
+			 GParamSpec* pspec)
+{
+	Repository* self = REPOSITORY (object);
+
+	switch (prop_id) {
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
+repository_set_property (GObject     * object,
+			 guint         prop_id,
+			 GValue const* value,
+			 GParamSpec  * pspec)
+{
+	Repository* self = REPOSITORY (object);
+
+	switch (prop_id) {
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
 repository_class_init (RepositoryClass* self_class)
 {
 	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
 
-	object_class->finalize = repository_finalize;
+	object_class->finalize     = repository_finalize;
+	object_class->get_property = repository_get_property;
+	object_class->set_property = repository_set_property;
 
 	// FIXME: either add the commits, too or drop the day
 	repository_signals[DATE_CHANGED] =
