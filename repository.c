@@ -27,8 +27,16 @@
 #include "revision-list.h"
 
 struct _RepositoryPrivate {
+	gchar    * location;
 	GSequence* commits_per_day;
+
+	/* while parsing */
 	GfcJob   * reader_job;
+};
+
+enum {
+	PROP_0,
+	PROP_LOCATION
 };
 
 enum {
@@ -101,6 +109,7 @@ repository_init (Repository* self)
 static void
 repository_finalize (GObject* object)
 {
+	g_free (PRIV(object)->location);
 	g_sequence_free (PRIV(object)->commits_per_day);
 
 	G_OBJECT_CLASS (repository_parent_class)->finalize (object);
@@ -112,9 +121,10 @@ repository_get_property (GObject   * object,
 			 GValue    * value,
 			 GParamSpec* pspec)
 {
-	Repository* self = REPOSITORY (object);
-
 	switch (prop_id) {
+	case PROP_LOCATION:
+		g_value_set_string (value, PRIV(object)->location);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -127,9 +137,16 @@ repository_set_property (GObject     * object,
 			 GValue const* value,
 			 GParamSpec  * pspec)
 {
-	Repository* self = REPOSITORY (object);
-
 	switch (prop_id) {
+	case PROP_LOCATION:
+		if (!g_value_get_string (value)) {
+			PRIV(object)->location = g_get_current_dir ();
+		} else {
+			PRIV(object)->location = g_value_dup_string (value);
+		}
+
+		g_object_notify (object, "location");
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -144,6 +161,11 @@ repository_class_init (RepositoryClass* self_class)
 	object_class->finalize     = repository_finalize;
 	object_class->get_property = repository_get_property;
 	object_class->set_property = repository_set_property;
+
+	g_object_class_install_property (object_class, PROP_LOCATION,
+					 g_param_spec_string ("location", NULL, NULL,
+							      NULL,
+							      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
 	// FIXME: either add the commits, too or drop the day
 	repository_signals[DATE_CHANGED] =
