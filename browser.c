@@ -21,11 +21,32 @@
  * USA
  */
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 #include "repository.h"
 #include "repository-model.h"
 #include "time-bar.h"
+
+static void
+open_button_clicked (GtkButton* button,
+		     TimeBar  * time_bar)
+{
+	GtkWidget* dialog = gtk_file_chooser_dialog_new (_("Select a Repository"),
+							 GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (button))),
+							 GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+							 GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
+							 GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+							 NULL);
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+					 GTK_RESPONSE_ACCEPT);
+
+	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+		// FIXME: implement opening
+	}
+
+	gtk_widget_destroy (dialog);
+}
 
 int
 main (int   argc,
@@ -50,12 +71,15 @@ main (int   argc,
 	gtk_container_add (GTK_CONTAINER (window),
 			   box);
 
+	time_bar = time_bar_new ();
+
 	button = gtk_button_new_from_stock (GTK_STOCK_OPEN);
+	g_signal_connect (button, "clicked",
+			  G_CALLBACK (open_button_clicked), time_bar);
 	gtk_widget_show (button);
 	gtk_container_add (GTK_CONTAINER (box),
 			   button);
 
-	time_bar = time_bar_new ();
 	gtk_widget_show (time_bar);
 	gtk_container_add (GTK_CONTAINER (box),
 			   time_bar);
