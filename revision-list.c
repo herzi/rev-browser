@@ -38,9 +38,10 @@ read_line_cb (GfcReader  * reader,
 }
 
 GfcJob*
-revision_list_get_job (void)
+revision_list_get_job (gchar const* location)
 {
-	return gfc_job_new (NULL, "git-rev-list --all --pretty=format:%ai");
+	return gfc_job_new (location,
+			    "git-rev-list --all --pretty=format:%ai");
 }
 
 gchar**
@@ -51,10 +52,11 @@ revision_list_get_lines (void)
 	gchar   **out    = NULL;
 	gchar   * err    = NULL;
 	gint      status = 0;
+	gchar   * working_folder = g_get_current_dir ();
 
 	GMainLoop* loop = g_main_loop_new (NULL, FALSE);
 	GPtrArray* array = g_ptr_array_new ();
-	GfcJob* job = revision_list_get_job ();
+	GfcJob* job = revision_list_get_job (working_folder);
 	g_signal_connect         (gfc_job_get_out_reader (job), "read-line",
 				  G_CALLBACK (read_line_cb), array);
 	g_signal_connect_swapped (job, "done",
@@ -63,6 +65,7 @@ revision_list_get_lines (void)
 	g_main_loop_unref (loop);
 	result = gfc_job_get_return_code (job) == 0;
 	g_object_unref (job);
+	g_free (working_folder);
 
 	g_ptr_array_add (array, NULL); /* terminate properly */
 	out = (gchar**)array->pdata;

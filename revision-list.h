@@ -28,7 +28,7 @@
 
 G_BEGIN_DECLS
 
-GfcJob* revision_list_get_job   (void);
+GfcJob* revision_list_get_job   (gchar const* location);
 gchar** revision_list_get_lines (void);
 
 G_END_DECLS

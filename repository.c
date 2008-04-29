@@ -108,7 +108,7 @@ repository_constructed (GObject* self)
 		G_OBJECT_CLASS (repository_parent_class)->constructed (self);
 	}
 
-	PRIV(self)->reader_job = revision_list_get_job ();
+	PRIV(self)->reader_job = revision_list_get_job (PRIV(self)->location);
 	g_signal_connect_swapped (PRIV(self)->reader_job, "done",
 			          G_CALLBACK (repository_done), self);
 	g_signal_connect_swapped (gfc_job_get_out_reader (PRIV(self)->reader_job), "read-line",
