@@ -99,6 +99,15 @@ repository_init (Repository* self)
 {
 	PRIV(self) = G_TYPE_INSTANCE_GET_PRIVATE (self, TYPE_REPOSITORY, RepositoryPrivate);
 	PRIV(self)->commits_per_day = g_sequence_new ((GDestroyNotify)commits_per_day_free);
+}
+
+static void
+repository_constructed (GObject* self)
+{
+	if (G_OBJECT_CLASS (repository_parent_class)->constructed) {
+		G_OBJECT_CLASS (repository_parent_class)->constructed (self);
+	}
+
 	PRIV(self)->reader_job = revision_list_get_job ();
 	g_signal_connect_swapped (PRIV(self)->reader_job, "done",
 			          G_CALLBACK (repository_done), self);
@@ -158,6 +167,7 @@ repository_class_init (RepositoryClass* self_class)
 {
 	GObjectClass* object_class = G_OBJECT_CLASS (self_class);
 
+	object_class->constructed  = repository_constructed;
 	object_class->finalize     = repository_finalize;
 	object_class->get_property = repository_get_property;
 	object_class->set_property = repository_set_property;
