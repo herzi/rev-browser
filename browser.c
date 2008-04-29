@@ -43,7 +43,11 @@ open_button_clicked (GtkButton* button,
 
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
 		gchar* filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-		g_print ("selected: %s\n", filename);
+		Repository* repository = repository_new (filename);
+		GtkTreeModel* model = repository_model_new (repository);
+		time_bar_set_model (time_bar, model);
+		g_object_unref (model);
+		g_object_unref (repository);
 		g_free (filename);
 	}
 
