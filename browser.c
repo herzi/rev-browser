@@ -61,6 +61,7 @@ main (int   argc,
 	GtkWidget   * box;
 	GtkWidget   * button;
 	GtkWidget   * time_bar;
+	gchar       * working_folder;
 
 	gtk_init (&argc, &argv);
 
@@ -86,9 +87,11 @@ main (int   argc,
 	gtk_container_add (GTK_CONTAINER (box),
 			   time_bar);
 
-	repository = repository_new ();
+	working_folder = g_get_current_dir ();
+	repository = repository_new (working_folder);
 	model = repository_model_new (repository);
 	g_object_unref (repository);
+	g_free (working_folder);
 
 	time_bar_set_model        (TIME_BAR (time_bar),
 				   model);

@@ -216,7 +216,7 @@ repository_parse_line (Repository * self,
 }
 
 Repository*
-repository_new (void)
+repository_new (gchar const* folder_name)
 {
 	return g_object_new (TYPE_REPOSITORY, NULL);
 }

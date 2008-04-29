@@ -42,13 +42,17 @@ main (int   argc,
       char**argv)
 {
 	Repository* repository;
+	gchar* working_folder;
 
 	g_type_init ();
 
-	repository = repository_new ();
+	working_folder = g_get_current_dir ();
+
+	repository = repository_new (working_folder);
 	repository_wait (repository);
 	repository_foreach (repository, (GHFunc)print_revs, NULL);
 	g_object_unref (repository);
+	g_free (working_folder);
 
 	return 0;
 }

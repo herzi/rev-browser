@@ -39,10 +39,10 @@ typedef struct _RepositoryClass   RepositoryClass;
 #define IS_REPOSITORY_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), TYPE_REPOSITORY))
 #define REPOSITORY_GET_CLASS(i) (G_TYPE_INSTANCE_GET_CLASS ((i), TYPE_REPOSITORY, RepositoryClass))
 
-Repository*  repository_new         (void);
-void         repository_foreach     (Repository* self,
-				     GHFunc      func,
-				     gpointer    user_data);
+Repository*  repository_new         (gchar const     * folder);
+void         repository_foreach     (Repository      * self,
+				     GHFunc            func,
+				     gpointer          user_data);
 gint         repository_get_commits (Repository const* self,
 				     guint             index);
 gchar const* repository_get_date    (Repository const* self,
