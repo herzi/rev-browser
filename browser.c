@@ -42,7 +42,9 @@ open_button_clicked (GtkButton* button,
 					 GTK_RESPONSE_ACCEPT);
 
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
-		// FIXME: implement opening
+		gchar* filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+		g_print ("selected: %s\n", filename);
+		g_free (filename);
 	}
 
 	gtk_widget_destroy (dialog);
