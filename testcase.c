@@ -132,8 +132,8 @@ testcase_new (void)
 void
 testcase_exercise (Testcase* self)
 {
-	gchar    * gdkdata;
-	gchar    * cairodata;
+	guchar   * gdkdata;
+	guchar   * cairodata;
 	gsize      index;
 	GdkPixbuf* gdk_pixbuf;
 	GdkPixbuf* cairo_pixbuf;
