@@ -11,8 +11,32 @@ AC_PROG_LIBTOOL
 
 AM_PATH_GLIB_2_0
 PKG_CHECK_MODULES(GFC,[glib-2.0 >= 2.16
-		       gobject-2.0])
+		       gobject-2.0
+		       gdk-2.0])
 PKG_CHECK_MODULES(GTK,[gtk+-2.0])
+
+gfc_has_gconf=
+PKG_CHECK_MODULES(GCONF,[gconf-2.0],[gfc_has_gconf=yes],[gfc_has_gconf=no])
+AM_CONDITIONAL(WITH_GNOME,[test "x$gfc_has_gconf" = "xyes"])
+AM_CONDITIONAL(WITH_OSX,[test "x$gfc_has_gconf" != "xyes"])
+
+if test "x${gfc_has_gconf}" != "xyes"; then
+	AC_PROG_OBJC
+
+	PLATFORM_CFLAGS=
+	PLATFORM_LIBS="-framework AppKit"
+	AC_SUBST(PLATFORM_CFLAGS)
+	AC_SUBST(PLATFORM_LIBS)
+else
+	GFC_CFLAGS="$GFC_CFLAGS $GCONF_CFLAGS"
+	GFC_LIBS="$GFC_LIBS $GCONF_LIBS"
+	AC_SUBST(GFC_CFLAGS)
+	AC_SUBST(GFC_LIBS)
+
+	OBJC='$(CC)'
+	AC_SUBST(OBJC)
+	AM_CONDITIONAL(am__fastdepOBJC,true)
+fi
 
 AC_CHECK_PROGS(VALAC, valac)
 if test "x$VALAC" != "x"; then
