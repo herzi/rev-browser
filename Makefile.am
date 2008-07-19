@@ -10,14 +10,15 @@ bin_PROGRAMS=\
 check_LTLIBRARIES=\
 	libtest.la \
 	$(NULL)
-check_PROGRAMS=\
+rb_tests=\
 	test-gdk-draw-layout \
 	test-gdk-draw-line \
 	test-gdk-draw-rectangle \
 	test-sensitive-binding \
 	$(NULL)
+check_PROGRAMS=$(rb_tests)
 
-TESTS=$(check_PROGRAMS)
+TESTS=$(rb_tests)
 
 ## libgfc start
 gfc_src_dir=gfc
