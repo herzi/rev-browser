@@ -17,6 +17,12 @@ rb_tests=\
 	test-sensitive-binding \
 	$(NULL)
 check_PROGRAMS=$(rb_tests)
+XFAIL_TESTS=
+
+if HAVE_OSX_104
+# https://bugs.freedesktop.org/show_bug.cgi?id=17162 (cairo)
+XFAIL_TESTS+=test-gdk-draw-line
+endif
 
 TESTS=$(rb_tests)
 

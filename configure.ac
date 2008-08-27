@@ -48,4 +48,15 @@ if test "x$VALAC" != "x"; then
 fi
 AM_CONDITIONAL(HAVE_VALAC, [test "x$VALAC" != "x"])
 
+AC_MSG_CHECKING([for Mac OS X 10.4.x])
+rb_have_macosx_10_4=no
+if test -x `which sw_vers`; then
+	# one pair of bracket for M4; two for the regexp
+	if sw_vers -productVersion | grep -q "^10\.4.[[[:digit:]]]*$"; then
+		rb_have_macosx_10_4=yes
+	fi
+fi
+AM_CONDITIONAL(HAVE_OSX_104,test "x${rb_have_macosx_10_4}" == "xyes")
+AC_MSG_RESULT([$rb_have_macosx_10_4])
+
 AC_OUTPUT(Makefile)
