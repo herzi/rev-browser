@@ -187,8 +187,7 @@ testcase_exercise (Testcase* self)
 				   cairodata[index]);
 			PRIV(self)->passed = FALSE;
 
-			filepath = g_strdup_printf ("%d-%s-gdk.png",
-						    getpid (),
+			filepath = g_strdup_printf ("%s-gdk.png",
 						    g_get_prgname ());
 			gdk_pixbuf_save (gdk_pixbuf,
 					 filepath,
@@ -199,8 +198,7 @@ testcase_exercise (Testcase* self)
 				   filepath);
 			g_free (filepath);
 
-			filepath = g_strdup_printf ("%d-%s-cairo.png",
-						    getpid (),
+			filepath = g_strdup_printf ("%s-cairo.png",
 						    g_get_prgname ());
 			gdk_pixbuf_save (cairo_pixbuf,
 					 filepath,

@@ -164,3 +164,8 @@ test-marshallers.c: $(srcdir)/test-marshallers.list Makefile
 	&& (cmp -s xgen-$(notdir $@) $(notdir $@) || (echo "Creating $(notdir $@)..."; cp xgen-$(notdir $@) $(notdir $@)) ) \
 	&& rm -f xgen-$(notdir $@)
 
+CLEANFILES=\
+	test-gdk-draw-line-cairo.png \
+	test-gdk-draw-line-gdk.png \
+	$(NULL)
+
